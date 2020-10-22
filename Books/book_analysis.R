@@ -38,12 +38,11 @@ ggsave('Books_Timeline.jpeg', width=15, height=9.5, dpi=200)
 # month plotter
 month_page_count <- books_df[, .(Author = Author, Pages=cumsum(Pages)), 
                              by= c('Year.Read', 'Month.Read')]
-ggplot(books_df[Year.Read > 2010]) + 
-  geom_col(aes(x=Month.Read, y=Pages, fill=Author.Gender, group=fct_rev(fct_inorder(Title))),
-           color='black') + facet_grid(Year.Read ~ .) +
+ggplot(books_df[Year.Read > 2010], aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
+  geom_col(aes(fill=Author.Gender), color='black') + 
+  facet_grid(Year.Read ~ .) +
   scale_fill_brewer('Author Gender', palette = 'Pastel1', guide=F) +
-  geom_text(data=month_page_count[Year.Read > 2010], aes(x=Month.Read, y=Pages, label=Author), 
-            size=3, color='chartreuse4', vjust=1, nudge_y=-30) +
+  geom_text(aes(label=Author), position = position_stack(0.5), size=3, color='chartreuse4') +
   scale_x_continuous(breaks=1:12, labels=1:12) +
   ggtitle('Month Breakdown') + xlab('Month') +
   theme(strip.text.y=element_text(angle=0), plot.title = element_text(hjust=0.5),

@@ -5,16 +5,14 @@ library(googlesheets)
 library(ggrepel)
 library(forcats)
 library(viridis)
-#read in from Google and environment variable
-register_google(key = Sys.getenv(x='GOOGLE_API'))  
-
+library(data.table)
+#read in from Google 
 books <- gs_title('Books')
 books_df <- gs_read(ss=books, ws = 'Sheet1')
 books_df$Date.Read <- as.Date(books_df$Date.Read, format = '%m/%d/%Y')
 names(books_df) <- gsub(' ', '.', names(books_df))
 books_df$Biography[is.na(books_df$Biography)] <- 'Not Biography'
 #initial eda graphs
-ggplot(books_df) + geom_point(aes(x=Date.Read, y=Fiction, color=Author.Gender, shape=Biography))
 ggplot(books_df) + geom_histogram(aes(Date.Read)) +
   scale_x_date(date_labels="%Y", date_breaks = '2 years')
   
@@ -36,18 +34,19 @@ ggplot(books_df) + geom_line(aes(x=Date.Read, y=1:nrow(books_df)), color='white'
 ggsave('Books_Timeline.jpeg', width=15, height=9.5, dpi=200)
 
 # month plotter
-month_page_count <- books_df[, .(Author = Author, Pages=cumsum(Pages)), 
-                             by= c('Year.Read', 'Month.Read')]
-ggplot(books_df[Year.Read > 2010], aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
-  geom_col(aes(fill=Author.Gender), color='black') + 
+ggplot(books_df[Year.Read > 2010 & Year.Read < 2021], aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
+  geom_col(aes(fill=Author.Gender, color=Fiction, linetype=Fiction), width=1, alpha=0.65) + 
   facet_grid(Year.Read ~ .) +
   scale_fill_brewer('Author Gender', palette = 'Pastel1', guide=F) +
-  geom_text(aes(label=Author), position = position_stack(0.5), size=3, color='chartreuse4') +
+  scale_color_brewer('Type', palette = 'Dark2') +
+  scale_linetype_discrete('Type') +
+  geom_text(aes(label=Author), position = position_stack(0.5), 
+            size=2.5, fontface='bold') +
   scale_x_continuous(breaks=1:12, labels=1:12) +
   ggtitle('Month Breakdown') + xlab('Month') +
   theme(strip.text.y=element_text(angle=0), plot.title = element_text(hjust=0.5),
         panel.background = element_rect(color='black', fill=NA))
-ggsave('Monthly_pages_read.jpeg', width=15, height=9)
+ggsave('Monthly_pages_read.jpeg', width=16, height=9)
 
 ## rolling average
 rolling_books_read <- function(df, date_col, interval = 180){
@@ -138,8 +137,11 @@ ggsave('Books_rolling_smoothspline.jpeg', width=16, height=8)
 ###nationality
 nation_df <- data.frame(table(books_df$Author.Nationality))
 names(nation_df) <- c('Nationality', 'Count')
-ggplot(nation_df) + geom_col(aes(x=Nationality, y=Count)) +
-  coord_flip()
+setDT(nation_df)
+nation_df <- nation_df[order(Count)]
+nation_df$Nationality <- factor(nation_df$Nationality, levels = nation_df$Nationality)
+ggplot(nation_df) + geom_col(aes(x=Nationality, y=Count), fill='steelblue3') +
+  coord_flip() + ggtitle("Nationalities Read")
 
 ggplot(books_df) + geom_point(aes(x=Date.Read, y=Year, color=Fiction, shape=Author.Gender), size=5) +
   scale_color_brewer(palette='Accent') + 
@@ -183,3 +185,10 @@ ggplot(years_tile) +
   scale_y_reverse() +
   xlab('Year Read') + ylab('Year Published') +
   ggtitle('Year Tile Plot')
+
+
+books_df$Genre <- strsplit(books_df$Genre, ',')
+
+genre_filter <- function(df, genre){
+  df[sapply(df$genre_list, function(x) genre %in% x),]
+}

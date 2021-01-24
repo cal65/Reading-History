@@ -6,6 +6,7 @@ library(ggrepel)
 library(forcats)
 library(viridis)
 library(data.table)
+library(stringi)
 #read in from Google 
 books <- gs_title('Books')
 books_df <- gs_read(ss=books, ws = 'Sheet1')
@@ -34,7 +35,8 @@ ggplot(books_df) + geom_line(aes(x=Date.Read, y=1:nrow(books_df)), color='white'
 ggsave('Books_Timeline.jpeg', width=15, height=9.5, dpi=200)
 
 # month plotter
-ggplot(books_df[Year.Read > 2010 & Year.Read < 2021], aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
+ggplot(books_df[Year.Read > 2010 & Year.Read < 2021], 
+       aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
   geom_col(aes(fill=Author.Gender, color=Fiction, linetype=Fiction), width=1, alpha=0.65) + 
   facet_grid(Year.Read ~ .) +
   scale_fill_brewer('Author Gender', palette = 'Pastel1', guide=F) +
@@ -190,5 +192,24 @@ ggplot(years_tile) +
 books_df$Genre <- strsplit(books_df$Genre, ',')
 
 genre_filter <- function(df, genre){
-  df[sapply(df$genre_list, function(x) genre %in% x),]
+  df[sapply(df$Genre, function(x) genre %in% x),]
 }
+
+
+# divergent chart
+divergent_df <- books_df
+divergent_df$Pages <- with(divergent_df, ifelse(Fiction == 'Fiction', -1*Pages, Pages))
+str_len <- 30
+
+divergent_df$Title <- sapply(divergent_df$Title,
+                             function(x) paste(stri_wrap(x, width=str_len), collapse='\n'))
+ggplot(divergent_df, aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) +
+  geom_col(aes(color=Fiction, fill=Author.Gender), size=1.5, width = .7) +
+  geom_text(aes(label=Title), position = position_stack(0.5), size=2) +
+  geom_hline(yintercept=0, linetype='dotted') +
+  scale_color_brewer(palette='Accent') + 
+  scale_fill_brewer(palette='Pastel1') +
+  ggtitle('Reading History') +
+  theme(legend.position = 'bottom', plot.title=element_text(hjust=0.5),
+        panel.background = element_rect(fill='white', color='black'))
+ggsave('Annual_Summary.jpeg', width=16, height=8)

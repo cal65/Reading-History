@@ -211,5 +211,6 @@ ggplot(divergent_df, aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(Title))
   scale_fill_brewer(palette='Pastel1') +
   ggtitle('Reading History') +
   theme(legend.position = 'bottom', plot.title=element_text(hjust=0.5),
-        panel.background = element_rect(fill='white', color='black'))
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(fill='wheat', color='black'))
 ggsave('Annual_Summary.jpeg', width=16, height=8)

@@ -35,7 +35,7 @@ ggplot(books_df) + geom_line(aes(x=Date.Read, y=1:nrow(books_df)), color='white'
 ggsave('Books_Timeline.jpeg', width=15, height=9.5, dpi=200)
 
 # month plotter
-ggplot(books_df[Year.Read > 2010 & Year.Read < 2021], 
+ggplot(books_df[Year.Read > 2010], 
        aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
   geom_col(aes(fill=Author.Gender, color=Fiction, linetype=Fiction), width=1, alpha=0.65) + 
   facet_grid(Year.Read ~ .) +

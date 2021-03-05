@@ -62,8 +62,9 @@ def get_stats(url, wait=0):
         shelf1 = shelves[0] if len(shelves) > 0 else ""
         shelf2 = shelves[1] if len(shelves) > 1 else ""
         shelf3 = shelves[2] if len(shelves) > 2 else ""
+        shelf4 = shelves[3] if len(shelves) > 3 else ""
     except:
-        shelf1 = shelf2 = shelf3 = ''
+        shelf1 = shelf2 = shelf3 =  shelf4 = None
 
     time.sleep(wait)
 
@@ -78,6 +79,7 @@ def get_stats(url, wait=0):
         "Shelf1": shelf1,
         "Shelf2": shelf2,
         "Shelf3": shelf3,
+        "Shelf4": shelf4,
     }
 
 
@@ -107,9 +109,10 @@ def apply_added_by(urls):
         if i % 20 == 0:
             print(i)
     #raw_stats = [get_stats(url, i/100) for i, url in enumerate(urls)]
-    #missing = [i for i, stat in enumerate(raw_stats) if stat is None]
+    not_missing = [i for i, m in enumerate(missing) if m == False]
     stats = [stat for stat in raw_stats if stat is not None ]
     goodreads_data = pd.DataFrame(stats)
+    goodreads_data['i'] = not_missing
     goodreads_data['Added_by'] = goodreads_data['Added_by'].str.extract("(\d+)") 
     goodreads_data['To_reads'] = goodreads_data['To_reads'].str.extract("(\d+)") 
     goodreads_data['Publish_info'] = goodreads_data['Publish_info'].str.replace('Published', '').str.strip()
@@ -124,7 +127,8 @@ def apply_added_by(urls):
 
 def generate_random_urls(max, n, seed):
     random.seed(seed)
-    random_samples = random.sample(list(np.arange(0, max)), n)
+    start = 5
+    random_samples = random.sample(list(np.arange(start, start + max)), n)
     urls = ["https://www.goodreads.com/book/show/" + str(r) for r in random_samples]
 
     return urls

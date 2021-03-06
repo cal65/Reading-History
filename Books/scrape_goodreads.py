@@ -66,6 +66,11 @@ def get_stats(url, wait=0):
     except:
         shelf1 = shelf2 = shelf3 =  shelf4 = None
 
+    try:
+        original_title = soup.find('div', {'class': 'infoBoxRowItem'})  
+    except:
+        original_title = None
+
     time.sleep(wait)
 
     return {
@@ -80,6 +85,7 @@ def get_stats(url, wait=0):
         "Shelf2": shelf2,
         "Shelf3": shelf3,
         "Shelf4": shelf4,
+        "Original_title": original_title,
     }
 
 

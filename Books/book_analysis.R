@@ -7,6 +7,7 @@ library(forcats)
 library(viridis)
 library(data.table)
 library(stringi)
+library(ggthemes)
 #read in from Google 
 books <- gs_title('Books')
 books_df <- gs_read(ss=books, ws = 'Sheet1')
@@ -39,7 +40,7 @@ ggplot(books_df[Year.Read > 2010],
        aes(x=Month.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) + 
   geom_col(aes(fill=Author.Gender, color=Fiction, linetype=Fiction), width=1, alpha=0.65) + 
   facet_grid(Year.Read ~ .) +
-  scale_fill_brewer('Author Gender', palette = 'Pastel1', guide=F) +
+  scale_fill_manual(values = c('pink1', 'royalblue1'), 'Author Gender', guide=F) +
   scale_color_brewer('Type', palette = 'Dark2') +
   scale_linetype_discrete('Type') +
   geom_text(aes(label=Author), position = position_stack(0.5), 
@@ -203,14 +204,15 @@ str_len <- 30
 
 divergent_df$Title <- sapply(divergent_df$Title,
                              function(x) paste(stri_wrap(x, width=str_len), collapse='\n'))
-ggplot(divergent_df, aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) +
-  geom_col(aes(color=Fiction, fill=Author.Gender), size=1.5, width = .7) +
-  geom_text(aes(label=Title), position = position_stack(0.5), size=2) +
-  geom_hline(yintercept=0, linetype='dotted') +
-  scale_color_brewer(palette='Accent') + 
-  scale_fill_brewer(palette='Pastel1') +
+ggplot(divergent_df[Year.Read > 2011], aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(Title)))) +
+  geom_col(aes(color=Fiction, fill=Author.Gender), 
+           size=0.7, width = .7, alpha=0.7) +
+  geom_hline(yintercept=0, linetype='solid', size=3, color='white') +
+  geom_text(aes(label=Title), position = position_stack(0.5), size=1.5) +
+  scale_color_manual(values=c('chartreuse', 'Grey')) + 
+  scale_fill_manual(values = c('pink1', 'royalblue1'), 'Author Gender') +
+  xlab('Year Read') +
   ggtitle('Reading History') +
-  theme(legend.position = 'bottom', plot.title=element_text(hjust=0.5),
-        panel.grid.minor = element_blank(),
-        panel.background = element_rect(fill='wheat', color='black'))
-ggsave('Annual_Summary.jpeg', width=16, height=8)
+  theme_pander() + theme(plot.title=element_text(hjust=0.5), 
+                         legend.position = 'bottom') 
+ggsave('Annual_Summary.jpeg', width=16, height=12, dpi=450)

@@ -7,13 +7,17 @@ library(ggthemes)
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 source('utils.R')
 
-paths <- list('Cal' = 'data/goodreads_library_export_cal_appended.csv', 
-              'Andrea' = 'data/goodreads_library_export_andrea_appended.csv',
+file_start <- 'data/goodreads_library_export_'
+paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'), 
+              'Andrea' = paste0(file_start, 'andrea_appended.csv'),
               'Glen'  = 'data/goodreads_library_export_glen_appended.csv',
               'Sarah' = 'data/goodreads_library_export_sarahgrey_appended.csv',
               'Adam' = 'data/goodreads_library_export_adam_appended.csv',
               'Ruby' = 'data/goodreads_library_export_ruby_appended.csv',
-              'Liz' = 'data/goodreads_library_export_liz_appended.csv')
+              'Liz' = 'data/goodreads_library_export_liz_appended.csv',
+              'Charlotte' = 'data/goodreads_library_export_charlotte_appended.csv',
+              'Corinne' = paste0(file_start, 'corinne_appended.csv'),
+              'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -40,8 +44,15 @@ sample <- unique(sample)
 
 sample$Source <- 'Random Scraped'
 sample$Exclusive.Shelf <- 'read'
+ggplot(sample) + geom_histogram(aes(Added_by), bins=100, fill='coral', color='black') + 
+  scale_x_log10(label=comma) + 
+  ggtitle('Reading Distribution of Goodreads Sample') +
+  theme_fivethirtyeight() +
+  xlab('Number of Readers') +
+  theme(axis.title = element_text())
+ggsave('Sample_distribution.jpeg', width=11, height=8)
 
-
+median(sample[Added_by > 0]$Added_by)
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 books_w_sample <- setDT(rbind.fill(books_combined, sample))
 
@@ -55,7 +66,7 @@ ggplot(books_combined[order(Date.Read, decreasing = T)][, .SD[1:25], Source]) +
   ggtitle('Comparison Plot') + ylab('Readers') +
   theme_wsj() +
   theme(plot.title=element_text(hjust=0.5))
-ggsave('Graphs/Comparison_Named2.jpeg', width=16, height=10)
+ggsave('Graphs/Comparison_Named3.jpeg', width=16, height=10)
 
 books_w_sample$Exclusive.Shelf <- factor(books_w_sample$Exclusive.Shelf,
                                          levels = c('unread', 'read'))
@@ -171,8 +182,49 @@ top_table$Shelf <- factor(top_table$Shelf,
 ggplot(top_table[Shelf %in% top_genres]) + 
   geom_col(aes(x=Shelf, y=Freq, fill=Source), color='black') +
   facet_grid(. ~ Source, scales='free') + 
-  scale_fill_brewer(palette = 'Dark2') +
+  scale_fill_brewer(palette = 'Set3') +
   coord_flip() +
   ggtitle('Genre Plot') +
   theme_wsj()
-ggsave('Graphs/genre_plot.jpeg', width=14, height=8)
+ggsave('Graphs/genre_plot2.jpeg', width=14, height=8)
+overall_genre_distribution <- data.frame(table(spider_df.m$Shelf)/nrow(spider_df.m))
+for (name in names(paths)){
+  indiv_genre <- top_table[Source == name]
+  indiv_genre$Freq_perc <- indiv_genre$Freq / sum(indiv_genre$Freq)
+  genre_comparison_df <- merge(indiv_genre[,c('Shelf', 'Freq_perc')],
+                               overall_genre_distribution,
+                               by.x = 'Shelf', by.y = 'Var1',
+                               all.y = T)
+  genre_comparison_df$difference <- with(genre_comparison_df, Freq_perc - Freq)
+  print(name)
+  print(genre_comparison_df[which.max(genre_comparison_df$difference)])
+}
+
+# Medium post
+top_table$Source_medium <- mapvalues(top_table$Source, 
+                                     from = c('Adam', 'Liz', 'Ruby', 'Sarah', 'Andrea'),
+                                     to = c('Friend 1', 'Friend 2', 'Friend 3', 'Friend 4', 'Friend 5'))
+ggplot(top_table[Shelf %in% top_genres & Source != 'Glen']) + 
+  geom_col(aes(x=Shelf, y=Freq, fill=Source_medium), color='black') +
+  facet_grid(. ~ Source_medium, scales='free') + 
+  scale_fill_brewer(palette = 'Dark2', 'Source') +
+  coord_flip() +
+  ggtitle('Genre Plot') +
+  theme_wsj()
+ggsave('Graphs/genre_plot_medium.jpeg', width=14, height=8)
+df_cal <- goodreads_list[['Cal']][Date.Read > '2011-01-01']
+
+
+## Month plot
+for (name in names(paths)){
+  month_plot(goodreads_list[[name]], name=name, date_col='Date.Read', 
+           page_col='Number.of.Pages', title_col='Title.Simple',
+           author_gender_col='gender', lims=c(2010, 2022))
+  ggsave(paste0('Graphs/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
+  year_plot(goodreads_list[[name]], name=name, fiction_col='narrative', 
+            date_col='Date.Read', page_col='Number.of.Pages', 
+            title_col='Title.Simple', author_gender_col='gender')
+  ggsave(paste0('Graphs/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
+  
+}
+  

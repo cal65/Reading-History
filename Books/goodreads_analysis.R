@@ -17,7 +17,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Liz' = 'data/goodreads_library_export_liz_appended.csv',
               'Charlotte' = 'data/goodreads_library_export_charlotte_appended.csv',
               'Corinne' = paste0(file_start, 'corinne_appended.csv'),
-              'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'))
+              'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'),
+              'Bernadette' = paste0(file_start, 'bernadette_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -207,7 +208,7 @@ top_table$Source_medium <- mapvalues(top_table$Source,
 ggplot(top_table[Shelf %in% top_genres & Source != 'Glen']) + 
   geom_col(aes(x=Shelf, y=Freq, fill=Source_medium), color='black') +
   facet_grid(. ~ Source_medium, scales='free') + 
-  scale_fill_brewer(palette = 'Dark2', 'Source') +
+  scale_fill_brewer(palette = 'Set3', 'Source') +
   coord_flip() +
   ggtitle('Genre Plot') +
   theme_wsj()

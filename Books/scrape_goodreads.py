@@ -63,11 +63,12 @@ def get_stats(url, wait=0):
         shelf2 = shelves[1] if len(shelves) > 1 else ""
         shelf3 = shelves[2] if len(shelves) > 2 else ""
         shelf4 = shelves[3] if len(shelves) > 3 else ""
+        shelf5 = shelves[4] if len(shelves) > 4 else ""
     except:
-        shelf1 = shelf2 = shelf3 =  shelf4 = None
+        shelf1 = shelf2 = shelf3 = shelf4 = shelf5 = None
 
     try:
-        original_title = soup.find('div', {'class': 'infoBoxRowItem'})  
+        original_title = soup.find('div', {'class': 'infoBoxRowItem'}).text  
     except:
         original_title = None
 
@@ -96,8 +97,12 @@ def create_url(id, name):
     return "https://www.goodreads.com/book/show/" + str(id) + "." + formatted_name
 
 
-def read_goodreads_export(csv_path):
-    goodreads_data = pd.read_csv(csv_path)
+def read_goodreads_export(file_path):
+    if file_path.endswith('.csv'):
+        goodreads_data = pd.read_csv(file_path)
+    elif file_path.endswith('.xlsx'):
+        goodreads_data = pd.read_excel(file_path)
+    goodreads_data["Title"] = goodreads_data["Title"].astype(str)
     urls = goodreads_data.apply(lambda x: create_url(x["Book Id"], x["Title"]), axis=1)
 
     return urls, goodreads_data
@@ -140,6 +145,9 @@ def generate_random_urls(max, n, seed):
     return urls
 
 if __name__ == "__main__":
+    """
+    python scrape_goodreads.py 67500000 25 999 export_goodreads.csv 
+    """
     urls = generate_random_urls(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
     goodreads_data = apply_added_by(urls)
     try:

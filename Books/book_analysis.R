@@ -216,3 +216,5 @@ ggplot(divergent_df[Year.Read > 2011], aes(x=Year.Read, y=Pages, group=fct_rev(f
   theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                          legend.position = 'bottom') 
 ggsave('Annual_Summary.jpeg', width=16, height=12, dpi=450)
+
+table(books_df[,c('Author.Gender', 'Fiction')])

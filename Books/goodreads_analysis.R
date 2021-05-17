@@ -18,7 +18,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Charlotte' = 'data/goodreads_library_export_charlotte_appended.csv',
               'Corinne' = paste0(file_start, 'corinne_appended.csv'),
               'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'),
-              'Bernadette' = paste0(file_start, 'bernadette_appended.csv'))
+              'Bernadette' = paste0(file_start, 'bernadette_appended.csv'),
+              'Elena' = paste0(file_start, 'elena_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -75,7 +76,7 @@ ggplot(books_w_sample[Date.Read > '2010-01-01' | is.na(Date.Read)]) +
   geom_bar(aes(x=Original.Publication.Year, fill=Source, alpha=Exclusive.Shelf), 
            color='black') +
   facet_grid(Source ~., scales='free') +
-  scale_fill_brewer(palette = 'Set1') + xlim(1840, 2020) +
+  scale_fill_brewer(palette = 'Set3') + xlim(1840, 2020) +
   scale_alpha_discrete(range = c(0.5, 1)) +
   xlab('Original Publication Year') +
   ggtitle('Comparison of Publication Years') +
@@ -174,20 +175,23 @@ setDT(spider_df.m)
 spider_df.m <- spider_df.m[!is.na(Shelf)]
 top_table <- spider_df.m[!Shelf %in% c('Fiction', 'Nonfiction', ''), 
                          .(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-top_genres <- unique(top_table[, .SD[1:20], Source ]$Shelf)
+users <- c('Cal', 'Elena', 'Liz', 'Ruby', 'Sarah_McNabb')
+
+top_genres <- unique(top_table[Source %in% users, .SD[1:15], Source ]$Shelf)
 #radar_table <- dcast(top_table, Source ~ Shelf, value.var = 'Freq')
 #colors_in=c( rgb(0.2,0.5,0.5,0.4), rgb(0.8,0.2,0.5,0.4) , rgb(0.7,0.5,0.1,0.4) )
 #radarchart(radar_table[,-1], pfcol=colors_in)
 top_table$Shelf <- factor(top_table$Shelf, 
                           levels = rev(unique(top_table$Shelf)))
-ggplot(top_table[Shelf %in% top_genres]) + 
+ggplot(top_table[Shelf %in% top_genres & Source %in% users]) + 
   geom_col(aes(x=Shelf, y=Freq, fill=Source), color='black') +
   facet_grid(. ~ Source, scales='free') + 
   scale_fill_brewer(palette = 'Set3') +
   coord_flip() +
   ggtitle('Genre Plot') +
   theme_wsj()
-ggsave('Graphs/genre_plot2.jpeg', width=14, height=8)
+ggsave('Graphs/genre_plot3.jpeg', width=14, height=8)
+
 overall_genre_distribution <- data.frame(table(spider_df.m$Shelf)/nrow(spider_df.m))
 for (name in names(paths)){
   indiv_genre <- top_table[Source == name]

@@ -1,7 +1,7 @@
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 options(stringsAsFactors = F)
 library(ggplot2)
-library(googlesheets)
+library(googlesheets4)
 library(ggrepel)
 library(forcats)
 library(viridis)
@@ -9,10 +9,11 @@ library(data.table)
 library(stringi)
 library(ggthemes)
 #read in from Google
-books <- gs_title('Books')
-books_df <- gs_read(ss = books, ws = 'Sheet1')
+books <- read_sheet('1x3c7xMfgKCdCg3D1wEqhCxchETzqNuv_arW2QMT4P0M')
+books_df <- data.frame(books)
 books_df$Date.Read <-
   as.Date(books_df$Date.Read, format = '%m/%d/%Y')
+books_df$Title <- as.character(unlist(books_df$Title))
 names(books_df) <- gsub(' ', '.', names(books_df))
 books_df$Biography[is.na(books_df$Biography)] <- 'Not Biography'
 #initial eda graphs

@@ -189,11 +189,14 @@ finish_plot <- function(df,
   df_read <- rbind(head(df_read, n), tail(df_read, n))
   df_read$Title.Simple <- factor(df_read$Title.Simple,
                                  levels = unique(df_read$Title.Simple))
+  df_read$Popularity <- c(rep('Least', n), rep('Most', n))
+  df_read$Popularity <- factor(df_read$Popularity, levels = c('Most', 'Least'))
   ggplot(df_read, aes(x=Title.Simple)) +
     geom_col(aes( y=1), fill='Dark Blue') +
        geom_col(aes( y=get(read_col)), fill='red') +
     geom_text(aes(y=get(read_col)/2, label = paste0(Read, ' / ', Added_by)), 
               size=n * 3/5, color='white') +
+    facet_grid(Popularity ~ ., scales='free', space='free') +
     ylim(0, 1) +
     xlab('Title') +
     ylab('Reading Percentage') +
@@ -206,3 +209,30 @@ finish_plot <- function(df,
   }
 }
 
+year_comparison <- function(l, year_col, year_start){
+  year_list <- vector('list')
+  for (name in names(l)){
+    year_df <- count(l[[name]][,get(year_col)])
+    year_df$prop <- with(year_df, freq/sum(freq))
+    year_df$name <- name
+    year_list[[name]] <- year_df
+  }
+  year_df <- do.call('rbind', year_list)
+  setDT(year_df)
+  year_agg <- year_df[!is.na(x) & x > year_start, .(sum_prop = sum(prop)), by = x]
+  base_df <- data.frame(year = seq(from=min(year_agg$x), to=max(year_agg$x), by=1))
+  year_agg <- merge(base_df, year_agg, by.x='year', by.y='x', all.x=T)
+  setDT(year_agg)
+  year_agg[is.na(sum_prop)]$sum_prop <- 0
+  year_agg$prop <- with(year_agg, sum_prop / sum(sum_prop))
+  year_agg$name <- 'Average'
+  for (name in names(l)){
+    names(year_list[[name]]) <- mapvalues(names(year_list[[name]]), from='x', to='year')
+    year_plot_df <- rbind.fill(year_list[[name]], year_agg)
+    ggplot(year_plot_df) + 
+      geom_col(aes(x=year,y=prop,fill=name), position=position_dodge()) + 
+      facet_grid(name ~., scales='free') +
+      scale_fill_brewer(palette = 'Pastel2') +
+      theme_dark()
+  }
+}

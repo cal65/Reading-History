@@ -19,10 +19,23 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Corinne' = paste0(file_start, 'corinne_appended.csv'),
               'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'),
               'Bernadette' = paste0(file_start, 'bernadette_appended.csv'),
-              'Elena' = paste0(file_start, 'elena_appended.csv'))
+              'Elena' = paste0(file_start, 'elena_appended.csv'),
+              'Bev' = paste0(file_start, 'bev_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
+  dir.create(paste0('Graphs/', name), showWarnings = F)
+}
+author_genders_fixed <- read.csv('author_genders_fixed.csv')
+author_genders_fixed$gender_fixed <- ifelse(author_genders_fixed$gender_fixed=='', 
+                                            author_genders_fixed$gender_guessed,
+                                            author_genders_fixed$gender_fixed)
+for (name in names(paths)){
+  goodreads_list[[name]][!gender %in% c('female', 'male')]$gender <- mapvalues(
+    goodreads_list[[name]][!gender %in% c('female', 'male')]$Author, 
+    author_genders_fixed$Author, 
+    author_genders_fixed$gender_fixed, warn_missing = F)
+  write.csv(goodreads_list[[name]], paths[[name]], row.names=F)
 }
 
 sample <- read.csv('export_goodreads.csv')
@@ -57,6 +70,10 @@ ggsave('Sample_distribution.jpeg', width=11, height=8)
 median(sample[Added_by > 0]$Added_by)
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 books_w_sample <- setDT(rbind.fill(books_combined, sample))
+
+# complete author genders
+author_genders <- books_combined[! gender %in% c('female', 'male'), .(Title=head(Title,1)), by = c('Author', 'gender')]
+
 
 # comparison plot df
 ggplot(books_combined[order(Date.Read, decreasing = T)][, .SD[1:25], Source]) + 
@@ -161,6 +178,10 @@ ggplot(reading_highlows[popularity == 'low']) +
   theme(plot.title = element_text(hjust=0.5))
 ggsave('Graphs/reading_perc_graph2.jpeg', width=12, height=9)
 
+for (name in names(goodreads_list)){
+  finish_plot(goodreads_list[[name]], name = name, plot=T)
+}
+
 library(igraph)
 # graph theory
 
@@ -175,7 +196,7 @@ setDT(spider_df.m)
 spider_df.m <- spider_df.m[!is.na(Shelf)]
 top_table <- spider_df.m[!Shelf %in% c('Fiction', 'Nonfiction', ''), 
                          .(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-users <- c('Cal', 'Elena', 'Liz', 'Ruby', 'Sarah_McNabb')
+users <- c('Cal', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
 
 top_genres <- unique(top_table[Source %in% users, .SD[1:15], Source ]$Shelf)
 #radar_table <- dcast(top_table, Source ~ Shelf, value.var = 'Freq')
@@ -232,4 +253,32 @@ for (name in names(paths)){
   ggsave(paste0('Graphs/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
   
 }
-  
+ 
+# gender analysis by unique authors
+unique_authors <- unique(books_combined[,c('Author', 'gender', 'Source')])
+gender_count <- unique_authors[, .(male=sum(gender=='male'), female=sum(gender=='female'), total=.N), by='Source']
+gender_count$ratio <- with(gender_count, male/total)
+gender_count$unknown <- with(gender_count, total - (male + female))
+gender_count.m <- melt(gender_count[,c('Source', 'male', 'female', 'unknown')], id = 'Source',
+                       value.name = 'count', variable.name='gender')
+ggplot(gender_count.m) +
+  geom_col(aes(x=Source, y=count, fill=gender), position = position_dodge()) +
+  scale_fill_brewer(palette = 'Dark2') + 
+  coord_flip()
+
+for (name in names(goodreads_list)){
+  rating_gender <- goodreads_list[[name]][,c('Author', 'narrative', 'gender', 'My.Rating')]
+  rating_count <- rating_gender[, .(Rating.Count = .N), by =c('narrative', 'My.Rating')]
+  rating_gender <- merge(rating_gender, rating_count, by = c('narrative', 'My.Rating'))
+  rating_gender$text_size <- pmin(10, 100/rating_gender$Rating.Count)
+  ggplot(rating_gender) +
+    geom_tile(aes(x=narrative, y=Author, fill=gender), color='black') +
+    scale_fill_brewer(palette = 'Dark2') +
+    geom_text(aes(x=narrative, y=Author, label=Author, size=text_size)) +
+    scale_size_continuous(guide=F) +
+    facet_wrap(narrative ~ My.Rating, scales='free', nrow=2) +
+    theme(axis.text.y = element_blank(),
+          plot.title = element_text(hjust=0.5),
+          panel.background = element_blank())
+  ggsave(paste0('Graphs/gender_ratings_', name, '.jpeg'), width=15, height=9, dpi=300)
+}

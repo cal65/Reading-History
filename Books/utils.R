@@ -146,7 +146,7 @@ read_plot <- function(df,
                       title_col, 
                       min_break = 3, 
                       plot=F, 
-                      plot_name = 'Graphs/popularity_spectrum_'){
+                      plot_name = 'popularity_spectrum_'){
   max_read <- as.integer(max(df[[read_col]], na.rm=T))
   df <- df[!is.na(get(read_col))]
   max_digits <- nchar(as.character(max_read)) + 1
@@ -172,10 +172,37 @@ read_plot <- function(df,
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   if (plot){
-    ggsave(paste0(plot_name, name, '.jpeg'), width = 16, height=9)
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9)
   }
 }
 
-
-
+### % finish plot
+finish_plot <- function(df, 
+                      name, 
+                      read_col = 'Read.Percentage',
+                      n = 5, 
+                      plot=F, 
+                      plot_name = 'finish_plot_'){
+  df_read <- df[order(get(read_col)),]
+  df_read <- df_read[!is.na(get(read_col))]
+  # keep only top and bottom n
+  df_read <- rbind(head(df_read, n), tail(df_read, n))
+  df_read$Title.Simple <- factor(df_read$Title.Simple,
+                                 levels = unique(df_read$Title.Simple))
+  ggplot(df_read, aes(x=Title.Simple)) +
+    geom_col(aes( y=1), fill='Dark Blue') +
+       geom_col(aes( y=get(read_col)), fill='red') +
+    geom_text(aes(y=get(read_col)/2, label = paste0(Read, ' / ', Added_by)), 
+              size=n * 3/5, color='white') +
+    ylim(0, 1) +
+    xlab('Title') +
+    ylab('Reading Percentage') +
+       coord_flip() + 
+       ggtitle('Most and Least Finished Reads') +
+       theme_solarized() +
+       theme(plot.title = element_text(hjust=0.5))
+  if (plot == T){
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=12, height=8)
+  }
+}
 

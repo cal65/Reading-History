@@ -101,25 +101,6 @@ ggplot(books_w_sample[Date.Read > '2010-01-01' | is.na(Date.Read)]) +
   theme(legend.position = 'bottom', plot.title=element_text(hjust=0.5))
 ggsave('Graphs/Density_Years3.jpeg', width=13, height=9)
 
-## books added by
-most_least_popular <- rbind(books_combined[Source != 'Random Scraped', .SD[which.max(Added_by)],
-               by = 'Source'],
-books_combined[Source != 'Random Scraped', .SD[which.min(Added_by)],
-               by = 'Source'])
-
-ggplot(books_w_sample[Added_by > 0 & Exclusive.Shelf == 'read']) + 
-  geom_histogram(aes(x=Added_by, fill=Source), bins=60) +
-  scale_fill_brewer(palette = 'Set1') + 
-  xlab('Number of Readers Added') +
-  scale_x_log10(label=comma) +
-  facet_grid(Source ~ ., scales='free') + 
-  geom_text(data=most_least_popular, 
-            aes(x=Added_by, y=1, label=paste0(Title.Simple, ':\n', Added_by))) +
-  ggtitle('Comparison of Readers') +
-  theme_solarized() +
-  theme(plot.title = element_text(hjust=0.5))
-ggsave('Graphs/Density_Readers4.jpeg', width=10, height=9)
-
 for (name in names(paths)){
   read_plot(goodreads_list[[name]][Read.Count==1], name=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T)
@@ -246,11 +227,11 @@ for (name in names(paths)){
   month_plot(goodreads_list[[name]], name=name, date_col='Date.Read', 
            page_col='Number.of.Pages', title_col='Title.Simple',
            author_gender_col='gender', lims=c(2010, 2022))
-  ggsave(paste0('Graphs/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
+  ggsave(paste0('Graphs/', name, '/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
   year_plot(goodreads_list[[name]], name=name, fiction_col='narrative', 
             date_col='Date.Read', page_col='Number.of.Pages', 
             title_col='Title.Simple', author_gender_col='gender')
-  ggsave(paste0('Graphs/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
+  ggsave(paste0('Graphs/', name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
   
 }
  

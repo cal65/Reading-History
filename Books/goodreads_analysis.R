@@ -106,59 +106,6 @@ for (name in names(paths)){
             read_col='Read', title_col = 'Title.Simple', plot=T)
 }
 
-
-books_read_df <- books_combined[Source != 'Random Scraped' & !is.na(Date.Read)] 
-
-common <- intersect(books_read_df[Source == "Cal's Books"]$Title.Simple , 
-                    books_read_df[Source == "Andrea's Books"]$Title.Simple)
-books_read_df$In_common <- books_read_df$Title.Simple %in% common
-common_df <- unique(books_read_df[In_common == T][,c('Title.Simple', 'Author', 'Average.Rating',
-                                              'Number.of.Pages')])
-common_df <- setDT(common_df)[, .(Average.Rating = max(Average.Rating),
-                                  Number.of.Pages = max(Number.of.Pages)), 
-      by =c('Title.Simple', 'Author')]
-ggplot(books_read_df, aes(x=Average.Rating, y=Number.of.Pages)) + 
-  geom_point(aes(size=log(added_by), fill=Source, color=In_common), 
-             shape=21, alpha=0.4) +
-  geom_text_repel(data=books_read_df[My.Review != ""], 
-                  aes(label=Title.Simple, color=Source), size=3) +
-  geom_text_repel(data=common_df, 
-                  aes(label=Title.Simple), color='red', size=3) +
-  scale_fill_brewer(palette='Dark2') +
-  scale_color_brewer(palette='Dark2') +
-  scale_size_continuous(breaks = seq(2, 12, 2),
-                          labels = round(exp(seq(2, 12, 2))),
-                        'Number of People Added') +
-  ylim(0, 500) +
-  ggtitle('Andrea + Cal book comparison') +
-  theme_economist()
-ggsave('Graphs/Comparison_plot.jpeg', width=12, height=9)
-
-## reading %
-quintiles <- books_combined[, .(q_low = quantile(Read.Percentage, .1, na.rm=T), 
-                   q_high = quantile(Read.Percentage, .9, na.rm=T)),
-               by = 'Source']
-reading_highlows <- books_combined[Exclusive.Shelf == 'read']
-reading_highlows[, read_percentage_rank_high := frank(Read.Percentage), by = Source]
-reading_highlows[, read_percentage_rank_low := frank(-Read.Percentage), by = Source]
-n <- 25
-reading_highlows <- reading_highlows[read_percentage_rank_low < n | read_percentage_rank_high < n]
-reading_highlows <- reading_highlows[order(Read.Percentage),]
-reading_highlows$popularity <- with(reading_highlows, 
-                                    ifelse(Added_by < 5000, 'low', 'high'))
-reading_highlows$Title.Simple <- factor(reading_highlows$Title.Simple,
-                                        levels = unique(reading_highlows$Title.Simple))
-
-ggplot(reading_highlows[popularity == 'low']) +
-  geom_col(aes(x=Title.Simple, y=Added_by), fill='blue') +
-  geom_col(aes(x=Title.Simple, y=Read), fill='red') +
-  facet_wrap(Source ~ ., scales = 'free', ncol=2) +
-  coord_flip() + 
-  ggtitle('Rarely Finished Reads') +
-  theme_solarized() +
-  theme(plot.title = element_text(hjust=0.5))
-ggsave('Graphs/reading_perc_graph2.jpeg', width=12, height=9)
-
 for (name in names(goodreads_list)){
   finish_plot(goodreads_list[[name]], name = name, plot=T)
 }

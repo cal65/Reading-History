@@ -192,7 +192,8 @@ gender_count.m <- melt(gender_count[,c('Source', 'male', 'female', 'unknown')], 
 ggplot(gender_count.m) +
   geom_col(aes(x=Source, y=count, fill=gender), position = position_dodge()) +
   scale_fill_brewer(palette = 'Dark2') + 
-  coord_flip()
+  coord_flip() +
+  ggtitle('Gender breakdown by user')
 
 for (name in names(goodreads_list)){
   rating_gender <- goodreads_list[[name]][,c('Author', 'narrative', 'gender', 'My.Rating')]
@@ -208,5 +209,5 @@ for (name in names(goodreads_list)){
     theme(axis.text.y = element_blank(),
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
-  ggsave(paste0('Graphs/gender_ratings_', name, '.jpeg'), width=15, height=9, dpi=300)
+  ggsave(paste0('Graphs/', name, '/gender_ratings_', name, '.jpeg'), width=15, height=9, dpi=300)
 }

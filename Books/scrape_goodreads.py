@@ -29,7 +29,7 @@ def get_stats(url, wait=0):
     added_by = navig[(n + len(add_string)) : (n + len(add_string) + 9)]
 
     to_read_string = "<\\/span> to-reads"
-    n2 = navig.find(to_read_string)
+    n2 = navig.find(to_read_string) 
     to_reads = navig[(n2 - 8) : n2]
 
     try:
@@ -115,8 +115,9 @@ def apply_added_by(urls):
         stat = get_stats(url)
         raw_stats.append(stat)
         missing.append(stat is None)
+        # avoid overloading the site, if we get 3 missing returns in a row
         if len(missing) > 3 and all(missing[-3:]):
-            time.sleep(45)
+            time.sleep(25)
         if i % 20 == 0:
             print(i)
     #raw_stats = [get_stats(url, i/100) for i, url in enumerate(urls)]

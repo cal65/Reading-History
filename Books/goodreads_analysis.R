@@ -174,11 +174,11 @@ for (name in names(paths)){
   month_plot(goodreads_list[[name]], name=name, date_col='Date.Read', 
            page_col='Number.of.Pages', title_col='Title.Simple',
            author_gender_col='gender', lims=c(2010, 2022))
-  ggsave(paste0('Graphs/', name, '/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
+  ggsave(paste0('Graphs/', name, '/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=180)
   year_plot(goodreads_list[[name]], name=name, fiction_col='narrative', 
             date_col='Date.Read', page_col='Number.of.Pages', 
             title_col='Title.Simple', author_gender_col='gender')
-  ggsave(paste0('Graphs/', name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=300)
+  ggsave(paste0('Graphs/', name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=180)
   
 }
  
@@ -209,5 +209,5 @@ for (name in names(goodreads_list)){
     theme(axis.text.y = element_blank(),
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
-  ggsave(paste0('Graphs/', name, '/gender_ratings_', name, '.jpeg'), width=15, height=9, dpi=300)
+  ggsave(paste0('Graphs/', name, '/gender_ratings_', name, '.jpeg'), width=15, height=9, dpi=180)
 }

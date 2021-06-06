@@ -102,10 +102,13 @@ def read_goodreads_export(file_path):
         goodreads_data = pd.read_csv(file_path)
     elif file_path.endswith('.xlsx'):
         goodreads_data = pd.read_excel(file_path)
+    return goodreads_data
+
+def return_urls(goodreads_data):
     goodreads_data["Title"] = goodreads_data["Title"].astype(str)
     urls = goodreads_data.apply(lambda x: create_url(x["Book Id"], x["Title"]), axis=1)
 
-    return urls, goodreads_data
+    return urls
 
 
 def apply_added_by(urls):
@@ -144,6 +147,7 @@ def generate_random_urls(max, n, seed):
     urls = ["https://www.goodreads.com/book/show/" + str(r) for r in random_samples]
 
     return urls
+
 
 if __name__ == "__main__":
     """

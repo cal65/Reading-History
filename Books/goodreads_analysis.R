@@ -14,13 +14,14 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Sarah' = 'data/goodreads_library_export_sarahgrey_appended.csv',
               'Adam' = 'data/goodreads_library_export_adam_appended.csv',
               'Ruby' = 'data/goodreads_library_export_ruby_appended.csv',
-              'Liz' = 'data/goodreads_library_export_liz_appended.csv',
-              'Charlotte' = 'data/goodreads_library_export_charlotte_appended.csv',
+              'Liz' = paste0(file_start, 'liz_appended.csv'),
+              'Charlotte' = paste0(file_start, 'charlotte_appended.csv'),
               'Corinne' = paste0(file_start, 'corinne_appended.csv'),
               'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'),
               'Bernadette' = paste0(file_start, 'bernadette_appended.csv'),
-              'Elena' = paste0(file_start, 'elena_appended.csv'),
-              'Bev' = paste0(file_start, 'bev_appended.csv'))
+              'Elena' = paste0(file_start, 'elena2.csv'),
+              'Bev' = paste0(file_start, 'bev_appended.csv'),
+              'Mery' = paste0(file_start, 'mery_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -37,6 +38,7 @@ for (name in names(paths)){
     author_genders_fixed$gender_fixed, warn_missing = F)
   write.csv(goodreads_list[[name]], paths[[name]], row.names=F)
 }
+
 
 sample <- read.csv('export_goodreads.csv')
 # data cleaning
@@ -71,9 +73,13 @@ median(sample[Added_by > 0]$Added_by)
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 books_w_sample <- setDT(rbind.fill(books_combined, sample))
 
-# complete author genders
+# complete author genders pipeline
 author_genders <- books_combined[! gender %in% c('female', 'male'), .(Title=head(Title,1)), by = c('Author', 'gender')]
-
+names(author_genders) <- mapvalues(names(author_genders),
+                                   from = 'gender', to = 'gender_guessed')
+author_genders <- author_genders[]
+author_genders_new <- rbind.fill(author_genders_fixed, author_genders)
+write.csv(author_genders_new, 'author_genders_fixed.csv', row.names=F)
 
 # comparison plot df
 ggplot(books_combined[order(Date.Read, decreasing = T)][, .SD[1:25], Source]) + 
@@ -104,9 +110,6 @@ ggsave('Graphs/Density_Years3.jpeg', width=13, height=9)
 for (name in names(paths)){
   read_plot(goodreads_list[[name]][Read.Count==1], name=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T)
-}
-
-for (name in names(goodreads_list)){
   finish_plot(goodreads_list[[name]], name = name, plot=T)
 }
 

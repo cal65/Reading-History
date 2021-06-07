@@ -110,7 +110,7 @@ month_plot <- function(df, name, date_col, page_col, title_col,
 }
 
 year_plot <- function(df, name, fiction_col, date_col, page_col, 
-                      title_col, author_gender_col, str_len=30){
+                      title_col, author_gender_col, str_len=30, start_year = 2010){
   divergent_df <- df
   divergent_df$Pages <- with(divergent_df, ifelse(get(fiction_col) == 'Fiction', -1*get(page_col), get(page_col)))
   str_len <- str_len
@@ -118,7 +118,7 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
   
   divergent_df[[title_col]] <- sapply(divergent_df[[title_col]],
                                function(x) paste(stri_wrap(x, width=str_len), collapse='\n'))
-  ggplot(divergent_df[Year.Read > 2011], aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(get(title_col))))) +
+  ggplot(divergent_df[Year.Read >= start_year], aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(get(title_col))))) +
     geom_col(aes(color=get(fiction_col), fill=get(author_gender_col)), 
              size=0.7, width = .7, alpha=0.7) +
     geom_hline(yintercept=0, linetype='solid', size=1, color='white') +

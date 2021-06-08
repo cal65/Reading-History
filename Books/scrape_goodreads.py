@@ -104,9 +104,9 @@ def read_goodreads_export(file_path):
         goodreads_data = pd.read_excel(file_path)
     return goodreads_data
 
-def return_urls(goodreads_data):
+def return_urls(goodreads_data, id_col = "Book.Id"):
     goodreads_data["Title"] = goodreads_data["Title"].astype(str)
-    urls = goodreads_data.apply(lambda x: create_url(x["Book Id"], x["Title"]), axis=1)
+    urls = goodreads_data.apply(lambda x: create_url(x[id_col], x["Title"]), axis=1)
 
     return urls
 

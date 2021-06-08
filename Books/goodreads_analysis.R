@@ -113,6 +113,13 @@ for (name in names(paths)){
   finish_plot(goodreads_list[[name]], name = name, plot=T)
 }
 
+for (name in names(paths)){
+  year_comparison(goodreads_list, 
+                  year_col='Original.Publication.Year', 
+                  year_start=1780,
+                  user = name, plot=T)
+}
+
 library(igraph)
 # graph theory
 
@@ -127,7 +134,7 @@ setDT(spider_df.m)
 spider_df.m <- spider_df.m[!is.na(Shelf)]
 top_table <- spider_df.m[!Shelf %in% c('Fiction', 'Nonfiction', ''), 
                          .(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-users <- c('Cal', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
+users <- c('Cal', 'Mery', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
 
 top_genres <- unique(top_table[Source %in% users, .SD[1:15], Source ]$Shelf)
 #radar_table <- dcast(top_table, Source ~ Shelf, value.var = 'Freq')
@@ -142,7 +149,7 @@ ggplot(top_table[Shelf %in% top_genres & Source %in% users]) +
   coord_flip() +
   ggtitle('Genre Plot') +
   theme_wsj()
-ggsave('Graphs/genre_plot3.jpeg', width=14, height=8)
+ggsave('Graphs/genre_plot4.jpeg', width=14, height=8)
 
 overall_genre_distribution <- data.frame(table(spider_df.m$Shelf)/nrow(spider_df.m))
 for (name in names(paths)){

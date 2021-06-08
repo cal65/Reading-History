@@ -209,30 +209,58 @@ finish_plot <- function(df,
   }
 }
 
-year_comparison <- function(l, year_col, year_start){
-  year_list <- vector('list')
-  for (name in names(l)){
-    year_df <- count(l[[name]][,get(year_col)])
-    year_df$prop <- with(year_df, freq/sum(freq))
-    year_df$name <- name
-    year_list[[name]] <- year_df
-  }
-  year_df <- do.call('rbind', year_list)
-  setDT(year_df)
-  year_agg <- year_df[!is.na(x) & x > year_start, .(sum_prop = sum(prop)), by = x]
-  base_df <- data.frame(year = seq(from=min(year_agg$x), to=max(year_agg$x), by=1))
-  year_agg <- merge(base_df, year_agg, by.x='year', by.y='x', all.x=T)
-  setDT(year_agg)
-  year_agg[is.na(sum_prop)]$sum_prop <- 0
-  year_agg$prop <- with(year_agg, sum_prop / sum(sum_prop))
-  year_agg$name <- 'Average'
-  for (name in names(l)){
-    names(year_list[[name]]) <- mapvalues(names(year_list[[name]]), from='x', to='year')
-    year_plot_df <- rbind.fill(year_list[[name]], year_agg)
-    ggplot(year_plot_df) + 
-      geom_col(aes(x=year,y=prop,fill=name), position=position_dodge()) + 
-      facet_grid(name ~., scales='free') +
-      scale_fill_brewer(palette = 'Pastel2') +
-      theme_dark()
+# year_comparison <- function(l, year_col, year_start){
+#   year_list <- vector('list')
+#   for (name in names(l)){
+#     year_df <- count(l[[name]][,get(year_col)])
+#     year_df$prop <- with(year_df, freq/sum(freq))
+#     year_df$name <- name
+#     year_list[[name]] <- year_df
+#   }
+#   year_df <- do.call('rbind', year_list)
+#   setDT(year_df)
+#   year_agg <- year_df[!is.na(x) & x > year_start, .(sum_prop = sum(prop)), by = x]
+#   base_df <- data.frame(year = seq(from=min(year_agg$x), to=max(year_agg$x), by=1))
+#   year_agg <- merge(base_df, year_agg, by.x='year', by.y='x', all.x=T)
+#   setDT(year_agg)
+#   year_agg[is.na(sum_prop)]$sum_prop <- 0
+#   year_agg$prop <- with(year_agg, sum_prop / sum(sum_prop))
+#   year_agg$name <- 'Average'
+#   year_max <- max(year_agg$year)
+#   for (name in names(l)){
+#     names(year_list[[name]]) <- mapvalues(names(year_list[[name]]), from='x', to='year')
+#     year_plot_df <- rbind.fill(year_list[[name]], year_agg)
+#     ggplot(year_plot_df) + 
+#       geom_col(aes(x=year,y=prop,fill=name), position=position_dodge()) + 
+#       facet_grid(name ~., scales='free') +
+#       xlim(year_start, year_max) + 
+#       scale_fill_brewer(palette = 'Pastel2') +
+#       theme_dark()
+#   }
+# }
+
+year_comparison <- function(l, year_col, year_start, user, plot=T) {
+  l_df <- setDT(do.call('rbind.fill', l))
+  year_max <- max(l_df[,get(year_col)], na.rm=T)
+  den_all <- density(l_df[!is.na(get(year_col)),][,get(year_col)], 
+          from = year_start, to = year_max)
+  den_user <- density(l[[user]][!is.na(get(year_col)),][,get(year_col)], 
+                      from = year_start, to = year_max)
+  density_df <- data.frame(x=den_all$x, y_all=den_all$y, y_user= den_user$y)
+  names(density_df) <- mapvalues(names(density_df), 
+                                 from = 'y_user', to = paste0('y_', user))
+  density_df$y_diff <- with(density_df, get(paste0('y_', user)) - y_all)
+  density_df.m <- reshape2::melt(density_df, id = 'x', variable.name = 'Source')
+  density_df.m$Source <- gsub('y_', '', density_df.m$Source)
+  density_df.m$Source <- factor(density_df.m$Source, levels = unique(density_df.m$Source))
+  ggplot(density_df.m) +
+    geom_area(aes(x=x, y=value, fill=Source)) +
+    facet_grid(Source ~ .) +
+    scale_fill_brewer(palette = 'Pastel1') +
+    xlab(gsub('.', ' ', year_col)) + 
+    theme_dark() +
+    ggtitle('Publication Year Comparison')
+  if (plot == T){
+    ggsave(paste0('Graphs/', user, '/publication_year', user, '.jpeg'), width=12, height=8)
   }
 }

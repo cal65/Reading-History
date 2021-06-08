@@ -4,6 +4,7 @@ import pandas as pd
 import re
 
 def append_scraping(goodreads_data):
+	goodreads_data.columns = [c.replace(' ', '.') for c in goodreads_data.columns]
 	urls = scrape_goodreads.return_urls(goodreads_data)
 	scraped_df = scrape_goodreads.apply_added_by(urls)
 	scraped_df.drop(columns = ['Title', 'Author', 'Publish_info'], inplace=True)
@@ -24,20 +25,28 @@ def add_to_existing_export(file_path_existing, file_path_new):
 	return diff_scraped
 
 def compare_dfs(df1, df2, index_column):
+	common_cols = [c for c in df2.columns if c in df1.columns]
 	for t in df2[index_column]:
 		df1_sub = df1[df1[index_column] == t]
 		df1_sub = df1_sub.head(1) # in case of duplicates, just keep the first match
 		df2_sub = df2[df2[index_column] == t]
-		common_cols = [c for c in df2_sub.columns if c in df1_sub.columns]
-		for c in common_cols:
+		
+		for c in ['Date.Read']:
 			if df1_sub.iloc[0][c] != df2_sub.iloc[0][c]:
-				df1_sub[c] = df2_sub[c]
-				df1.loc[df1[index_column]==t, c] = df2_sub[c]
+				print(t)
+				df1.loc[df1[index_column]==t, c] = df2_sub.iloc[0][c]
 	return df1
 
 def update_goodreads(df1, df2, index_column):
 	df2.columns = [c.replace(' ', '.') for c in df2.columns]
-	return compare_dfs(df1, df2, index_column)
+	# save all new books
+	df2_unupdated = df2[~df2[index_column].isin(df1[index_column])]
+	# go over the old books that are in common with existing dataset
+	df2 = df2[df2[index_column].isin(df1[index_column])]
+	df1_updated = compare_dfs(df1, df2, index_column)
+	df2_updated = append_scraping(df2_unupdated)
+	df_updated = pd.concat([df1_updated, df2_updated])
+	return df_updated
 
 if __name__ == "__main__":
 	file_path = sys.argv[1]

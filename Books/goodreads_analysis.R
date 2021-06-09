@@ -21,23 +21,39 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Bernadette' = paste0(file_start, 'bernadette_appended.csv'),
               'Elena' = paste0(file_start, 'elena2.csv'),
               'Bev' = paste0(file_start, 'bev_appended.csv'),
-              'Mery' = paste0(file_start, 'mery_appended.csv'))
+              'Mery' = paste0(file_start, 'mery_appended.csv'),
+              'Viki' = paste0(file_start, 'viki_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
   dir.create(paste0('Graphs/', name), showWarnings = F)
 }
 author_genders_fixed <- read.csv('author_genders_fixed.csv')
-author_genders_fixed$gender_fixed <- ifelse(author_genders_fixed$gender_fixed=='', 
-                                            author_genders_fixed$gender_guessed,
-                                            author_genders_fixed$gender_fixed)
 for (name in names(paths)){
-  goodreads_list[[name]][!gender %in% c('female', 'male')]$gender <- mapvalues(
-    goodreads_list[[name]][!gender %in% c('female', 'male')]$Author, 
-    author_genders_fixed$Author, 
-    author_genders_fixed$gender_fixed, warn_missing = F)
-  write.csv(goodreads_list[[name]], paths[[name]], row.names=F)
+  missing_genders <- goodreads_list[[name]][(!gender %in% c('female', 'male')) & (! Author %in% author_genders_fixed$Author), 
+                                   .(Title=head(Title,1)), by = c('Author', 'gender')]
+  if (nrow(missing_genders) > 0){
+    names(missing_genders) <- mapvalues(names(missing_genders),
+                                       from = 'gender', to = 'gender_guessed')
+    author_genders_new <- rbind.fill(author_genders_fixed, missing_genders)
+    write.csv(author_genders_new, 'author_genders_fixed.csv', row.names=F)
+    system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py author_genders_fixed.csv')
+    author_genders_fixed <- read.csv('author_genders_fixed.csv')
+    author_genders_fixed$gender_fixed <- ifelse(author_genders_fixed$gender_fixed=='', 
+                                                author_genders_fixed$gender_guessed,
+                                                author_genders_fixed$gender_fixed)
+    goodreads_list[[name]][!gender %in% c('female', 'male')]$gender <- mapvalues(
+      goodreads_list[[name]][!gender %in% c('female', 'male')]$Author, 
+      author_genders_fixed$Author, 
+      author_genders_fixed$gender_fixed, warn_missing = F)
+    write.csv(goodreads_list[[name]], paths[[name]], row.names=F)
+    }
+  rm(missing_genders)
 }
+books_combined <- setDT(do.call('rbind.fill', goodreads_list))
+# complete author genders pipeline
+author_genders <- books_combined[(! gender %in% c('female', 'male')) & (! Author %in% author_genders_fixed$Author), 
+                                 .(Title=head(Title,1)), by = c('Author', 'gender')]
 
 
 sample <- read.csv('export_goodreads.csv')
@@ -70,16 +86,9 @@ ggplot(sample) + geom_histogram(aes(Added_by), bins=100, fill='coral', color='bl
 ggsave('Sample_distribution.jpeg', width=11, height=8)
 
 median(sample[Added_by > 0]$Added_by)
-books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 books_w_sample <- setDT(rbind.fill(books_combined, sample))
 
-# complete author genders pipeline
-author_genders <- books_combined[! gender %in% c('female', 'male'), .(Title=head(Title,1)), by = c('Author', 'gender')]
-names(author_genders) <- mapvalues(names(author_genders),
-                                   from = 'gender', to = 'gender_guessed')
-author_genders <- author_genders[]
-author_genders_new <- rbind.fill(author_genders_fixed, author_genders)
-write.csv(author_genders_new, 'author_genders_fixed.csv', row.names=F)
+
 
 # comparison plot df
 ggplot(books_combined[order(Date.Read, decreasing = T)][, .SD[1:25], Source]) + 
@@ -134,7 +143,7 @@ setDT(spider_df.m)
 spider_df.m <- spider_df.m[!is.na(Shelf)]
 top_table <- spider_df.m[!Shelf %in% c('Fiction', 'Nonfiction', ''), 
                          .(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-users <- c('Cal', 'Mery', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
+users <- c('Cal', 'Viki', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
 
 top_genres <- unique(top_table[Source %in% users, .SD[1:15], Source ]$Shelf)
 #radar_table <- dcast(top_table, Source ~ Shelf, value.var = 'Freq')

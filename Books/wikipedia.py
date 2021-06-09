@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+import sys
 
 S = requests.Session()
 
@@ -63,3 +64,7 @@ def evaluate_file(csv, fix_col='gender_fixed', name_col = 'Author'):
 	genders = search_people_for_gender(authors)
 	df.loc[pd.isnull(df[fix_col]), fix_col] = genders
 	return df
+
+if __name__ == "__main__":
+	file_path = sys.argv[1]
+	evaluate_file(file_path).to_csv(file_path, index=False)

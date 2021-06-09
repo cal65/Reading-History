@@ -261,6 +261,6 @@ year_comparison <- function(l, year_col, year_start, user, plot=T) {
     theme_dark() +
     ggtitle('Publication Year Comparison')
   if (plot == T){
-    ggsave(paste0('Graphs/', user, '/publication_year', user, '.jpeg'), width=12, height=8)
+    ggsave(paste0('Graphs/', user, '/publication_year_', user, '.jpeg'), width=12, height=8)
   }
 }

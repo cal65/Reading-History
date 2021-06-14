@@ -146,15 +146,23 @@ read_plot <- function(df,
                       title_col, 
                       min_break = 3, 
                       plot=F, 
-                      plot_name = 'popularity_spectrum_'){
+                      plot_name = 'popularity_spectrum_',
+                      date_col='Date.Read',
+                      start_year=NA){
   max_read <- as.integer(max(df[[read_col]], na.rm=T))
   df <- df[!is.na(get(read_col))]
+  if (!is.na(start_year)){
+    start_date <- as.Date(paste0(start_year, '-01-01'))
+    df <- df[date_col > start_date]
+  }
+  # control text sizes
   max_digits <- nchar(as.character(max_read)) + 1
   breaks <- c(0, 10^c(min_break : max_digits))
   df[[read_col]] <- as.numeric(df[[read_col]])
-  df <- df[order(get(read_col))]
   df$title_length <- nchar(df[[title_col]])
   df$text_size <- pmax(3, 70/df$title_length)
+  # order title text by popularity
+  df <- df[order(get(read_col))]
   df[[title_col]] <- factor(df[[title_col]], levels = unique(df[[title_col]]))
   labels = generate_labels(prettyNum(breaks, big.mark = ',', scientific=F))
   df$strats <- cut(df[[read_col]], breaks = breaks, 

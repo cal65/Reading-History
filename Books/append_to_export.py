@@ -8,7 +8,7 @@ def append_scraping(goodreads_data):
 	urls = scrape_goodreads.return_urls(goodreads_data)
 	scraped_df = scrape_goodreads.apply_added_by(urls)
 	scraped_df.drop(columns = ['Title', 'Author', 'Publish_info'], inplace=True)
-	goodreads_data['i'] = goodreads_data.index
+	goodreads_data['i'] = goodreads_data.reset_index().index
 	goodreads_data_merged = pd.merge(goodreads_data, scraped_df, on='i', how='left')
 	return goodreads_data_merged
 
@@ -33,7 +33,6 @@ def compare_dfs(df1, df2, index_column):
 		
 		for c in ['Date.Read']:
 			if df1_sub.iloc[0][c] != df2_sub.iloc[0][c]:
-				print(t)
 				df1.loc[df1[index_column]==t, c] = df2_sub.iloc[0][c]
 	return df1
 

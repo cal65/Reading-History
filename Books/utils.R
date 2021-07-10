@@ -5,6 +5,7 @@ library(ggrepel)
 library(forcats)
 library(plyr)
 library(stringi)
+library(rworldmap)
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 
 preprocess <- function(dt){
@@ -48,20 +49,6 @@ run_all <- function(csv_path){
   dt <- read_percentage(dt)
   return(dt)
 }
-
-
-# goodreads_andrea[!gender %in% c('male', 'female')][,c('Author', 'gender')]
-# selected_authors <- c('Stieg Larsson', 'Liu Cixin', 'Walter Farley',
-#                       'Agatha Christie', "Madeleine L'Engle", 
-#                       'Kate Atkinson', 'Anne Rice', 'Yaa Gyasi', 'Han Suyin', 
-#                       'Zhou Weihui', 'Kang Chol-Hwan', 'Walter Mosley', 'Suzanne Collins',
-#                       'Hilary Mantel', 'Tennessee Williams')
-# goodreads_andrea[Author %in% selected_authors]$gender <- mapvalues(
-#   goodreads_andrea[Author %in% selected_authors]$Author,
-#                                      from = selected_authors,
-#                                      to = c('male', 'male', 'male', 'female', 'female', 'female',
-#                                             'female', 'female', 'female', 'female', 'male',
-#                                             'male', 'female', 'female', 'male'))
 
 preprocess_dt <- function(dt){
   dt <- dt[Title != '']
@@ -217,36 +204,6 @@ finish_plot <- function(df,
   }
 }
 
-# year_comparison <- function(l, year_col, year_start){
-#   year_list <- vector('list')
-#   for (name in names(l)){
-#     year_df <- count(l[[name]][,get(year_col)])
-#     year_df$prop <- with(year_df, freq/sum(freq))
-#     year_df$name <- name
-#     year_list[[name]] <- year_df
-#   }
-#   year_df <- do.call('rbind', year_list)
-#   setDT(year_df)
-#   year_agg <- year_df[!is.na(x) & x > year_start, .(sum_prop = sum(prop)), by = x]
-#   base_df <- data.frame(year = seq(from=min(year_agg$x), to=max(year_agg$x), by=1))
-#   year_agg <- merge(base_df, year_agg, by.x='year', by.y='x', all.x=T)
-#   setDT(year_agg)
-#   year_agg[is.na(sum_prop)]$sum_prop <- 0
-#   year_agg$prop <- with(year_agg, sum_prop / sum(sum_prop))
-#   year_agg$name <- 'Average'
-#   year_max <- max(year_agg$year)
-#   for (name in names(l)){
-#     names(year_list[[name]]) <- mapvalues(names(year_list[[name]]), from='x', to='year')
-#     year_plot_df <- rbind.fill(year_list[[name]], year_agg)
-#     ggplot(year_plot_df) + 
-#       geom_col(aes(x=year,y=prop,fill=name), position=position_dodge()) + 
-#       facet_grid(name ~., scales='free') +
-#       xlim(year_start, year_max) + 
-#       scale_fill_brewer(palette = 'Pastel2') +
-#       theme_dark()
-#   }
-# }
-
 year_comparison <- function(l, year_col, year_start, user, plot=T) {
   l_df <- setDT(do.call('rbind.fill', l))
   year_max <- max(l_df[,get(year_col)], na.rm=T)
@@ -271,4 +228,31 @@ year_comparison <- function(l, year_col, year_start, user, plot=T) {
   if (plot == T){
     ggsave(paste0('Graphs/', user, '/publication_year_', user, '.jpeg'), width=12, height=8)
   }
+}
+
+update_authors_artifact <- function(artifact, df_new, id_col='Author'){
+  authors_new = setdiff(df_new[,get(id_col)], artifact[,get(id_col)])
+  
+}
+
+merge_nationalities <- function(df, authors_db, country_col = 'country_chosen'){
+  df <- merge(df, authors_db[,c('Author', country_col)], by='Author', all.x=T)
+  return (df)
+}
+
+merge_map_data <- function(df, region_dict, map_data, name, country_col = 'country_chosen'){
+  df <- merge(df, region_dict, by.x='country_chosen', by.y='nationality', all.x=T)[, union(names(df), names(region_dict))]
+  regions_count <- data.frame(table(df$region))
+  names(regions_count) <- c('region', 'count')
+  world_df <- setDT(map_data('world'))
+  world_df <- merge(world_df, regions_count, all.x=T)
+  max_count = max(regions_count$count)
+  my_breaks <- c(1, 5, 25, 125)
+  ggplot(world_df) + 
+    geom_polygon((aes(x=long, y=lat, group=group, fill=count))) +
+    scale_fill_gradient2(name = "count", trans = "log", breaks=my_breaks,
+                        low = muted("red"),
+                        mid = "white",
+                        high = muted("blue")) +
+    ggtitle('Author Nationality Map')
 }

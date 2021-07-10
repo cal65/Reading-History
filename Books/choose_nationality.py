@@ -21,8 +21,8 @@ def choose_nationality(df, regions_file = 'world_regions_dict.csv'):
 		if pd.isnull(row['nationality2']): #shortcut, if nationality 2 is NA, they are all NA
 			return row['nationality1']
 		else:
-			nationalities = [n for n in df.iloc[0][nationality_cols] if pd.notnull(n)]
-			counts = [count_dict.get(n) for n in nationalities if n in regions['nationality']]
+			nationalities = [n for n in row[nationality_cols] if pd.notnull(n)]
+			counts = [count_dict.get(n) for n in nationalities if n in regions['nationality'].values]
 			if len(counts) > 0:
 				return nationalities[np.argmin(counts)]
 			else:

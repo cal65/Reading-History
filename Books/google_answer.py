@@ -74,5 +74,13 @@ def convert_nats_list_to_df(nats_list):
 				output_dict[c] = [None]
 		output_dicts.append(pd.DataFrame(output_dict))
 	return pd.concat(output_dicts).reset_index(drop=True)
- 
 
+def append_nationalities(df, author_col='Author'):
+	nats_list = df[author_col].apply(lookup_author_nationality)
+	nats_df = convert_nats_list_to_df(nats_list)
+	return pd.concat([df, nats_df], axis=1)
+ 
+if __name__ == "__main__":
+	file_path = sys.argv[1]
+	df = pd.read_csv(file_path)
+	append_nationalities(df).to_csv(file_path, index=False)

@@ -6,12 +6,13 @@ library(forcats)
 library(plyr)
 library(stringi)
 library(rworldmap)
+library(RColorBrewer)
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 
 preprocess <- function(dt){
   dt$gender <- mapvalues(dt$gender,
                                        from = c('mostly_male', 'mostly_female'),
-                                       to = c('male', 'female'))
+                                       to = c('male', 'female'), warn_missing = FALSE)
   names(dt) <- gsub(' ', '.', names(dt))
   dt$Date.Read <- as.Date(dt$Date.Read, format = '%Y/%m/%d')
   dt$Title.Simple <- gsub(':.*', '', dt$Title)
@@ -47,9 +48,6 @@ run_all <- function(csv_path){
   dt <- preprocess(dt)
   dt <- narrative(dt)
   dt <- read_percentage(dt)
-  region_dict <- read.csv('world_regions_dict.csv')
-  authors_db <- read.csv('authors_database.csv')
-  dt <- merge_nationalities(dt, authors_db)
   return(dt)
 }
 
@@ -243,21 +241,19 @@ merge_nationalities <- function(df, authors_db, country_col = 'country_chosen'){
   return (df)
 }
 
-merge_map_data <- function(df, region_dict, map_data, user, country_col = 'country_chosen'){
-  df <- merge(df, region_dict, by.x='country_chosen', by.y='nationality', all.x=T)[, union(names(df), names(region_dict))]
-  regions_count <- data.frame(table(df$region))
+plot_map_data <- function(df, region_dict, world_df, user, country_col = 'country_chosen'){
+  country_df <- merge(df, region_dict, by.x='country_chosen', by.y='nationality', all.x=T)
+  regions_count <- data.frame(table(country_df$region))
   names(regions_count) <- c('region', 'count')
-  world_df <- setDT(map_data('world'))
   world_df <- merge(world_df, regions_count, all.x=T)
   max_count = max(regions_count$count)
-  my_breaks <- rep(5^(1:round(log(max_count))))
+  my_breaks <- c(1, rep(2^(1:round(log2(max_count)))))
   ggplot(world_df) + 
     geom_polygon((aes(x=long, y=lat, group=group, fill=count))) +
-    scale_fill_gradient(name = "count", trans = "log", breaks=my_breaks,
-                        low = muted("red"),
-                        high = muted("blue")) +
+    scale_fill_gradientn(name = "count", trans = "log", breaks=my_breaks,
+                        colors=rev(brewer.pal(8, 'RdBu'))) +
     ggtitle(paste0('Author Nationality Map - ', user)) +
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
-                           legend.position = 'bottom') 
+                           legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
   ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.jpeg'), width=12, height=8)
 }

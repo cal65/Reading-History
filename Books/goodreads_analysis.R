@@ -4,6 +4,8 @@ library(stringr)
 library(scales)
 library(ggrepel)
 library(ggthemes)
+library(rworldmap)
+
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 source('utils.R')
 
@@ -19,10 +21,11 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Corinne' = paste0(file_start, 'corinne_appended.csv'),
               'Sarah_McNabb' = paste0(file_start, 'sarahmcnabb_appended.csv'),
               'Bernadette' = paste0(file_start, 'bernadette_appended.csv'),
-              'Elena' = paste0(file_start, 'elena2.csv'),
+              'Elena' = paste0(file_start, 'elena_appended.csv'),
               'Bev' = paste0(file_start, 'bev_appended.csv'),
               'Mery' = paste0(file_start, 'mery_appended.csv'),
-              'Viki' = paste0(file_start, 'viki_appended.csv'))
+              'Viki' = paste0(file_start, 'viki_appended.csv'),
+              'Marian' = paste0(file_start, 'marian_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -52,8 +55,10 @@ for (name in names(paths)){
 }
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 # complete author genders pipeline
-author_genders <- books_combined[(! gender %in% c('female', 'male')) & (! Author %in% author_genders_fixed$Author), 
-                                 .(Title=head(Title,1)), by = c('Author', 'gender')]
+author_genders <- books_combined[, .(Title=head(Title,1)), by = c('Author', 'gender')]
+author_genders <- author_genders[!Author %in% author_genders_fixed$Author]
+names(author_genders) <- mapvalues(names(author_genders), from = 'gender', to = 'gender_guessed')
+author_genders$gender_fixed <- author_genders$gender_guessed
 
 
 sample <- read.csv('export_goodreads.csv')
@@ -120,13 +125,21 @@ for (name in names(paths)){
   read_plot(goodreads_list[[name]][Read.Count==1], name=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T)
   finish_plot(goodreads_list[[name]], name = name, plot=T)
-}
-
-for (name in names(paths)){
   year_comparison(goodreads_list, 
                   year_col='Original.Publication.Year', 
                   year_start=1780,
                   user = name, plot=T)
+}
+
+# plot world maps
+world_df <- setDT(map_data('world'))
+region_dict <- fread('world_regions_dict.csv')
+region_dict <- region_dict[nationality != '']
+names(regions_count) <- c('region', 'count')
+authors_db <- read.csv('authors_database.csv')
+for (name in names(paths)){
+  country_df <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_db)
+  plot_map_data(country_df, region_dict=region_dict, world_df=world_df, user=name)
 }
 
 library(igraph)

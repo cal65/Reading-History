@@ -23,14 +23,15 @@ def get_stats(url, wait=0):
     except IndexError as error:
         return None
     except Exception as exception:
-        return str(Exception)
+        print(str(exception))
+        return None
     add_string = 'added by <span class=\\"value\\">'
     # cruxial breaking line
     try: 
         n = navig.find(add_string)
     except Exception as exception:
         print(str(exception))
-        return str(Exception)    
+        return None 
     added_by = navig[(n + len(add_string)) : (n + len(add_string) + 9)]
 
     to_read_string = "<\\/span> to-reads"
@@ -166,16 +167,4 @@ if __name__ == "__main__":
     except:
         pass
     goodreads_data.to_csv(sys.argv[-1], index=False)
-
-
-viki = pd.read_csv('data/goodreads_library_export_viki.csv')
-n = 300
-i = 0
-while n < viki.shape[0]:
-    imin = i*300
-    imax = min((i+1)*n, viki.shape[0])
-    viki_sub = viki[imin:imax]
-    viki_sub.to_csv('data/goodreads_library_export_viki_' + str(i) + '.csv', index=False)
-    n = n + 300
-    i = i + 1
 

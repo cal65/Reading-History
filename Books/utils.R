@@ -176,23 +176,20 @@ read_plot <- function(df,
 finish_plot <- function(df, 
                       name, 
                       read_col = 'Read.Percentage',
-                      n = 5, 
+                      n = 10, 
                       plot=F, 
                       plot_name = 'finish_plot_'){
   df_read <- df[order(get(read_col)),]
   df_read <- df_read[!is.na(get(read_col))]
-  # keep only top and bottom n
-  df_read <- rbind(head(df_read, n), tail(df_read, n))
+  # keep only bottom n
+  df_read <- tail(df_read, n)
   df_read$Title.Simple <- factor(df_read$Title.Simple,
                                  levels = unique(df_read$Title.Simple))
-  df_read$Popularity <- c(rep('Least', n), rep('Most', n))
-  df_read$Popularity <- factor(df_read$Popularity, levels = c('Most', 'Least'))
   ggplot(df_read, aes(x=Title.Simple)) +
     geom_col(aes( y=1), fill='Dark Blue') +
        geom_col(aes( y=get(read_col)), fill='red') +
     geom_text(aes(y=get(read_col)/2, label = paste0(Read, ' / ', Added_by)), 
               size=n * 3/5, color='white') +
-    facet_grid(Popularity ~ ., scales='free', space='free') +
     ylim(0, 1) +
     xlab('Title') +
     ylab('Reading Percentage') +
@@ -256,4 +253,12 @@ plot_map_data <- function(df, region_dict, world_df, user, country_col = 'countr
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
   ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.jpeg'), width=12, height=8)
+}
+
+export_user_authors <- function(list='goodreads_list', authors_db, user){
+  df <- merge(get(list)[[user]], authors_db, by='Author', all.x=T)
+  df <- df[,c('Author', 'Title.x', 'gender_fixed', 'nationality1', 'nationality2', 
+              'nationality3', 'nationality4', 'country_chosen')]
+  names(df) <- mapvalues(names(df), from='Title.x', to='Title')
+  return (df)
 }

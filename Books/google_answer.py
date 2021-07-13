@@ -47,6 +47,8 @@ def lookup_author_nationality(author):
     ]  # sometimes we get "American, British" as a response
     answers = [a for answer in answers for a in answer]  # flatten list
     answers = pd.unique(answers)
+    if len(answers)==0:
+    	print('No results found for ' + author)
     return answers
 
 

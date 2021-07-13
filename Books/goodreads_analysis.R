@@ -31,24 +31,25 @@ for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
   dir.create(paste0('Graphs/', name), showWarnings = F)
 }
-author_genders_fixed <- read.csv('author_genders_fixed.csv')
+authors_database <- read.csv('authors_database.csv')
 for (name in names(paths)){
-  missing_genders <- goodreads_list[[name]][(!gender %in% c('female', 'male')) & (! Author %in% author_genders_fixed$Author), 
+  missing_genders <- goodreads_list[[name]][(!gender %in% c('female', 'male')) & (! Author %in% authors_database$Author), 
                                    .(Title=head(Title,1)), by = c('Author', 'gender')]
   if (nrow(missing_genders) > 0){
     names(missing_genders) <- mapvalues(names(missing_genders),
                                        from = 'gender', to = 'gender_guessed')
-    author_genders_new <- rbind.fill(author_genders_fixed, missing_genders)
-    write.csv(author_genders_new, 'author_genders_fixed.csv', row.names=F)
-    system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py author_genders_fixed.csv')
-    author_genders_fixed <- read.csv('author_genders_fixed.csv')
-    author_genders_fixed$gender_fixed <- ifelse(author_genders_fixed$gender_fixed=='', 
-                                                author_genders_fixed$gender_guessed,
-                                                author_genders_fixed$gender_fixed)
+    author_genders_new <- rbind.fill(authors_database, missing_genders)
+    # because of the multiple programming languages, have this awkward write python read pipeline
+    write.csv(author_genders_new, 'authors_database.csv', row.names=F)
+    system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py authors_database.csv')
+    authors_database <- read.csv('authors_database.csv')
+    authors_database$gender_fixed <- ifelse(authors_database$gender_fixed=='', 
+                                                authors_database$gender_guessed,
+                                                authors_database$gender_fixed)
     goodreads_list[[name]][!gender %in% c('female', 'male')]$gender <- mapvalues(
       goodreads_list[[name]][!gender %in% c('female', 'male')]$Author, 
-      author_genders_fixed$Author, 
-      author_genders_fixed$gender_fixed, warn_missing = F)
+      authors_database$Author, 
+      authors_database$gender_fixed, warn_missing = F)
     write.csv(goodreads_list[[name]], paths[[name]], row.names=F)
     }
   rm(missing_genders)
@@ -56,7 +57,7 @@ for (name in names(paths)){
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 # complete author genders pipeline
 author_genders <- books_combined[, .(Title=head(Title,1)), by = c('Author', 'gender')]
-author_genders <- author_genders[!Author %in% author_genders_fixed$Author]
+author_genders <- author_genders[!Author %in% authors_database$Author]
 names(author_genders) <- mapvalues(names(author_genders), from = 'gender', to = 'gender_guessed')
 author_genders$gender_fixed <- author_genders$gender_guessed
 
@@ -137,9 +138,10 @@ region_dict <- fread('world_regions_dict.csv')
 region_dict <- region_dict[nationality != '']
 names(regions_count) <- c('region', 'count')
 authors_db <- read.csv('authors_database.csv')
+country_dict = vector('list')
 for (name in names(paths)){
-  country_df <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_db)
-  plot_map_data(country_df, region_dict=region_dict, world_df=world_df, user=name)
+  country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_db)
+  plot_map_data(country_dict[[name]], region_dict=region_dict, world_df=world_df, user=name)
 }
 
 library(igraph)

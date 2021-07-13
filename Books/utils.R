@@ -19,7 +19,7 @@ preprocess <- function(dt){
   dt$Title.Simple <- gsub('\\(.*\\)', '', dt$Title.Simple)
   dt$Exclusive.Shelf <- mapvalues(dt$Exclusive.Shelf,
                                   from = c('2020-books', 'currently-reading', 'to-read'),
-                                  to=c('unread', 'unread', 'unread'))
+                                  to=c('unread', 'unread', 'unread'), warn_missing = FALSE)
   
   return(dt)
 }

@@ -145,7 +145,7 @@ read_plot <- function(df,
   df <- df[!is.na(get(read_col))]
   if (!is.na(start_year)){
     start_date <- as.Date(paste0(start_year, '-01-01'))
-    df <- df[date_col > start_date]
+    df <- df[get(date_col) > start_date]
   }
   # control text sizes
   max_digits <- nchar(as.character(max_read)) + 1
@@ -265,4 +265,54 @@ export_user_authors <- function(user, list='goodreads_list', authors_db){
               'nationality3', 'nationality4', 'country_chosen')]
   names(df) <- mapvalues(names(df), from='Title.x', to='Title')
   return (df)
+}
+
+genre_plot <- function(genre_df, 
+                      name, 
+                      read_col,
+                      n_genre = 10, 
+                      n_users = 5,
+                      plot=F, 
+                      plot_name = 'genre_comparison_',
+                      source_col= 'Source',
+                      date_col='Date.Read',
+                      random_seed=337,
+                      start_year=NA){
+  #random_seed
+  genre_df.m <- setDT(melt(genre_df, 
+                     id.var='Source', value.name = 'Shelf'))
+  genre_df.m <- genre_df.m[!Shelf %in% c('Fiction', 'Nonfiction', '')]
+
+  all_names <- unique(genre_df[,get(source_col)])
+  other_names <- sample(setdiff(all_names, name), n_users)
+  chosen_names <- c(name, other_names)
+  top_table <- genre_df.m[,.(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
+
+  ### Calculate average
+  genres_total <- setDT(data.frame(table(genre_df.m$Shelf)))
+  names(genres_total) <- c('Shelf', 'Freq')
+  genres_total$Freq <- genres_total$Freq / nrow(genre_df) * 100
+  genres_total$Source <- 'Average'
+  top_genres <- unique(top_table[Source %in% chosen_names, .SD[1:n_genre], by=Source]$Shelf)
+  genre_plot_df <- top_table[Shelf %in% top_genres & Source %in% chosen_names]
+  genre_plot_df <- rbind(genre_plot_df, genres_total[Shelf %in% top_genres])
+  genre_plot_df$Source <- mapvalues(genre_plot_df$Source, 
+                                    from = other_names,
+                                    to = paste0('Reader', 1:length(other_names)))
+  # order the shelves based on the order of the user
+  genre_plot_df$Shelf <- factor(genre_plot_df$Shelf, 
+                            levels = rev(union(unique(genre_plot_df[Source == name]$Shelf),
+                                               unique(genre_plot_df$Shelf))))
+  ggplot(genre_plot_df) + 
+    geom_col(aes(x=Shelf, y=Freq, fill=Source), color='black') +
+    facet_grid(. ~ Source, scales='free') + 
+    scale_fill_brewer(palette = 'Set1') +
+    coord_flip() +
+    ggtitle('Genre Plot') +
+    theme_pander() + theme(plot.title=element_text(hjust=0.5), 
+                           legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
+  if (plot==T){
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=14, height=8)
+    
+  }
 }

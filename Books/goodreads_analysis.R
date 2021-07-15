@@ -140,42 +140,14 @@ for (name in names(paths)){
 
 lapply(country_dict, function(x) length(which(is.na(x$country_chosen) | x$country_chosen=='')))
 unique(authors_db[which(!authors_db$country_chosen %in% region_dict$nationality),]$country_chosen)
-library(igraph)
-# graph theory
 
-# spider graph
-library(fmsb)
-spider_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
-                            c('Source', grep('^Shelf', names(books_combined), value=T)),with=F]
+# genre plotting
+genre_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
+                           c('Source', grep('^Shelf', names(books_combined), value=T)),with=F]
+for (name in names(paths)){
+  genre_plot(genre_df, name = name, read_col='Read',  plot=T)
+}
 
-spider_df.m <- melt(spider_df, 
-                    id.var='Source', value.name = 'Shelf')
-setDT(spider_df.m)
-spider_df.m <- spider_df.m[!is.na(Shelf)]
-top_table <- spider_df.m[!Shelf %in% c('Fiction', 'Nonfiction', ''), 
-                         .(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-users <- c('Cal', 'Viki', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
-
-top_genres <- unique(top_table[Source %in% users, .SD[1:5], Source ]$Shelf)
-radar_table <- dcast(top_table[Shelf %in% top_genres], Source ~ Shelf, value.var = 'Freq')
-radar_table[is.na(radar_table)] <- 0
-max_genre <- max(apply(radar_table[,-1], 2, max))
-colors_in=c( rgb(0.2,0.5,0.5,0.4), rgb(0.8,0.2,0.5,0.4) , rgb(0.7,0.5,0.1,0.4) )
-
-radarchart(data.frame(radar_table[1:3,2:9]), pfcol=colors_in, maxmin=F)
-legend(x=0.7, y=1, legend = radar_table$Source[1:3], bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
-top_table$Shelf <- factor(top_table$Shelf, 
-                          levels = rev(unique(top_table$Shelf)))
-ggplot(top_table[Shelf %in% top_genres & Source %in% users]) + 
-  geom_col(aes(x=Shelf, y=Freq, fill=Source), color='black') +
-  facet_grid(. ~ Source, scales='free') + 
-  scale_fill_brewer(palette = 'Set3') +
-  coord_flip() +
-  ggtitle('Genre Plot') +
-  theme_wsj()
-ggsave('Graphs/genre_plot4.jpeg', width=14, height=8)
-
-overall_genre_distribution <- data.frame(table(spider_df.m$Shelf)/nrow(spider_df.m))
 for (name in names(paths)){
   indiv_genre <- top_table[Source == name]
   indiv_genre$Freq_perc <- indiv_genre$Freq / sum(indiv_genre$Freq)

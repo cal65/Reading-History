@@ -47,8 +47,8 @@ def lookup_author_nationality(author):
     ]  # sometimes we get "American, British" as a response
     answers = [a for answer in answers for a in answer]  # flatten list
     answers = pd.unique(answers)
-    if len(answers)==0:
-    	print('No results found for ' + author)
+    if len(answers) == 0:
+        print("No results found for " + author)
     return answers
 
 
@@ -77,14 +77,22 @@ def append_nationalities(df, author_col="Author"):
     nats_df = convert_nats_list_to_df(nats_list)
     return pd.concat([df.reset_index(drop=True), nats_df], axis=1)
 
-def lookup_unfound(df, nationality_col = 'country_chosen', author_col="Author"):
-	df_found = df[(pd.notnull(df[nationality_col])) & (df[nationality_col]!='')]
-	df_unfound = df[(pd.isnull(df[nationality_col])) | (df[nationality_col]=='')]
-	df_unfound = df_unfound[[c for c in df_unfound.columns if ('nationality' not in c) and (nationality_col not in c)]]
-	df_unfound = append_nationalities(df_unfound)
-	df_return = pd.concat([df_found, df_unfound])
-	
-	return df_return
+
+def lookup_unfound(df, nationality_col="country_chosen", author_col="Author"):
+    df_found = df[(pd.notnull(df[nationality_col])) & (df[nationality_col] != "")]
+    df_unfound = df[(pd.isnull(df[nationality_col])) | (df[nationality_col] == "")]
+    df_unfound = df_unfound[
+        [
+            c
+            for c in df_unfound.columns
+            if ("nationality" not in c) and (nationality_col not in c)
+        ]
+    ]
+    df_unfound = append_nationalities(df_unfound)
+    df_return = pd.concat([df_found, df_unfound])
+
+    return df_return
+
 
 if __name__ == "__main__":
     file_path = sys.argv[1]

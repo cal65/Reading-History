@@ -8,12 +8,13 @@ import time
 import sys
 import gender_guesser.detector as gender
 
+
 def get_stats(url, wait=0):
-    '''
+    """
     Mega block to pull Goodreads website contents using BeautifulSoup
     Extract numerous useful book info from the page
     Returns a dictionary of that extract
-    '''
+    """
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
 
@@ -27,15 +28,15 @@ def get_stats(url, wait=0):
         return None
     add_string = 'added by <span class=\\"value\\">'
     # cruxial breaking line
-    try: 
+    try:
         n = navig.find(add_string)
     except Exception as exception:
         print(str(exception))
-        return None 
+        return None
     added_by = navig[(n + len(add_string)) : (n + len(add_string) + 9)]
 
     to_read_string = "<\\/span> to-reads"
-    n2 = navig.find(to_read_string) 
+    n2 = navig.find(to_read_string)
     to_reads = navig[(n2 - 8) : n2]
 
     try:
@@ -49,21 +50,23 @@ def get_stats(url, wait=0):
         author = None
 
     try:
-        publish_info = soup.find('div', {'id': 'details'}).findAll('div', {'class': 'row'})[1].text
+        publish_info = (
+            soup.find("div", {"id": "details"}).findAll("div", {"class": "row"})[1].text
+        )
         publish_info = publish_info.replace("\n", "")
     except:
         publish_info = None
 
     try:
-        language = soup.find('div', {'itemprop': 'inLanguage'}).text
+        language = soup.find("div", {"itemprop": "inLanguage"}).text
     except:
         language = None
     try:
-        rating = soup.find('span', {'itemprop': 'ratingValue'}).text.replace("\n", "")
+        rating = soup.find("span", {"itemprop": "ratingValue"}).text.replace("\n", "")
     except:
         rating = None
     try:
-        shelves = soup.findAll('a', {'class': 'actionLinkLite bookPageGenreLink'})  
+        shelves = soup.findAll("a", {"class": "actionLinkLite bookPageGenreLink"})
         shelves = [shelf.text for shelf in shelves]
         shelf1 = shelves[0] if len(shelves) > 0 else ""
         shelf2 = shelves[1] if len(shelves) > 1 else ""
@@ -74,7 +77,7 @@ def get_stats(url, wait=0):
         shelf1 = shelf2 = shelf3 = shelf4 = shelf5 = None
 
     try:
-        original_title = soup.find('div', {'class': 'infoBoxRowItem'}).text  
+        original_title = soup.find("div", {"class": "infoBoxRowItem"}).text
     except:
         original_title = None
 
@@ -104,13 +107,14 @@ def create_url(id, name):
 
 
 def read_goodreads_export(file_path):
-    if file_path.endswith('.csv'):
+    if file_path.endswith(".csv"):
         goodreads_data = pd.read_csv(file_path)
-    elif file_path.endswith('.xlsx'):
+    elif file_path.endswith(".xlsx"):
         goodreads_data = pd.read_excel(file_path)
     return goodreads_data
 
-def return_urls(goodreads_data, id_col = "Book.Id"):
+
+def return_urls(goodreads_data, id_col="Book.Id"):
     goodreads_data["Title"] = goodreads_data["Title"].astype(str)
     urls = goodreads_data.apply(lambda x: create_url(x[id_col], x["Title"]), axis=1)
 
@@ -129,22 +133,38 @@ def apply_added_by(urls):
             time.sleep(25)
         if i % 20 == 0:
             print(i)
-    #raw_stats = [get_stats(url, i/100) for i, url in enumerate(urls)]
+    # raw_stats = [get_stats(url, i/100) for i, url in enumerate(urls)]
     not_missing = [i for i, m in enumerate(missing) if m == False]
-    stats = [stat for stat in raw_stats if stat is not None ]
+    empty_stats = {key: None for key in raw_stats[not_missing[0]].keys()}
+    stats = [stat if stat is not None else empty_stats for stat in raw_stats]
     goodreads_data = pd.DataFrame(stats)
-    goodreads_data['i'] = not_missing
-    goodreads_data['Added_by'] = goodreads_data['Added_by'].str.extract("(\d+)") 
-    goodreads_data['To_reads'] = goodreads_data['To_reads'].str.extract("(\d+)") 
-    goodreads_data['Publish_info'] = goodreads_data['Publish_info'].str.replace('Published', '').str.strip()
-    goodreads_data['Publisher'] = goodreads_data['Publish_info'].str.split('by ').apply(lambda x: x[1] if x is not None and len(x)>1 else None)  
-    goodreads_data['date_published'] = goodreads_data['Publish_info'].str.split('by ').apply(lambda x: x[0] if x is not None  else None) 
+    goodreads_data["Added_by"] = goodreads_data["Added_by"].str.extract("(\d+)")
+    goodreads_data["To_reads"] = goodreads_data["To_reads"].str.extract("(\d+)")
+    goodreads_data["Publish_info"] = (
+        goodreads_data["Publish_info"].str.replace("Published", "").str.strip()
+    )
+    goodreads_data["Publisher"] = (
+        goodreads_data["Publish_info"]
+        .str.split("by ")
+        .apply(lambda x: x[1] if x is not None and len(x) > 1 else None)
+    )
+    goodreads_data["date_published"] = (
+        goodreads_data["Publish_info"]
+        .str.split("by ")
+        .apply(lambda x: x[0] if x is not None else None)
+    )
     # gender
     d = gender.Detector()
-    goodreads_data['first_name'] = [name[0] if name is not None else "" for name in goodreads_data['Author'].str.split(' ')]   
-    goodreads_data['gender'] = [d.get_gender(name) for name in goodreads_data['first_name']] 
+    goodreads_data["first_name"] = [
+        name[0] if name is not None else ""
+        for name in goodreads_data["Author"].str.split(" ")
+    ]
+    goodreads_data["gender"] = [
+        d.get_gender(name) for name in goodreads_data["first_name"]
+    ]
     # shelves
     return goodreads_data
+
 
 def generate_random_urls(max, n, seed):
     random.seed(seed)
@@ -157,7 +177,7 @@ def generate_random_urls(max, n, seed):
 
 if __name__ == "__main__":
     """
-    python scrape_goodreads.py 67500000 25 999 export_goodreads.csv 
+    python scrape_goodreads.py 67500000 25 999 export_goodreads.csv
     """
     urls = generate_random_urls(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
     goodreads_data = apply_added_by(urls)
@@ -167,4 +187,3 @@ if __name__ == "__main__":
     except:
         pass
     goodreads_data.to_csv(sys.argv[-1], index=False)
-

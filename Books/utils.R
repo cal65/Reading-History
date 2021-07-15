@@ -98,7 +98,8 @@ month_plot <- function(df, name, date_col, page_col, title_col,
 }
 
 year_plot <- function(df, name, fiction_col, date_col, page_col, 
-                      title_col, author_gender_col, str_len=30, start_year = 2010){
+                      title_col, author_gender_col, str_len=30, start_year = 2010,
+                      plot=T){
   divergent_df <- df
   divergent_df$Pages <- with(divergent_df, ifelse(get(fiction_col) == 'Fiction', -1*get(page_col), get(page_col)))
   str_len <- str_len
@@ -117,6 +118,9 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
     ggtitle(paste0(name, ' - Reading History')) +
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom') 
+  if (plot == T){
+    ggsave(paste0('Graphs/',  name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9)
+  }
 }
 
 generate_labels <- function(breaks){

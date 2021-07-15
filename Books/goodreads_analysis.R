@@ -25,7 +25,9 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Bev' = paste0(file_start, 'bev_appended.csv'),
               'Mery' = paste0(file_start, 'mery_appended.csv'),
               'Viki' = paste0(file_start, 'viki_appended.csv'),
-              'Marian' = paste0(file_start, 'marian_appended.csv'))
+              'Marian' = paste0(file_start, 'marian_appended.csv'),
+              'Maggie' = paste0(file_start, 'maggie_appended.csv'),
+              'Luisa' = paste0(file_start, 'luisa_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -33,16 +35,21 @@ for (name in names(paths)){
 }
 authors_database <- read.csv('authors_database.csv')
 for (name in names(paths)){
-  missing_genders <- goodreads_list[[name]][(!gender %in% c('female', 'male')) & (! Author %in% authors_database$Author), 
-                                   .(Title=head(Title,1)), by = c('Author', 'gender')]
-  if (nrow(missing_genders) > 0){
-    names(missing_genders) <- mapvalues(names(missing_genders),
+  missing_data <- goodreads_list[[name]][!Author %in% authors_database$Author][, c('Author', 'Title', 'gender')]
+  missing_data <- missing_data[, .(Title = head(Title,1)), by=c('Author', 'gender')]
+  if (nrow(missing_data) > 0){
+    names(missing_data) <- mapvalues(names(missing_data),
                                        from = 'gender', to = 'gender_guessed')
-    author_genders_new <- rbind.fill(authors_database, missing_genders)
+    missing_data$country_chosen <- NA
+    missing_data$gender_fixed <- ifelse(missing_data$gender_guessed %in% c('male', 'female'), missing_data$gender_guessed, NA)
+    write.csv(missing_data, 'new_authors_data.csv', row.names=F)
+    system('/Users/christopherlee/anaconda3/bin/python3 google_answer.py new_authors_data.csv')
+    system('/Users/christopherlee/anaconda3/bin/python3 choose_nationality.py new_authors_data.csv')
+    system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py new_authors_data.csv')
+    missing_data <- read.csv('new_authors_data.csv')
+    authors_database <- rbind.fill(authors_database, missing_data)
     # because of the multiple programming languages, have this awkward write python read pipeline
-    write.csv(author_genders_new, 'authors_database.csv', row.names=F)
-    system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py authors_database.csv')
-    authors_database <- read.csv('authors_database.csv')
+    write.csv(authors_database, 'authors_database.csv', row.names=F)
     authors_database$gender_fixed <- ifelse(authors_database$gender_fixed=='', 
                                                 authors_database$gender_guessed,
                                                 authors_database$gender_fixed)
@@ -52,7 +59,7 @@ for (name in names(paths)){
       authors_database$gender_fixed, warn_missing = F)
     write.csv(goodreads_list[[name]], paths[[name]], row.names=F)
     }
-  rm(missing_genders)
+  rm(missing_data)
 }
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 # complete author genders pipeline
@@ -91,23 +98,7 @@ ggplot(sample) + geom_histogram(aes(Added_by), bins=100, fill='coral', color='bl
   theme(axis.title = element_text())
 ggsave('Sample_distribution.jpeg', width=11, height=8)
 
-median(sample[Added_by > 0]$Added_by)
 books_w_sample <- setDT(rbind.fill(books_combined, sample))
-
-
-
-# comparison plot df
-ggplot(books_combined[order(Date.Read, decreasing = T)][, .SD[1:25], Source]) + 
-  geom_text_repel(aes(x=narrative, y=Read, color=gender, label=Title.Simple), 
-                  alpha=0.75, size=3) +
-  facet_grid(. ~ Source) +
-  scale_color_brewer(palette = 'Set1') +
-  scale_y_log10(label=comma) +
-  ggtitle('Comparison Plot') + ylab('Readers') +
-  theme_wsj() +
-  theme(plot.title=element_text(hjust=0.5))
-ggsave('Graphs/Comparison_Named3.jpeg', width=16, height=10)
-
 books_w_sample$Exclusive.Shelf <- factor(books_w_sample$Exclusive.Shelf,
                                          levels = c('unread', 'read'))
 ggplot(books_w_sample[Date.Read > '2010-01-01' | is.na(Date.Read)]) + 
@@ -123,7 +114,7 @@ ggplot(books_w_sample[Date.Read > '2010-01-01' | is.na(Date.Read)]) +
 ggsave('Graphs/Density_Years3.jpeg', width=13, height=9)
 
 for (name in names(paths)){
-  read_plot(goodreads_list[[name]][Read.Count==1], name=name, 
+  read_plot(goodreads_list[[name]][Read.Count>0], name=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T)
   finish_plot(goodreads_list[[name]], name = name, plot=T)
   year_comparison(goodreads_list, 
@@ -141,9 +132,14 @@ authors_db <- read.csv('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){
   country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_db)
+  country_dict[[name]]$country_chosen <- mapvalues(country_dict[[name]]$country_chosen,
+                                                   from = c('English', 'Scottish'),
+                                                   to = c('British', 'British'))
   plot_map_data(country_dict[[name]], region_dict=region_dict, world_df=world_df, user=name)
 }
 
+lapply(country_dict, function(x) length(which(is.na(x$country_chosen) | x$country_chosen=='')))
+unique(authors_db[which(!authors_db$country_chosen %in% region_dict$nationality),]$country_chosen)
 library(igraph)
 # graph theory
 
@@ -160,10 +156,14 @@ top_table <- spider_df.m[!Shelf %in% c('Fiction', 'Nonfiction', ''),
                          .(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
 users <- c('Cal', 'Viki', 'Bev', 'Liz', 'Ruby', 'Sarah_McNabb')
 
-top_genres <- unique(top_table[Source %in% users, .SD[1:15], Source ]$Shelf)
-#radar_table <- dcast(top_table, Source ~ Shelf, value.var = 'Freq')
-#colors_in=c( rgb(0.2,0.5,0.5,0.4), rgb(0.8,0.2,0.5,0.4) , rgb(0.7,0.5,0.1,0.4) )
-#radarchart(radar_table[,-1], pfcol=colors_in)
+top_genres <- unique(top_table[Source %in% users, .SD[1:5], Source ]$Shelf)
+radar_table <- dcast(top_table[Shelf %in% top_genres], Source ~ Shelf, value.var = 'Freq')
+radar_table[is.na(radar_table)] <- 0
+max_genre <- max(apply(radar_table[,-1], 2, max))
+colors_in=c( rgb(0.2,0.5,0.5,0.4), rgb(0.8,0.2,0.5,0.4) , rgb(0.7,0.5,0.1,0.4) )
+
+radarchart(data.frame(radar_table[1:3,2:9]), pfcol=colors_in, maxmin=F)
+legend(x=0.7, y=1, legend = radar_table$Source[1:3], bty = "n", pch=20 , col=colors_in , text.col = "grey", cex=1.2, pt.cex=3)
 top_table$Shelf <- factor(top_table$Shelf, 
                           levels = rev(unique(top_table$Shelf)))
 ggplot(top_table[Shelf %in% top_genres & Source %in% users]) + 
@@ -212,13 +212,14 @@ for (name in names(paths)){
   year_plot(goodreads_list[[name]], name=name, fiction_col='narrative', 
             date_col='Date.Read', page_col='Number.of.Pages', 
             title_col='Title.Simple', author_gender_col='gender')
-  ggsave(paste0('Graphs/', name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=180)
+  ggsave(paste0('Graphs/', name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9)
   
 }
  
 # gender analysis by unique authors
 unique_authors <- unique(books_combined[,c('Author', 'gender', 'Source')])
-gender_count <- unique_authors[, .(male=sum(gender=='male'), female=sum(gender=='female'), total=.N), by='Source']
+gender_count <- unique_authors[, .(male=sum(gender=='male', na.rm=T), 
+                                   female=sum(gender=='female', na.rm=T), total=.N), by='Source']
 gender_count$ratio <- with(gender_count, male/total)
 gender_count$unknown <- with(gender_count, total - (male + female))
 gender_count.m <- melt(gender_count[,c('Source', 'male', 'female', 'unknown')], id = 'Source',

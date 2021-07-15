@@ -182,14 +182,14 @@ finish_plot <- function(df,
   df_read <- df[order(get(read_col)),]
   df_read <- df_read[!is.na(get(read_col))]
   # keep only bottom n
-  df_read <- tail(df_read, n)
+  df_read <- head(df_read, n)
   df_read$Title.Simple <- factor(df_read$Title.Simple,
                                  levels = unique(df_read$Title.Simple))
   ggplot(df_read, aes(x=Title.Simple)) +
     geom_col(aes( y=1), fill='Dark Blue') +
        geom_col(aes( y=get(read_col)), fill='red') +
     geom_text(aes(y=get(read_col)/2, label = paste0(Read, ' / ', Added_by)), 
-              size=n * 3/5, color='white') +
+              size=n * 3/5, color='white', hjust=0) +
     ylim(0, 1) +
     xlab('Title') +
     ylab('Reading Percentage') +
@@ -255,7 +255,7 @@ plot_map_data <- function(df, region_dict, world_df, user, country_col = 'countr
   ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.jpeg'), width=12, height=8)
 }
 
-export_user_authors <- function(list='goodreads_list', authors_db, user){
+export_user_authors <- function(user, list='goodreads_list', authors_db){
   df <- merge(get(list)[[user]], authors_db, by='Author', all.x=T)
   df <- df[,c('Author', 'Title.x', 'gender_fixed', 'nationality1', 'nationality2', 
               'nationality3', 'nationality4', 'country_chosen')]

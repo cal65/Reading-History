@@ -518,7 +518,7 @@ Tony D'Souza,male,Whiteman,male,American,,,,American
 Maria Semple,female,"Where'd You Go, Bernadette",female,American,,,,American
 Neal Shusterman,male,Challenger Deep,male,American,,,,American
 Mitch Albom,male,Tuesdays with Morrie,male,American,,,,American
-Anne Frank,female,The Diary of a Young Girl,female,German,Weimar,Dutch,,Weimar
+Anne Frank,female,The Diary of a Young Girl,female,German,Weimar,Dutch,,Dutch
 Ben Goldacre,male,"Bad Science: Quacks, Hacks, and Big Pharma Flacks",male,British,,,,British
 Ken Jennings,male,"Maphead: Charting the Wide, Weird World of Geography Wonks",male,American,,,,American
 Vincent Bevins,male,The Jakarta Method: Washington's Anticommunist Crusade and the Mass Murder Program that Shaped Our World,male,American,,,,American
@@ -533,7 +533,7 @@ Kikuko Tsumura,female,There's No Such Thing as an Easy Job,female,Japanese,,,,Ja
 Douglas Adams,male,"The Hitchhiker's Guide to the Galaxy (Hitchhiker's Guide to the Galaxy, #1)",male,English,,,,English
 Anne Helen Petersen,female,Can't Even: How Millennials Became the Burnout Generation,female,American,,,,American
 Mike Lupica,male,Travel Team,male,American,,,,American
-Harper Lee,male,To Kill a Mockingbird,male,American,,,,American
+Harper Lee,male,To Kill a Mockingbird,female,American,,,,American
 Chris Laszlo,male,The Sustainable Company: How to Create Lasting Value through Social and Environmental Performance,male,American,,,,American
 Vu Hong Lien,male,"Descending Dragon, Rising Tiger: A History of Vietnam",male,Vietnamese,English,,,Vietnamese
 Kate Atkinson,female,Case Histories (Jackson Brodie #1),female,British,English,,,English
@@ -2166,11 +2166,11 @@ Cait Flanders,female,"The Year of Less: How I Stopped Shopping, Gave Away My Bel
 Daniel Markovits,male,"The Meritocracy Trap: How America's Foundational Myth Feeds Inequality, Dismantles the Middle Class, and Devours the Elite",male,British,,,,British
 Deborah Fallows,female,"Dreaming in Chinese: Mandarin Lessons in Life, Love, And Language",female,American,,,,American
 Mark Schatzker,male,The Dorito Effect: The Surprising New Truth About Food and Flavor,male,Canadian,,,,Canadian
-Jessica Winter,female,Break in Case of Emergency,female,,,,,
+Jessica Winter,female,Break in Case of Emergency,female,American,,,,American
 Teddy Wayne,male,Loner,male,,,,,
-Adam Brookes,male,Night Heron (Philip Mangan #1),male,,,,,
+Adam Brookes,male,Night Heron (Philip Mangan #1),male,Canadian,,,,
 Pasquale Anthony Leonardo,male,ULTIMATE--The First Four Decades,male,American,,,,American
-Bonnie Marson,female,Sleeping with Schubert,female,,,,,
+Bonnie Marson,female,Sleeping with Schubert,female,American,,,,
 Adam Minter,male,Junkyard Planet: Travels in the Billion-Dollar Trash Trade,male,American,,,,American
 Anton DiSclafani,male,The Yonahlossee Riding Camp for Girls,female,American,,,,American
 Zachary Mexico,male,China Underground,male,American,,,,American
@@ -2185,8 +2185,8 @@ Jennifer Burns,female,Goddess of the Market: Ayn Rand and the American Right,fem
 Donald C. Gause,male,Are Your Lights On?: How to Figure Out What the Problem Really is,male,American,,,,American
 Marty Cagan,male,INSPIRED: How to Create Tech Products Customers Love,male,American,,,,American
 Melissa Perri,female,Escaping the Build Trap: How Effective Product Management Creates Real Value,female,American,,,,American
-James Clear,male,Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones,male,,,,,
-Rachel Jonat,female,"Do Less: A Minimalist Guide to a Simplified, Organized, and Happy Life",female,,,,,
+James Clear,male,Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones,male,American,,,,American
+Rachel Jonat,female,"Do Less: A Minimalist Guide to a Simplified, Organized, and Happy Life",female,Canadian,,,,Canadian
 Hector Garcia Puigcerver,male,Ikigai: The Japanese Secret to a Long and Happy Life,male,Spanish,,,,Spanish
 Adam M. Grant,male,Originals: How Nonconformists Move the World,male,American,,,,American
 Renee Baron,female,The Enneagram Made Easy: Discover the 9 Types of People,female,Brazilian,,,,Brazilian
@@ -2200,23 +2200,23 @@ Briallen Hopper,female,Hard to Love: Essays and Confessions,female,American,,,,A
 Horace P. Beck,male,Folklore and the Sea,male,American,,,,American
 Laurence Gonzales,female,"Deep Survival: Who Lives, Who Dies, and Why",female,American,,,,American
 Tracy Townsend,female,"The Nine (Thieves of Fate, #1)",female,American,,,,American
-Clifford Beal,male,The Witch of Torinia,male,,,,,
-John Fleskes,male,Spectrum 21: The Best in Contemporary Fantastic Art,male,,,,,
-Frank T. Thompson,male,"Tim Burton's Nightmare Before Christmas: The Film, the Art, the Vision",male,,,,,
+Clifford Beal,male,The Witch of Torinia,male,American,English,,,English
+John Fleskes,male,Spectrum 21: The Best in Contemporary Fantastic Art,male,American,,,,American
+Frank T. Thompson,male,"Tim Burton's Nightmare Before Christmas: The Film, the Art, the Vision",male,American,,,,American
 Declan McGrath,male,Editing and Postproduction,male,British,,,,British
 Larissa Theule,female,Fat & Bones: And Other Stories,female,American,,,,American
-Peter Dallas-Smith,male,Trouble for Trumpets,male,,,,,
-Frank R. Wilson,male,"The Hand: How Its Use Shapes the Brain, Language, and Human Culture",male,,,,,
-Sam Gosling,male,Snoop: What Your Stuff Says About You,male,,,,,
+Peter Dallas-Smith,male,Trouble for Trumpets,male,American,,,,American
+Frank R. Wilson,male,"The Hand: How Its Use Shapes the Brain, Language, and Human Culture",male,American,,,,American
+Sam Gosling,male,Snoop: What Your Stuff Says About You,male,American,,,,American
 Jocelyn Bouquillard,female,"Hokusai, First Manga Master",male,French,,,,French
-Nancy Kelly Allen,female,Once Upon a Dime: A Math Adventure,female,,,,,
-Jon Fasman,male,The Geographer's Library,male,,,,,
+Nancy Kelly Allen,female,Once Upon a Dime: A Math Adventure,female,American,,,,American
+Jon Fasman,male,The Geographer's Library,male,American,,,,American
 "Wes """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""Scoop"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" Nisker",male,Crazy Wisdom,male,American,,,,American
 Michael J. Bader,male,Arousal: The Secret Logic of Sexual Fantasies,male,,,,,
 David Bayles,male,Art and Fear: Observations on the Perils (and Rewards) of Artmaking,male,,,,,
 Leta Hong Fincher,female,Betraying Big Brother: The Feminist Awakening in China,female,American,,,,American
 Marc Levinson,male,The Box: How the Shipping Container Made the World Smaller and the World Economy Bigger,male,American,,,,American
-Anthony Abraham Jack,male,The Privileged Poor: How Elite Colleges Are Failing Disadvantaged Students,male,,,,,
+Anthony Abraham Jack,male,The Privileged Poor: How Elite Colleges Are Failing Disadvantaged Students,male,American,,,,
 Frances Cha,female,If I Had Your Face,female,South Korean,American,,,South Korean
 Christopher R. Beha,male,The Index of Self-Destructive Acts,male,American,,,,American
 Nadia Owusu,female,Aftershocks,female,American,Tanzanian,,,Tanzanian
@@ -2251,13 +2251,13 @@ Michael W. Twitty,male,The Cooking Gene: A Journey Through African American Culi
 Nicole Y. Dennis-Benn,female,Here Comes the Sun,female,,,,,
 Michelle  Kuo,female,"Reading with Patrick: A Teacher, a Student, and a Life-Changing Friendship",female,American,Taiwanese,,,Taiwanese
 Meg Jay,female,The Defining Decade: Why Your Twenties Matter--And How to Make the Most of Them Now,female,,,,,
-Heather Harpham,female,Happiness: The Crooked Little Road to Semi-Ever After,female,,,,,
+Heather Harpham,female,Happiness: The Crooked Little Road to Semi-Ever After,female,American,,,,American
 Mauricio L Miller,male,The Alternative: Most of What You Believe About Poverty Is Wrong,male,,,,,
 Geoffrey G. Parker,male,Platform Revolution: How Networked Markets Are Transforming the Economy--and How to Make Them Work for You,male,,,,,
 Robin Romm,male,Double Bind: Women on Ambition,male,,,,,
 Ian McGuire,male,The North Water,male,English,,,,English
 Winston Ma,male,China's Mobile Economy: Opportunities in the Largest and Fastest Information Consumption Boom,male,Chinese,,,,Chinese
-Catherine Fletcher,female,The Black Prince of Florence: The Spectacular Life and Treacherous World of Alessandro de’ Medici,female,,,,,
+Catherine Fletcher,female,The Black Prince of Florence: The Spectacular Life and Treacherous World of Alessandro de’ Medici,female,British,,,,British
 Amy  Rowland,female,The Transcriptionist,female,,,,,
 Jon Gertner,male,The Idea Factory: Bell Labs and the Great Age of American Innovation,male,,,,,
 Joe Studwell,male,How Asia Works: Success and Failure in the World's Most Dynamic Region,male,,,,,
@@ -2273,9 +2273,9 @@ Victoria James,female,"Wine Girl: The Obstacles, Humiliations, and Triumphs of A
 Steve Dublanica,male,Waiter Rant: Thanks for the Tip-Confessions of a Cynical Waiter,male,American,,,,American
 Tim Kreider,male,We Learn Nothing,male,American,,,,American
 Susie Yang,female,White Ivy,female,American,Chinese,,,Chinese
-Liv Constantine,female,The Wife Stalker,female,,,,,
+Liv Constantine,female,The Wife Stalker,female,American,,,,American
 Courtney Carver,female,Project 333: The Minimalist Fashion Challenge That Proves Less Really Is So Much More,female,,,,,
-Gino Wickman,male,Traction,male,,,,,
+Gino Wickman,male,Traction,male,American,,,,American
 Anne Bogel,female,I'd Rather Be Reading: The Delights and Dilemmas of the Reading Life,female,,,,,
 Alexis Schaitkin,male,Saint X,female,American,,,,American
 Stacy  Sims,female,"Roar: How to Match Your Food and Fitness to Your Unique Female Physiology for Optimum Performance, Great Health, and a Strong, Lean Body for Life",female,,,,,
@@ -2327,7 +2327,7 @@ Elizabeth Brundage,female,All Things Cease to Appear,female,,,,,
 Renee T. White,female,Putting Risk in Perspective: Black Teenage Lives in the Era of AIDS,female,,,,,
 Jessica L. Gregg,female,"Virtually Virgins: Sexual Strategies and Cervical Cancer in Recife, Brazil",female,American,,,,American
 Monique W. Morris,female,Pushout: The Criminalization of Black Girls in Schools,female,American,,,,American
-Josephine Ensign,female,Catching Homelessness: A Nurse's Story of Falling Through the Safety Net,female,,,,,
+Josephine Ensign,female,Catching Homelessness: A Nurse's Story of Falling Through the Safety Net,female,American,,,,American
 Harry Beckwith,male,Selling the Invisible: A Field Guide to Modern Marketing,male,,,,,
 Alexandra M. Levitt,female,"Deadly Outbreaks: How Medical Detectives Save Lives Threatened by Killer Pandemics, Exotic Viruses, and Drug-Resistant Parasites",female,,,,,
 Ernest Drucker,male,A Plague of Prisons: The Epidemiology of Mass Incarceration in America,male,,,,,
@@ -2348,12 +2348,12 @@ Julia  Cooke,female,Come Fly the World: The Jet-Age Story of the Women of Pan Am
 Jennifer    Ryan,female,The Kitchen Front,female,British,American,,,British
 Janet Skeslien Charles,female,The Paris Library,female,American,French,,,French
 Veera Hiranandani,female,The Night Diary,female,American,,,,American
-Fiona  Davis,female,The Masterpiece,female,,,,,
-Laurie Frankel,female,This Is How It Always Is,female,,,,,
+Fiona  Davis,female,The Masterpiece,female,American,,,,American
+Laurie Frankel,female,This Is How It Always Is,female,American,,,,American
 Erin Bartels,female,We Hope for Better Things,female,,,,,
 Claire Lombardo,female,The Most Fun We Ever Had,female,,,,,
 Derick Lugo,male,The Unlikely Thru-Hiker: An Appalachian Trail Journey,male,American,,,,American
-Stephen Puleo,male,"Voyage of Mercy: The USS Jamestown, the Irish Famine, and the Remarkable Story of America's First Humanitarian Mission",male,,,,,
+Stephen Puleo,male,"Voyage of Mercy: The USS Jamestown, the Irish Famine, and the Remarkable Story of America's First Humanitarian Mission",male,American,,,,American
 Jane Healey,female,The Saturday Evening Girls Club,female,,,,,
 Kelli Estes,female,The Girl Who Wrote in Silk,female,,,,,
 Jim DeFede,male,"The Day the World Came to Town: 9/11 in Gander, Newfoundland",male,,,,,
@@ -2653,7 +2653,7 @@ Judith McNaught,female,Night Whispers (Second Opportunities #3),female,American,
 Alan Bradley,female,"The Sweetness at the Bottom of the Pie (Flavia de Luce, #1)",female,Canadian,,,,Canadian
 James Comey,female,"A Higher Loyalty: Truth, Lies, and Leadership",female,American,,,,American
 Hannah Pakula,male,The Last Empress: Madame Chiang Kai-shek and the Birth of Modern China,male,American,,,,American
-Catherine S. Neal,female,Taking Down the Lion: The Triumphant Rise and Tragic Fall of Tyco's Dennis Kozlowski,female,,,,,
+Catherine S. Neal,female,Taking Down the Lion: The Triumphant Rise and Tragic Fall of Tyco's Dennis Kozlowski,female,American,,,,American
 George Howe Colt,female,The Big House: A Century in the Life of an American Summer Home,female,American,,,,American
 Karen Corsano,male,John Singer Sargent and His Muse: Painting Love and Loss,male,,,,,
 Nam Le,male,The Boat,male,Australian,,,,Australian
@@ -2665,7 +2665,7 @@ Paul        Howard,male,"Sex, Lies and Handlebar Tape: The Remarkable Life of Ja
 Tim Krabbé,male,The Rider,male,Dutch,,,,Dutch
 Jerry Spinelli,male,Maniac Magee,male,American,,,,American
 Avi,male,The True Confessions of Charlotte Doyle,male,American,,,,American
-Dean Jobb,male,Empire of Deception: The Incredible Story of a Master Swindler Who Seduced a City and Captivated the Nation,male,,,,,
+Dean Jobb,male,Empire of Deception: The Incredible Story of a Master Swindler Who Seduced a City and Captivated the Nation,male,Canadian,,,,Canadian
 Richard Atwater,male,Mr. Popper's Penguins,male,American,,,,American
 Gertrude Chandler Warner,female,"The Boxcar Children (The Boxcar Children, #1)",female,American,,,,American
 John McPhee,male,The Control of Nature,male,American,,,,American
@@ -2726,7 +2726,7 @@ Jamie O. Smith,female,Reading the Race: Tactics and Strategies for Bike Racing,f
 Thomas Prehn,male,Racing Tactics for Cyclists,male,American,,,,American
 Nathaniel Philbrick,male,In the Heart of the Sea: The Tragedy of the Whaleship Essex,male,American,,,,American
 Dick Lehr,male,"Black Mass: Whitey Bulger, the FBI, and a Devil's Deal",male,American,,,,American
-Adam Skolnick,male,"One Breath: Freediving, Death, and the Quest to Shatter Human Limits",male,,,,,
+Adam Skolnick,male,"One Breath: Freediving, Death, and the Quest to Shatter Human Limits",male,American,,,,American
 Dan Lyons,male,Disrupted: My Misadventure in the Start-Up Bubble,male,American,,,,American
 Jaimal Yogis,unknown,"The Fear Project: What Our Most Primal Emotion Taught Me About Survival, Success, Surfing . . . and Love",unknown,American,,,,American
 Gary Kamiya,male,Cool Gray City of Love: 49 Views of San Francisco,male,American,,,,American
@@ -2916,7 +2916,7 @@ Amanda Knox,female,Waiting to Be Heard: A Memoir,female,American,,,,American
 Balli Kaur Jaswal,unknown,Erotic Stories for Punjabi Widows,female,Singaporean,,,,Singaporean
 Brittney Morris,female,Slay,female,,,,,
 Jennifer E. Smith,female,Field Notes on Love,female,American,,,,American
-Justin A. Reynolds,male,Opposite of Always,male,,,,,
+Justin A. Reynolds,male,Opposite of Always,male,American,,,,American
 Ibi Zoboi,unknown,Pride,female,American,,,,American
-Natasha Diaz,female,Color Me In,female,,,,,
+Natasha Diaz,female,Color Me In,female,American,,,,American
 Tahereh Mafi,female,A Very Large Expanse of Sea,female,American,,,,American

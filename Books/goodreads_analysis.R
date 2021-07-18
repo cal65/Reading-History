@@ -127,7 +127,6 @@ for (name in names(paths)){
 world_df <- setDT(map_data('world'))
 region_dict <- fread('world_regions_dict.csv')
 region_dict <- region_dict[nationality != '']
-names(regions_count) <- c('region', 'count')
 authors_db <- read.csv('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){

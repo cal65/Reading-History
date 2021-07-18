@@ -27,12 +27,11 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
         else:
             nationalities = [n for n in row[nationality_cols] if pd.notnull(n)]
             counts = [
-                count_dict.get(n)
+                count_dict.get(n) if n in regions["nationality"].values else np.nan
                 for n in nationalities
-                if n in regions["nationality"].values
             ]
             if len(counts) > 0:
-                return nationalities[np.argmin(counts)]
+                return nationalities[np.nanargmin(counts)]
             else:
                 return None
 

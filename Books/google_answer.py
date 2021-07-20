@@ -5,7 +5,7 @@ import numpy as np
 import sys
 import logging
 logger = logging.getLogger()
-
+logger.setLevel(logging.INFO)
 
 S = requests.Session()
 

@@ -3,7 +3,8 @@ import sys
 import pandas as pd
 import re
 import logging
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 def append_scraping(goodreads_data):
     goodreads_data.columns = [c.replace(" ", ".") for c in goodreads_data.columns]
@@ -73,7 +74,7 @@ def fix_date(file_path):
     df["Date.Read"] = pd.to_datetime(df["Date.Read"])
     df.to_csv(file_path, index=False)
     # return just for proof
-    return df
+    return df[['Title.Simple', 'Date.Added', 'Date.Read']]
 
 
 if __name__ == "__main__":

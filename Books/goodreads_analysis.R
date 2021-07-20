@@ -15,7 +15,7 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Glen'  = 'data/goodreads_library_export_glen_appended.csv',
               'Sarah' = 'data/goodreads_library_export_sarahgrey_appended.csv',
               'Adam' = 'data/goodreads_library_export_adam_appended.csv',
-              'Ruby' = 'data/goodreads_library_export_ruby_appended.csv',
+              'Ruby' = paste0(file_start, 'ruby_appended.csv'),
               'Liz' = paste0(file_start, 'liz_appended.csv'),
               'Charlotte' = paste0(file_start, 'charlotte_appended.csv'),
               'Corinne' = paste0(file_start, 'corinne_appended.csv'),
@@ -27,7 +27,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Viki' = paste0(file_start, 'viki_appended.csv'),
               'Marian' = paste0(file_start, 'marian_appended.csv'),
               'Maggie' = paste0(file_start, 'maggie_appended.csv'),
-              'Luisa' = paste0(file_start, 'luisa_appended.csv'))
+              'Luisa' = paste0(file_start, 'luisa_appended.csv'),
+              'Ben_Goldsmith' = paste0(file_start, 'ben_goldsmith_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -40,6 +41,7 @@ for (name in names(paths)){
   if (nrow(missing_data) > 0){
     names(missing_data) <- mapvalues(names(missing_data),
                                        from = 'gender', to = 'gender_guessed')
+    print(nrow(missing_data))
     missing_data$country_chosen <- NA
     missing_data$gender_fixed <- ifelse(missing_data$gender_guessed %in% c('male', 'female'), missing_data$gender_guessed, NA)
     write.csv(missing_data, 'new_authors_data.csv', row.names=F)
@@ -67,51 +69,6 @@ author_genders <- books_combined[, .(Title=head(Title,1)), by = c('Author', 'gen
 author_genders <- author_genders[!Author %in% authors_database$Author]
 names(author_genders) <- mapvalues(names(author_genders), from = 'gender', to = 'gender_guessed')
 author_genders$gender_fixed <- author_genders$gender_guessed
-
-
-sample <- read.csv('export_goodreads.csv')
-# data cleaning
-setDT(sample)
-sample <- sample[Title != '']
-sample$Added_by[is.na(sample$Added_by)] <- 0
-sample$To_reads[is.na(sample$To_reads)] <- 0
-sample$Edition_published <- unlist(lapply(str_extract_all(sample$date_published, '[0-9]{4}') , function(x) x[1]))
-sample$Edition_published <- as.numeric(sample$Edition_published)
-sample$Original.Publication.Year <- unlist(lapply(str_extract_all(sample$Publish_info, 'first published .*') , 
-                                               function(x) x[1]))
-sample$Original.Publication.Year <- unlist(lapply(str_extract_all(sample$Original.Publication.Year, '[0-9]{4}') , 
-                                                function(x) x[1]))
-sample$Original.Publication.Year <- as.numeric(sample$Original.Publication.Year)
-sample$Original.Publication.Year <- ifelse(!is.na(sample$Original.Publication.Year), 
-                                sample$Original.Publication.Year,
-                                sample$Edition_published)
-
-sample <- unique(sample)
-
-sample$Source <- 'Random Scraped'
-sample$Exclusive.Shelf <- 'read'
-ggplot(sample) + geom_histogram(aes(Added_by), bins=100, fill='coral', color='black') + 
-  scale_x_log10(label=comma) + 
-  ggtitle('Reading Distribution of Goodreads Sample') +
-  theme_fivethirtyeight() +
-  xlab('Number of Readers') +
-  theme(axis.title = element_text())
-ggsave('Sample_distribution.jpeg', width=11, height=8)
-
-books_w_sample <- setDT(rbind.fill(books_combined, sample))
-books_w_sample$Exclusive.Shelf <- factor(books_w_sample$Exclusive.Shelf,
-                                         levels = c('unread', 'read'))
-ggplot(books_w_sample[Date.Read > '2010-01-01' | is.na(Date.Read)]) + 
-  geom_bar(aes(x=Original.Publication.Year, fill=Source, alpha=Exclusive.Shelf), 
-           color='black') +
-  facet_grid(Source ~., scales='free') +
-  scale_fill_brewer(palette = 'Set3') + xlim(1840, 2020) +
-  scale_alpha_discrete(range = c(0.5, 1)) +
-  xlab('Original Publication Year') +
-  ggtitle('Comparison of Publication Years') +
-  theme_solarized() +
-  theme(legend.position = 'bottom', plot.title=element_text(hjust=0.5))
-ggsave('Graphs/Density_Years3.jpeg', width=13, height=9)
 
 for (name in names(paths)){
   read_plot(goodreads_list[[name]][Read.Count>0], name=name, 

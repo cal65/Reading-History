@@ -21,7 +21,7 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
 
     def _choose_row(row):
         if pd.isnull(
-            row["nationality2"]
+            row.get("nationality2")
         ):  # shortcut, if nationality 2 is NA, they are all NA
             return row["nationality1"]
         else:

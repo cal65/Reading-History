@@ -2,7 +2,8 @@ import scrape_goodreads
 import sys
 import pandas as pd
 import re
-
+import logging
+logger = logging.getLogger()
 
 def append_scraping(goodreads_data):
     goodreads_data.columns = [c.replace(" ", ".") for c in goodreads_data.columns]
@@ -55,10 +56,14 @@ def update_goodreads(df1, df2, index_column):
 
 def update_missing_data(df):
     df_missing = df[pd.isnull(df["Added_by"])]
-    urls = scrape_goodreads.return_urls(df_missing)
-    scraped_missing = scrape_goodreads.apply_added_by(urls)
-    scraped_missing.index = df_missing.index
-    df.update(scraped_missing)
+    if len(df_missing) > 0:
+	    logger.info('Updating missing rows of data', nrows=len(df_missing.shape))
+	    urls = scrape_goodreads.return_urls(df_missing)
+	    scraped_missing = scrape_goodreads.apply_added_by(urls)
+	    scraped_missing.index = df_missing.index
+	    df.update(scraped_missing)
+    else:
+	    logger.info('No data needs updating')
     return df
 
 

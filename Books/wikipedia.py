@@ -52,22 +52,20 @@ def search_raw_page_for_gender(paragraphs):
     return "unknown"
 
 
-def search_people_for_gender(people):
-    genders = []
-    for person in people:
-        result = grab_first_result(person)
-        if result == "No result":
-            genders.append("unknown")
-        else:
-            paragraphs = eval_page(result)
-            genders.append(search_raw_page_for_gender(paragraphs))
-    return genders
+def search_person_for_gender(person):
+    result = grab_first_result(person)
+    if result == "No result":
+        gender = "unknown"
+    else:
+        paragraphs = eval_page(result)
+        gender = search_raw_page_for_gender(paragraphs)
+    return gender
 
 
 def evaluate_file(csv, fix_col="gender_fixed", name_col="Author"):
     df = pd.read_csv(csv)
     authors = df.loc[pd.isnull(df[fix_col]), name_col]
-    genders = search_people_for_gender(authors)
+    genders = [search_people_for_gender(author) for author in authors]
     df.loc[pd.isnull(df[fix_col]), fix_col] = genders
     return df
 

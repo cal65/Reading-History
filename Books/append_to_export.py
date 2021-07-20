@@ -54,10 +54,10 @@ def update_goodreads(df1, df2, index_column):
 
 
 def update_missing_data(df):
-    missing_data = df[pd.isnull(df["Added_by"])]
-    urls = scrape_goodreads.return_urls(missing_data)
+    df_missing = df[pd.isnull(df["Added_by"])]
+    urls = scrape_goodreads.return_urls(df_missing)
     scraped_missing = scrape_goodreads.apply_added_by(urls)
-    scraped_missing.index = missing_data.index
+    scraped_missing.index = df_missing.index
     df.update(scraped_missing)
     return df
 

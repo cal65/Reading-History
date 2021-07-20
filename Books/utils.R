@@ -77,6 +77,9 @@ month_plot <- function(df, name, date_col, page_col, title_col,
   setDT(df)
   df$Year.Read <- as.numeric(format(df[[date_col]], '%Y'))
   df$Month.Read  <- as.numeric(format(df[[date_col]], '%m'))
+  if (length(unique(df$Year.Read)) < 1) {
+    return()
+  }
   df <- df[!is.na(Year.Read)]
   if (!is.null(lims)){
     df <- df[Year.Read > lims[1] & Year.Read < lims[2]]
@@ -104,7 +107,10 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
   divergent_df$Pages <- with(divergent_df, ifelse(get(fiction_col) == 'Fiction', -1*get(page_col), get(page_col)))
   str_len <- str_len
   divergent_df$Year.Read <- format(divergent_df[[date_col]], '%Y')
-  
+  # exit function if there is no date data
+  if (length(unique(divergent_df$Year.Read)) < 1) {
+    return()
+  }
   divergent_df[[title_col]] <- sapply(divergent_df[[title_col]],
                                function(x) paste(stri_wrap(x, width=str_len), collapse='\n'))
   ggplot(divergent_df[Year.Read >= start_year], aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(get(title_col))))) +
@@ -198,7 +204,7 @@ finish_plot <- function(df,
     xlab('Title') +
     ylab('Reading Percentage') +
        coord_flip() + 
-       ggtitle('Most and Least Finished Reads') +
+       ggtitle('Least Finished Reads') +
        theme_solarized() +
        theme(plot.title = element_text(hjust=0.5))
   if (plot == T){

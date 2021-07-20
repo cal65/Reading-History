@@ -101,7 +101,7 @@ unique(authors_db[which(!authors_db$country_chosen %in% region_dict$nationality)
 genre_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
                            c('Source', grep('^Shelf', names(books_combined), value=T)),with=F]
 for (name in names(paths)){
-  genre_plot(genre_df, name = name, read_col='Read',  plot=T)
+  genre_plot(genre_df, name = name, n_genre = 12, read_col='Read',  plot=T)
 }
 
 for (name in names(paths)){
@@ -155,8 +155,10 @@ gender_count.m <- melt(gender_count[,c('Source', 'male', 'female', 'unknown')], 
 ggplot(gender_count.m) +
   geom_col(aes(x=Source, y=count, fill=gender), position = position_dodge()) +
   scale_fill_brewer(palette = 'Dark2') + 
-  coord_flip() +
-  ggtitle('Gender breakdown by user')
+  coord_flip() + ylab('Number of Authors') +
+  ggtitle('Gender Breakdown by User') + 
+  theme_pander() + theme(plot.title=element_text(hjust=0.5))
+ggsave('Graphs/Gender_breakdown_users.jpeg', width=10, height=7)
 
 for (name in names(goodreads_list)){
   rating_gender <- goodreads_list[[name]][,c('Author', 'narrative', 'gender', 'My.Rating')]

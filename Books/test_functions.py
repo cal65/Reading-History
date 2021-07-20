@@ -5,7 +5,7 @@ from pandas._testing import assert_frame_equal
 from google_answer import lookup_unfound
 from wikipedia import search_person_for_gender
 from update_artifact import create_artifact_addition
-from append_to_export import update_missing_data
+from append_to_export import update_missing_data, apply_append
 
 
 test_df = pd.DataFrame(
@@ -32,3 +32,9 @@ def test_update_missing_data():
 		'Added_by': [99, 1029405, 3332859]})
 	updated = update_missing_data(no_missing_data)
 	assert_frame_equal(no_missing_data, updated)
+
+test_file_path = "test/test_export.csv"
+
+def test_apply_append():
+	test_df = apply_append(test_file_path)
+	assert(len(test_df) == 5) # original file has 5 rows

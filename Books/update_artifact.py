@@ -6,6 +6,7 @@ import gender_guesser.detector as gender
 from choose_nationality import choose_nationality
 import logging
 logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def guess_gender(author):
     d = gender.Detector()
@@ -17,7 +18,7 @@ def guess_gender(author):
     return gender_return
 
 
-def create_artifact_addition(df, author_col="Author", artifact_path="authors_database.csv"):
+def create_artifact_addition(df, authors_database, author_col="Author"):
     """
     Take a dataframe with an author_col. 
     Compare authors in dataframe with authors in database.
@@ -26,7 +27,6 @@ def create_artifact_addition(df, author_col="Author", artifact_path="authors_dat
     Return dataframe with columns appended.
     """
     df.drop_duplicates(author_col, keep='first', inplace=True)
-    authors_database = pd.read_csv(artifact_path)
     df_addition = df[~df[author_col].isin(authors_database[author_col])]
     df_addition = append_nationalities(df_addition) # this will add nationality1, nationality2 etc (given these Google results) 
     df_addition = choose_nationality(df_addition) # this will add country_chosen
@@ -35,9 +35,10 @@ def create_artifact_addition(df, author_col="Author", artifact_path="authors_dat
     return df_addition
 
 def update_artifact(df, author_col="Author", artifact_path="authors_database.csv"):
-    df_addition = create_artifact_addition(df, author_col, artifact_path)
-    logger.info('Adding new rows to authors database', nrows=df_addition.shape[0])
-    df_return = pd.concat([df, df_addition])
+    authors_database = pd.read_csv(artifact_path)
+    authors_addition = create_artifact_addition(df, authors_database, author_col)
+    logger.info('Adding ' + str(len(authors_addition)) + ' new rows to authors database')
+    df_return = pd.concat([authors_database, authors_addition])
     df_return.reset_index(drop=True, inplace=True)
     df_return.to_csv(artifact_path, index=False)
 

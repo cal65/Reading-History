@@ -11,8 +11,7 @@ def append_scraping(goodreads_data):
     urls = scrape_goodreads.return_urls(goodreads_data)
     scraped_df = scrape_goodreads.apply_added_by(urls)
     scraped_df.drop(columns=["Title", "Author", "Publish_info"], inplace=True)
-    goodreads_data["i"] = goodreads_data.reset_index().index
-    goodreads_data_merged = pd.merge(goodreads_data, scraped_df, on="i", how="left")
+    goodreads_data_merged = pd.concat([goodreads_data, scraped_df], axis=1)
     return goodreads_data_merged
 
 
@@ -58,7 +57,7 @@ def update_goodreads(df1, df2, index_column):
 def update_missing_data(df):
     df_missing = df[pd.isnull(df["Added_by"])]
     if len(df_missing) > 0:
-	    logger.info('Updating missing rows of data', nrows=len(df_missing.shape))
+	    logger.info('Updating ' + str(len(df_missing.shape)) + ' missing rows of data')
 	    urls = scrape_goodreads.return_urls(df_missing)
 	    scraped_missing = scrape_goodreads.apply_added_by(urls)
 	    scraped_missing.index = df_missing.index

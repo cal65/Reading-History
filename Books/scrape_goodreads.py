@@ -7,7 +7,10 @@ import random
 import time
 import sys
 import gender_guesser.detector as gender
+import logging
 
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 def get_stats(url, wait=0):
     """
@@ -22,9 +25,10 @@ def get_stats(url, wait=0):
     try:
         navig = scripts[18].string
     except IndexError as error:
+        logger.info("Soup failed - index error - for url: " + url)
         return None
     except Exception as exception:
-        print(str(exception))
+        logger.info("Soup failed for url: " + url, )
         return None
     add_string = 'added by <span class=\\"value\\">'
     # cruxial breaking line
@@ -100,10 +104,11 @@ def get_stats(url, wait=0):
 
 
 def create_url(id, name):
-    formatted_name = name.replace(" ", "_")
-    formatted_name = formatted_name.split(":")[0]
-    formatted_name = formatted_name.split("(")[0]
-    return "https://www.goodreads.com/book/show/" + str(id) + "." + formatted_name
+    # formatted_name = name.replace(" ", "_")
+    # formatted_name = formatted_name.replace("'", "-")
+    # formatted_name = formatted_name.split(":")[0]
+    # formatted_name = formatted_name.split("(")[0]
+    return "https://www.goodreads.com/book/show/" + str(id) #+ "." + formatted_name
 
 
 def read_goodreads_export(file_path):
@@ -142,11 +147,6 @@ def apply_added_by(urls):
     goodreads_data["To_reads"] = goodreads_data["To_reads"].str.extract("(\d+)")
     goodreads_data["Publish_info"] = (
         goodreads_data["Publish_info"].str.replace("Published", "").str.strip()
-    )
-    goodreads_data["Publisher"] = (
-        goodreads_data["Publish_info"]
-        .str.split("by ")
-        .apply(lambda x: x[1] if x is not None and len(x) > 1 else None)
     )
     goodreads_data["date_published"] = (
         goodreads_data["Publish_info"]

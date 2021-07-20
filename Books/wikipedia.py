@@ -36,11 +36,14 @@ def eval_page(url):
 
 def search_paragraph_for_gender(paragraph):
     words = paragraph.split(" ")
+    #counter = [0, 0, 0]
     for word in words:
         if word.lower() in ["he", "his", "him"]:
             return "male"
         elif word.lower() in ["she", "her", "hers"]:
             return "female"
+        # elif word.lower() in ["they", "them", "theirs"]:
+        #     return "non-binary"
     return None
 
 

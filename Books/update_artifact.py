@@ -5,7 +5,10 @@ from wikipedia import search_person_for_gender
 import gender_guesser.detector as gender
 from choose_nationality import choose_nationality
 import logging
-logger = logging.getLogger()
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+# add the handler to the root logger
+logger = logging.getLogger('').addHandler(console)
 logger.setLevel(logging.INFO)
 
 def guess_gender(author):

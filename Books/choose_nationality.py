@@ -35,7 +35,7 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
             else:
                 return None
 
-    df["country_chosen"] = df.apply(_choose_row, axis=1)
+    df["Country.Chosen"] = df.apply(_choose_row, axis=1)
     return df
 
 

@@ -99,6 +99,7 @@ def get_stats(url, wait=0):
         "Shelf2": shelf2,
         "Shelf3": shelf3,
         "Shelf4": shelf4,
+        "Shelf5": shelf5,
         "Original_title": original_title,
     }
 
@@ -155,12 +156,12 @@ def apply_added_by(urls):
     )
     # gender
     d = gender.Detector()
-    goodreads_data["first_name"] = [
+    goodreads_data["First.Name"] = [
         name[0] if name is not None else ""
         for name in goodreads_data["Author"].str.split(" ")
     ]
     goodreads_data["gender"] = [
-        d.get_gender(name) for name in goodreads_data["first_name"]
+        d.get_gender(name) for name in goodreads_data["First.Name"]
     ]
     # shelves
     return goodreads_data

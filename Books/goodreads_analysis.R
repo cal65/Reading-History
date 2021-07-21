@@ -88,14 +88,14 @@ authors_db <- read.csv('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){
   country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_db)
-  country_dict[[name]]$country_chosen <- mapvalues(country_dict[[name]]$country_chosen,
+  country_dict[[name]]$Country.Chosen <- mapvalues(country_dict[[name]]$Country.Chosen,
                                                    from = c('English', 'Scottish'),
                                                    to = c('British', 'British'))
   plot_map_data(country_dict[[name]], region_dict=region_dict, world_df=world_df, user=name)
 }
 
-lapply(country_dict, function(x) length(which(is.na(x$country_chosen) | x$country_chosen=='')))
-unique(authors_db[which(!authors_db$country_chosen %in% region_dict$nationality),]$country_chosen)
+lapply(country_dict, function(x) length(which(is.na(x$Country.Chosen) | x$Country.Chosen=='')))
+unique(authors_db[which(!authors_db$Country.Chosen %in% region_dict$nationality),]$Country.Chosen)
 
 # genre plotting
 genre_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
@@ -161,16 +161,16 @@ ggplot(gender_count.m) +
 ggsave('Graphs/Gender_breakdown_users.jpeg', width=10, height=7)
 
 for (name in names(goodreads_list)){
-  rating_gender <- goodreads_list[[name]][,c('Author', 'narrative', 'gender', 'My.Rating')]
-  rating_count <- rating_gender[, .(Rating.Count = .N), by =c('narrative', 'My.Rating')]
-  rating_gender <- merge(rating_gender, rating_count, by = c('narrative', 'My.Rating'))
+  rating_gender <- goodreads_list[[name]][,c('Author', 'Narrative', 'gender', 'My.Rating')]
+  rating_count <- rating_gender[, .(Rating.Count = .N), by =c('Narrative', 'My.Rating')]
+  rating_gender <- merge(rating_gender, rating_count, by = c('Narrative', 'My.Rating'))
   rating_gender$text_size <- pmin(10, 100/rating_gender$Rating.Count)
   ggplot(rating_gender) +
-    geom_tile(aes(x=narrative, y=Author, fill=gender), color='black') +
+    geom_tile(aes(x=Narrative, y=Author, fill=gender), color='black') +
     scale_fill_brewer(palette = 'Dark2') +
-    geom_text(aes(x=narrative, y=Author, label=Author, size=text_size)) +
+    geom_text(aes(x=Narrative, y=Author, label=Author, size=text_size)) +
     scale_size_continuous(guide=F) +
-    facet_wrap(narrative ~ My.Rating, scales='free', nrow=2) +
+    facet_wrap(Narrative ~ My.Rating, scales='free', nrow=2) +
     theme(axis.text.y = element_blank(),
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())

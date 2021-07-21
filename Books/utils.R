@@ -25,7 +25,7 @@ preprocess <- function(dt){
 }
 
 narrative <- function(dt){
-  dt$narrative <- apply(
+  dt$Narrative <- apply(
     dt, 1, function(x) ifelse(any(
     grepl('Nonfiction|Memoir', x[c('Shelf1', 'Shelf2', 'Shelf3', 'Shelf4')])
     ), 'Nonfiction', 'Fiction')
@@ -166,7 +166,7 @@ read_plot <- function(df,
   df$strats <- cut(df[[read_col]], breaks = breaks, 
                    labels = labels)
   ggplot(df, aes(x=strats, y=get(title_col))) +
-    geom_tile(aes(fill=narrative), color='black') +
+    geom_tile(aes(fill=Narrative), color='black') +
     geom_text(aes(label = get(title_col), size = text_size)) +
     facet_wrap(strats ~ ., scales='free', nrow=1) +
     scale_fill_manual(values = c('hotpink2', 'darkolivegreen')) +
@@ -243,12 +243,12 @@ update_authors_artifact <- function(artifact, df_new, id_col='Author'){
   
 }
 
-merge_nationalities <- function(df, authors_db, country_col = 'country_chosen'){
+merge_nationalities <- function(df, authors_db, country_col = 'Country.Chosen'){
   df <- merge(df, authors_db[,c('Author', country_col)], by='Author', all.x=T)
   return (df)
 }
 
-plot_map_data <- function(df, region_dict, world_df, user, country_col = 'country_chosen'){
+plot_map_data <- function(df, region_dict, world_df, user, country_col = 'Country.Chosen'){
   country_df <- merge(df, region_dict, by.x='country_chosen', by.y='nationality', all.x=T)
   regions_count <- data.frame(table(country_df$region))
   names(regions_count) <- c('region', 'count')
@@ -268,7 +268,7 @@ plot_map_data <- function(df, region_dict, world_df, user, country_col = 'countr
 export_user_authors <- function(user, list='goodreads_list', authors_db){
   df <- merge(get(list)[[user]], authors_db, by='Author', all.x=T)
   df <- df[,c('Author', 'Title.x', 'gender_fixed', 'nationality1', 'nationality2', 
-              'nationality3', 'nationality4', 'country_chosen')]
+              'nationality3', 'nationality4', 'Country.Chosen')]
   names(df) <- mapvalues(names(df), from='Title.x', to='Title')
   return (df)
 }

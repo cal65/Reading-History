@@ -6,6 +6,7 @@ import json
 import random
 import time
 import sys
+import re
 import gender_guesser.detector as gender
 import logging
 
@@ -31,17 +32,27 @@ def get_stats(url, wait=0):
         logger.info("Soup failed for url: " + url, )
         return None
     add_string = 'added by <span class=\\"value\\">'
-    # cruxial breaking line
+    # crucial breaking line
     try:
         n = navig.find(add_string)
     except Exception as exception:
         print(str(exception))
         return None
-    added_by = navig[(n + len(add_string)) : (n + len(add_string) + 9)]
+    added_by_raw = navig[(n + len(add_string)) : (n + len(add_string) + 9)]
+    added_by_parsed = re.findall('\d+', added_by_raw) # extract numbers
+    if len(added_by_parsed) > 0:
+        added_by = int(added_by_parsed[0]) # first number found
+    else:
+        added_by = None
 
     to_read_string = "<\\/span> to-reads"
     n2 = navig.find(to_read_string)
-    to_reads = navig[(n2 - 8) : n2]
+    to_reads_raw = navig[(n2 - 8) : n2]
+    to_reads_parsed = re.findall('\d+', to_reads_raw)
+    if len(to_reads_parsed) > 0:
+        to_reads = int(to_reads_parsed[0])
+    else:
+        to_reads = None
 
     try:
         title = soup.find("h1").text.replace("\n", "")
@@ -58,6 +69,7 @@ def get_stats(url, wait=0):
             soup.find("div", {"id": "details"}).findAll("div", {"class": "row"})[1].text
         )
         publish_info = publish_info.replace("\n", "")
+        publish_info = publish_info.replace("Published", "").strip()
     except:
         publish_info = None
 
@@ -144,11 +156,7 @@ def apply_added_by(urls):
     empty_stats = {key: None for key in raw_stats[not_missing[0]].keys()}
     stats = [stat if stat is not None else empty_stats for stat in raw_stats]
     goodreads_data = pd.DataFrame(stats)
-    goodreads_data["Added_by"] = goodreads_data["Added_by"].str.extract("(\d+)")
-    goodreads_data["To_reads"] = goodreads_data["To_reads"].str.extract("(\d+)")
-    goodreads_data["Publish_info"] = (
-        goodreads_data["Publish_info"].str.replace("Published", "").str.strip()
-    )
+
     goodreads_data["date_published"] = (
         goodreads_data["Publish_info"]
         .str.split("by ")

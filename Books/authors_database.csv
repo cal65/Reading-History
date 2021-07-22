@@ -12,7 +12,7 @@ N.J. Enfield,unknown,How We Talk: The Inner Workings of Conversation,male,Austra
 Kai-Fu Lee,andy,"AI Superpowers: China, Silicon Valley, and the New World Order",male,American,Taiwanese,,,Taiwanese
 Robin Sloan,,"Mr. Penumbra's 24-Hour Bookstore (Mr. Penumbra's 24-Hour Bookstore, #1)",male,American,,,,American
 J.K. Rowling,unknown,Harry Potter and the Sorcerer's Stone (Harry Potter #1),female,British,,,,British
-Te-Ping Chen,unknown,Land of Big Numbers,female,American,,,,American
+Te-Ping Chen,unknown,Land of Big Numbers,female,American,Chinese,,,Chinese
 E.L. Konigsburg,unknown,The View from Saturday,female,American,,,,American
 C.S. Lewis,unknown,"The Lion, the Witch and the Wardrobe (Chronicles of Narnia, #1)",male,British,Irish,,,Irish
 J.D. Salinger,unknown,The Catcher in the Rye,male,American,,,,American
@@ -2131,10 +2131,8 @@ Marla Rinwick,,'Il sentiero dei nidi di ragno' di Italo Calvino. Una favola neor
 Arshay Cooper,unknown,A Most Beautiful Thing,male,American,,,,American
 Lian Dolan,andy,The Sweeney Sisters,female,American,,,,American
 Manning Coles,multiple,"Drink to Yesterday (Tommy Hambledon, #1)",male,British,,,,British
-Anonymous,unknown,The Epic of Gilgamesh,unknown,,,,,
-Unknown,unknown,Beowulf,unknown,,,,,
 Dear Damsels,unknown,What She's Having: Stories of Women and Food,unknown,,,,,
-K.X. Song,unknown,An Echo in the City,male,American,Hong Kong,,,Hong Kong
+K.X. Song,unknown,An Echo in the City,female,American,Hong Kong,,,Hong Kong
 A. Kendra Greene,unknown,The Museum of Whales You Will Never See: And Other Excursions to Iceland's Most Unusual Museums,female,American,,,,American
 Jo Hamya,unknown,Three Rooms,female,British,,,,British
 Sareeta Domingo,unknown,Whoâs Loving You,female,British,,,,British
@@ -2167,10 +2165,10 @@ Daniel Markovits,male,"The Meritocracy Trap: How America's Foundational Myth Fee
 Deborah Fallows,female,"Dreaming in Chinese: Mandarin Lessons in Life, Love, And Language",female,American,,,,American
 Mark Schatzker,male,The Dorito Effect: The Surprising New Truth About Food and Flavor,male,Canadian,,,,Canadian
 Jessica Winter,female,Break in Case of Emergency,female,American,,,,American
-Teddy Wayne,male,Loner,male,,,,,
-Adam Brookes,male,Night Heron (Philip Mangan #1),male,Canadian,,,,
+Teddy Wayne,male,Loner,male,American,,,,American
+Adam Brookes,male,Night Heron (Philip Mangan #1),male,Canadian,,,,Canadian
 Pasquale Anthony Leonardo,male,ULTIMATE--The First Four Decades,male,American,,,,American
-Bonnie Marson,female,Sleeping with Schubert,female,American,,,,
+Bonnie Marson,female,Sleeping with Schubert,female,American,,,,American
 Adam Minter,male,Junkyard Planet: Travels in the Billion-Dollar Trash Trade,male,American,,,,American
 Anton DiSclafani,male,The Yonahlossee Riding Camp for Girls,female,American,,,,American
 Zachary Mexico,male,China Underground,male,American,,,,American
@@ -2244,15 +2242,15 @@ Ingrid Rojas Contreras,female,Fruit of the Drunken Tree,female,Colombian,,,,Colo
 Kristin Rowe-Finkbeiner,female,Keep Marching: How Every Woman Can Take Action and Change Our World,female,American,,,,American
 Peter Bevelin,male,Seeking Wisdom: From Darwin To Munger,male,Swedish,,,,Swedish
 John Neffinger,male,Compelling People: The Hidden Qualities That Make Us Influential,male,American,,,,American
-Peter Moskowitz,male,"How to Kill a City: Gentrification, Inequality, and the Fight for the Neighborhood",male,,,,,
-Patty McCord,female,Powerful: Building a Culture of Freedom and Responsibility,female,,,,,
-Kathleen Thelen,female,How Institutions Evolve,female,,,,,
+Peter Moskowitz,male,"How to Kill a City: Gentrification, Inequality, and the Fight for the Neighborhood",male,American,,,,American
+Patty McCord,female,Powerful: Building a Culture of Freedom and Responsibility,female,American,,,,American
+Kathleen Thelen,female,How Institutions Evolve,female,American,,,,American
 Michael W. Twitty,male,The Cooking Gene: A Journey Through African American Culinary History in the Old South,male,,,,,
 Nicole Y. Dennis-Benn,female,Here Comes the Sun,female,,,,,
 Michelle  Kuo,female,"Reading with Patrick: A Teacher, a Student, and a Life-Changing Friendship",female,American,Taiwanese,,,Taiwanese
 Meg Jay,female,The Defining Decade: Why Your Twenties Matter--And How to Make the Most of Them Now,female,,,,,
 Heather Harpham,female,Happiness: The Crooked Little Road to Semi-Ever After,female,American,,,,American
-Mauricio L Miller,male,The Alternative: Most of What You Believe About Poverty Is Wrong,male,,,,,
+Mauricio L Miller,male,The Alternative: Most of What You Believe About Poverty Is Wrong,male,American,,,,American
 Geoffrey G. Parker,male,Platform Revolution: How Networked Markets Are Transforming the Economy--and How to Make Them Work for You,male,,,,,
 Robin Romm,male,Double Bind: Women on Ambition,male,,,,,
 Ian McGuire,male,The North Water,male,English,,,,English
@@ -2281,7 +2279,7 @@ Alexis Schaitkin,male,Saint X,female,American,,,,American
 Stacy  Sims,female,"Roar: How to Match Your Food and Fitness to Your Unique Female Physiology for Optimum Performance, Great Health, and a Strong, Lean Body for Life",female,New Zealand,,,,New Zealand
 Katie Arnold,female,Running Home,female,American,,,,American
 Hal Elrod,male,"The Miracle Equation: The Two Decisions That Move Your Biggest Goals from Possible, to Probable, to Inevitable",male,American,,,,American
-Blythe Roberson,female,How to Date Men When You Hate Men,female,,,,,
+Blythe Roberson,female,How to Date Men When You Hate Men,female,American,,,,American
 Gary John Bishop,male,Stop Doing That Sh*t: End Self-Sabotage and Demand Your Life Back,male,,,,,
 Brad Stulberg,male,"The Passion Paradox: A Guide to Going All In, Finding Success, and Discovering the Benefits of an Unbalanced Life",male,,,,,
 Robyn Harding,female,Her Pretty Face,female,,,,,
@@ -2533,7 +2531,7 @@ Patricia Highsmith,female,Strangers on a Train,female,American,,,,American
 Jenny Han,female,"To All the Boys I've Loved Before (To All the Boys I've Loved Before, #1)",female,American,,,,American
 Padma Venkatraman,female,A Time to Dance,female,Indian,,,,Indian
 Chris Claremont,male,X-Men: Days of Future Past,male,American,British,,,British
-Merritt Tierce,male,Love Me Back,male,,,,,
+Merritt Tierce,male,Love Me Back,male,American,,,,American
 Harriet Reuter Hapgood,female,The Square Root of Summer,female,,,,,
 Janet Ellis,female,The Butcher's Hook,female,British,,,,British
 Sally Green,female,"Half Wild (The Half Bad Trilogy, #2)",female,British,,,,British
@@ -2547,7 +2545,7 @@ Rabih Alameddine,male,An Unnecessary Woman,male,American,Lebanese,,,Lebanese
 Kit de Waal,male,My Name is Leon,male,British,English,,,English
 Megan  Erickson,female,Class War: The Privatization of Childhood,female,American,,,,American
 Alan Hollinghurst,male,The Swimming-Pool Library,male,British,,,,British
-Stephen  D'Arcy,male,Languages of the Unheard,male,,,,,
+Stephen  D'Arcy,male,Languages of the Unheard,male,American,,,,American
 Kei Miller,female,The Last Warner Woman,female,Jamaican,,,,Jamaican
 Joe Abercrombie,male,"The Blade Itself (The First Law, #1)",male,British,,,,British
 Joseph Fink,male,"Welcome to Night Vale (Welcome to Night Vale, #1)",male,American,,,,American
@@ -2901,7 +2899,7 @@ Christina Hammonds Reed,female,The Black Kids,female,,,,,
 Tiffany D. Jackson,female,Grown,female,American,,,,American
 Jennifer  De Leon,female,Don't Ask Me Where I'm From,female,American,Guatemalan,,,Guatemalan
 Rory Power,male,Wilder Girls,female,American,,,,American
-Douglas Stone,male,Difficult Conversations: How to Discuss What Matters Most,male,,,,,
+Douglas Stone,male,Difficult Conversations: How to Discuss What Matters Most,male,American,,,,American
 Todd Balf,male,"Major: A Black Athlete, a White Era, and the Fight to Be the World's Fastest Human Being",male,American,,,,American
 André Aciman,male,"Call Me By Your Name (Call Me By Your Name, #1)",male,American,Egyptian,,,Egyptian
 Chanel Miller,female,Know My Name,female,American,,,,American
@@ -2921,9 +2919,9 @@ Ibi Zoboi,unknown,Pride,female,American,,,,American
 Natasha Diaz,female,Color Me In,female,American,,,,American
 Tahereh Mafi,female,A Very Large Expanse of Sea,female,American,,,,American
 Leslie T. Chang,female,Factory Girls: From Village to City in a Changing China,female,American,NA,NA,NA,American
-David Eimer,male,The Emperor Far Away: Travels at the Edge of China,male,,NA,NA,NA,
+David Eimer,male,The Emperor Far Away: Travels at the Edge of China,male,British,NA,NA,NA,British
 Arthur Meursault,male,Party Members,male,,NA,NA,NA,
 Mark Elvin,male,The Retreat of the Elephants: An Environmental History of China,male,,NA,NA,NA,
 Ada Palmer,female,"Too Like the Lightning (Terra Ignota, #1)",female,American,NA,NA,NA,American
 Jerry Smath,male,But No Elephants (Once Upon a Time),male,,NA,NA,NA,
-Bobbi Jane Kates,female,"We're Different, We're the Same",female,,NA,NA,NA,
+Bobbi Jane Kates,female,"We're Different, We're the Same",female,American,NA,NA,NA,American

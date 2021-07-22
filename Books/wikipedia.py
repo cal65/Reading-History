@@ -2,6 +2,14 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import sys
+import logging
+logging.basicConfig()
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+# add the handler to the root logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.addHandler(ch)
 
 S = requests.Session()
 
@@ -22,7 +30,7 @@ def grab_first_result(search_term):
     try:
         first_result = DATA[-1][0]
     except:
-        print("No Wikipedia page found for: " + search_term)
+        logger.info("No Wikipedia page found for: " + search_term)
         return "No result"
     return first_result
 
@@ -68,8 +76,9 @@ def search_person_for_gender(person):
 def evaluate_file(csv, fix_col="gender_fixed", name_col="Author"):
     df = pd.read_csv(csv)
     authors = df.loc[pd.isnull(df[fix_col]), name_col]
-    genders = [search_people_for_gender(author) for author in authors]
+    genders = [search_person_for_gender(author) for author in authors]
     df.loc[pd.isnull(df[fix_col]), fix_col] = genders
+    logger.info("Updating genders for " + str(len(genders)) + " authors")
     return df
 
 

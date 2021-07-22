@@ -56,12 +56,12 @@ ggplot(books_df) + geom_line(aes(x = Date.Read, y = 1:nrow(books_df)), color =
     panel.background = element_rect(fill = 'black'),
     panel.grid = element_blank()
   )
-ggsave(
-  'Books_Timeline.jpeg',
-  width = 15,
-  height = 9.5,
-  dpi = 200
-)
+# ggsave(
+#   'Books_Timeline.jpeg',
+#   width = 15,
+#   height = 9.5,
+#   dpi = 200
+# )
 
 # month plotter
 ggplot(books_df[Year.Read > 2010],

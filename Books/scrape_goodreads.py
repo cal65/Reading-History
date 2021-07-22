@@ -140,21 +140,7 @@ def return_urls(goodreads_data, id_col="Book.Id"):
 
 
 def apply_added_by(urls):
-    raw_stats = []
-    missing = []
-    for i, url in enumerate(urls):
-        stat = get_stats(url)
-        raw_stats.append(stat)
-        missing.append(stat is None)
-        # avoid overloading the site, if we get 3 missing returns in a row
-        if len(missing) > 3 and all(missing[-3:]):
-            time.sleep(25)
-        if i % 20 == 0:
-            print(i)
-    # raw_stats = [get_stats(url, i/100) for i, url in enumerate(urls)]
-    not_missing = [i for i, m in enumerate(missing) if m == False]
-    empty_stats = {key: None for key in raw_stats[not_missing[0]].keys()}
-    stats = [stat if stat is not None else empty_stats for stat in raw_stats]
+    stats = [get_stats(url) for url in urls]
     goodreads_data = pd.DataFrame(stats)
 
     goodreads_data["date_published"] = (
@@ -174,6 +160,12 @@ def apply_added_by(urls):
     # shelves
     return goodreads_data
 
+def get_first_name(name):
+    names = name.split(" ")
+    if len(names) > 0:
+        return names[0]
+    else:
+        return ""
 
 def generate_random_urls(max, n, seed):
     random.seed(seed)

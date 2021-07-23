@@ -84,10 +84,10 @@ for (name in names(paths)){
 world_df <- setDT(map_data('world'))
 region_dict <- fread('world_regions_dict.csv')
 region_dict <- region_dict[nationality != '']
-authors_db <- read.csv('authors_database.csv')
+authors_database <- read.csv('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){
-  country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_db)
+  country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_database)
   country_dict[[name]]$Country.Chosen <- mapvalues(country_dict[[name]]$Country.Chosen,
                                                    from = c('English', 'Scottish'),
                                                    to = c('British', 'British'))
@@ -95,7 +95,7 @@ for (name in names(paths)){
 }
 
 lapply(country_dict, function(x) length(which(is.na(x$Country.Chosen) | x$Country.Chosen=='')))
-unique(authors_db[which(!authors_db$Country.Chosen %in% region_dict$nationality),]$Country.Chosen)
+unique(authors_database[which(!authors_database$Country.Chosen %in% region_dict$nationality),]$Country.Chosen)
 
 # genre plotting
 genre_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
@@ -175,4 +175,10 @@ for (name in names(goodreads_list)){
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   ggsave(paste0('Graphs/', name, '/gender_ratings_', name, '.jpeg'), width=15, height=9, dpi=180)
+}
+
+for (name in names(goodreads_list)){
+  summary_plot(goodreads_list[[name]], date_col='Original.Publication.Year', gender_col = 'gender', 
+               narrative_col='narrative', nationality_col='Country.Chosen', 
+               authors_database = authors_database, name = name)
 }

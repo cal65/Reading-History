@@ -3,12 +3,12 @@ import requests
 import pandas as pd
 import sys
 import logging
+
 logging.basicConfig()
 ch = logging.StreamHandler()
 ch.setLevel(logging.INFO)
 # add the handler to the root logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 logger.addHandler(ch)
 
 S = requests.Session()
@@ -44,7 +44,7 @@ def eval_page(url):
 
 def search_paragraph_for_gender(paragraph):
     words = paragraph.split(" ")
-    #counter = [0, 0, 0]
+    # counter = [0, 0, 0]
     for word in words:
         if word.lower() in ["he", "his", "him"]:
             return "male"

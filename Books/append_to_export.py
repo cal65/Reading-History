@@ -29,28 +29,24 @@ def add_to_existing_export(file_path_existing, file_path_new):
     return diff_scraped
 
 
-def compare_dfs(df1, df2, index_column):
-    common_cols = [c for c in df2.columns if c in df1.columns]
-    for t in df2[index_column]:
-        df1_sub = df1[df1[index_column] == t]
-        df1_sub = df1_sub.head(1)  # in case of duplicates, just keep the first match
-        df2_sub = df2[df2[index_column] == t]
-
-        for c in ["Date.Read"]:
-            if df1_sub.iloc[0][c] != df2_sub.iloc[0][c]:
-                df1.loc[df1[index_column] == t, c] = df2_sub.iloc[0][c]
-    return df1
-
 
 def update_goodreads(df1, df2, index_column):
+	"""
+	Takes df1, an existing dataframe, and df2, a new dataframe.
+	The idea is df1 already has appended fields, but df2 may be more recent.
+	Any changes in df2 should be reflected in df1
+	Updates df1 on new df2 values
+	"""
     df2.columns = [c.replace(" ", ".") for c in df2.columns]
     # save all new books
     df2_unupdated = df2[~df2[index_column].isin(df1[index_column])]
     # go over the old books that are in common with existing dataset
-    df2 = df2[df2[index_column].isin(df1[index_column])]
-    df1_updated = compare_dfs(df1, df2, index_column)
+    df1.set_index(index_column, inplace=True)
+    df2.set_index(index_column, inplace=True)
+    df1.update(df2)
+    df1.reset_index(inplace=True)
     df2_updated = append_scraping(df2_unupdated)
-    df_updated = pd.concat([df1_updated, df2_updated])
+    df_updated = pd.concat([df1, df2_updated])
     return df_updated
 
 

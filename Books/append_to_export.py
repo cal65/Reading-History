@@ -70,10 +70,11 @@ def fix_date(file_path):
     df["Date.Read"] = pd.to_datetime(df["Date.Read"])
     df.to_csv(file_path, index=False)
     # return just for proof
-    return df[["Title.Simple", "Date.Added", "Date.Read"]]
+    return df[["Title", "Date.Added", "Date.Read"]]
 
 
 if __name__ == "__main__":
     file_path = sys.argv[1]
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)
     apply_append(file_path).to_csv(export_path, index=False)
+    fix_date(export_path)

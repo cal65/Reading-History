@@ -344,43 +344,50 @@ summary_plot <- function(dt, date_col,
   p1 <- gender_bar_plot(dt, gender_col, narrative_col, name)
   p2 <- nationality_bar_plot(dt, authors_database, nationality_col)
   p3 <- publication_histogram(dt, date_col)
-  min_count <- round(nrow(dt)/50)
+  p3 <- p3 + ggtitle(paste0('for ', name))
+  min_count <- round(nrow(dt)/40)
   p4 <- genre_bar_plot(dt, min_count=10)
+  jpeg(filename = paste0('Graphs/', name, '/Summary_plot.jpeg'), 
+       res = 200, width = 3200, height=2400)
   multiplot(p1, p2, p3, p4, cols=2)
-  ggsave(paste0('Graphs/', name, '/Summary_plot.jpeg'), width=10, height=8)
-}
-
-
-
-publication_histogram <- function(dt, date_col, start_year=1800){
-  dt_sub <- dt[get(date_col) > start_year]
-  n_bins <- nrow(dt_sub) / 10
-  ggplot(dt_sub) + geom_histogram(aes(x=get(date_col)), fill='black', bins=n_bins) + 
-    theme_pander() +
-    xlab('Year of Publication') 
+  dev.off()
 }
 
 gender_bar_plot <- function(dt, gender_col, narrative_col, name){
+  name <- gsub('_', ' ', name)
   ggplot(dt) + 
     geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), position=position_dodge()) +
     theme_pander() +
     xlab('') +
     scale_fill_brewer('Gender', palette='Set1') +
     coord_flip() +
-    theme(legend.position = 'bottom', plot.title=element_text(hjust=0)) + 
-    ggtitle(paste0('Summary Plot for ', name))
+    theme(legend.position = 'bottom', plot.title=element_text(hjust=1),
+          panel.border = element_rect(colour = "black", fill=NA, size=1)) + 
+    ggtitle('Summary Plots')
 }
 
 nationality_bar_plot <- function(dt, authors_database, nationality_col='Country.Chosen'){
   dt <- setDT(merge(dt, authors_database, by='Author'))
-  nation_table_df <- data.frame(table(dt[,get(nationality_col)]))
+  dt_sub <- dt[get(nationality_col) != '']
+  nation_table_df <- data.frame(table(dt_sub[,get(nationality_col)]))
   names(nation_table_df) <- c('Nationality', 'Count')
   setDT(nation_table_df)
   nation_table_df <- nation_table_df[order(Count)]
-  dt$Nationality <-
-    factor(dt[,get(nationality_col)], levels = nation_table_df$Nationality)
-  ggplot(dt) + geom_bar(aes(x=Nationality), color='black', fill='blue') + 
-    coord_flip() + theme_pander()
+  dt_sub$Nationality <-
+    factor(dt_sub[,get(nationality_col)], levels = nation_table_df$Nationality)
+  ggplot(dt_sub) + geom_bar(aes(x=Nationality), color='black', fill='blue') + 
+    coord_flip() + theme_pander() +
+    theme(panel.border = element_rect(colour = "black", fill=NA, size=1)) 
+}
+
+
+publication_histogram <- function(dt, date_col, start_year=1800){
+  dt_sub <- dt[get(date_col) > start_year]
+  n_bins <- max(nrow(dt_sub) / 10, 10)
+  ggplot(dt_sub) + geom_histogram(aes(x=get(date_col)), fill='black', bins=n_bins) + 
+    theme_pander() +
+    xlab('Year of Publication') +
+    theme(panel.border = element_rect(colour = "black", fill=NA, size=1)) 
 }
 
 genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
@@ -393,5 +400,27 @@ genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
   shelf_table_df$Shelf <- factor(shelf_table_df$Shelf, levels = shelf_table_df$Shelf)
   ggplot(shelf_table_df[Count > min_count]) + 
     geom_col(aes(x=Shelf, y=Count), color='black', fill='red') +
+    coord_flip() + theme_pander()
+}
+
+get_highest_rated_book <- function(dt, rating_col='Average.Rating', 
+                                   title_col='Title.Simple', author_col='Author'){
+  most_popular <- dt[which.max(get(rating_col))][, c((author_col), (title_col)), with=F]
+  return (paste0(most_popular, collapse = ': '))
+}
+
+plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
+                                     my_rating_col='My.Rating',
+                                     title_col='Title.Simple'){
+  highest <- tail(dt[order(get(rating_col))], n)
+  highest[[title_col]] <- factor(highest[[(title_col)]],
+                                     levels = unique(highest[[(title_col)]]))
+  highest[[my_rating_col]] <- as.factor(highest[[my_rating_col]])
+  ggplot(highest, aes(x=Title.Simple)) + 
+    geom_col(aes(y=get(rating_col), fill=get(my_rating_col))) +
+      geom_text(aes(y=get(rating_col)/2, label=get(rating_col))) +
+    xlab('Title') + ylab('Average Rating') +
+    ylim(0, 5) +
+    scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
     coord_flip() + theme_pander()
 }

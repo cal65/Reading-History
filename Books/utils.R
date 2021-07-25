@@ -14,7 +14,7 @@ preprocess <- function(dt){
                                        from = c('mostly_male', 'mostly_female'),
                                        to = c('male', 'female'), warn_missing = FALSE)
   names(dt) <- gsub(' ', '.', names(dt))
-  dt$Date.Read <- as.Date(dt$Date.Read, format = '%Y/%m/%d')
+  dt$Date.Read <- as.Date(dt$Date.Read, format = '%Y-%m-%d')
   dt$Title.Simple <- gsub(':.*', '', dt$Title)
   dt$Title.Simple <- gsub('\\(.*\\)', '', dt$Title.Simple)
   dt$Exclusive.Shelf <- mapvalues(dt$Exclusive.Shelf,
@@ -73,7 +73,7 @@ preprocess_dt <- function(dt){
 }
 
 month_plot <- function(df, name, date_col, page_col, title_col,
-                       author_gender_col, lims=NULL){
+                       author_gender_col, lims=NULL, save=F){
   setDT(df)
   df$Year.Read <- as.numeric(format(df[[date_col]], '%Y'))
   df$Month.Read  <- as.numeric(format(df[[date_col]], '%m'))
@@ -98,11 +98,14 @@ month_plot <- function(df, name, date_col, page_col, title_col,
     xlab('Month') + ylab('Number of Pages') + 
     theme(strip.text.y=element_text(angle=0), plot.title = element_text(hjust=0.5),
           panel.background = element_rect(color='black', fill=NA))
+  if (save == T){
+    ggsave(paste0('Graphs/', name, '/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=180)
+  }
 }
 
 year_plot <- function(df, name, fiction_col, date_col, page_col, 
                       title_col, author_gender_col, str_len=30, start_year = 2010,
-                      plot=T){
+                      save=F){
   divergent_df <- df
   divergent_df$Pages <- with(divergent_df, ifelse(get(fiction_col) == 'Fiction', -1*get(page_col), get(page_col)))
   str_len <- str_len
@@ -124,7 +127,7 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
     ggtitle(paste0(name, ' - Reading History')) +
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom') 
-  if (plot == T){
+  if (save == T){
     ggsave(paste0('Graphs/',  name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9)
   }
 }
@@ -205,7 +208,7 @@ finish_plot <- function(df,
     ylab('Reading Percentage') +
        coord_flip() + 
        ggtitle('Least Finished Reads') +
-       theme_solarized() +
+       theme_pander() +
        theme(plot.title = element_text(hjust=0.5))
   if (plot == T){
     ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=12, height=8)

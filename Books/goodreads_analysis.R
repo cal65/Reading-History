@@ -135,13 +135,11 @@ df_cal <- goodreads_list[['Cal']][Date.Read > '2011-01-01']
 for (name in names(paths)){
   month_plot(goodreads_list[[name]], name=name, date_col='Date.Read', 
            page_col='Number.of.Pages', title_col='Title.Simple',
-           author_gender_col='gender', lims=c(2010, 2022))
-  ggsave(paste0('Graphs/', name, '/Monthly_pages_read_', name, '.jpeg'), width=15, height=9, dpi=180)
+           author_gender_col='gender', lims=c(2010, 2022), save=T)
   year_plot(goodreads_list[[name]], name=name, fiction_col='narrative', 
             date_col='Date.Read', page_col='Number.of.Pages', 
-            title_col='Title.Simple', author_gender_col='gender')
-  ggsave(paste0('Graphs/', name, '/Yearly_pages_read_', name, '.jpeg'), width=15, height=9)
-  
+            title_col='Title.Simple', author_gender_col='gender', save=T)
+
 }
  
 # gender analysis by unique authors
@@ -179,6 +177,6 @@ for (name in names(goodreads_list)){
 
 for (name in names(goodreads_list)){
   summary_plot(goodreads_list[[name]], date_col='Original.Publication.Year', gender_col = 'gender', 
-               narrative_col='narrative', nationality_col='Country.Chosen', 
+               narrative_col='Narrative', nationality_col='Country.Chosen', 
                authors_database = authors_database, name = name)
 }

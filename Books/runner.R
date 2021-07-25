@@ -17,10 +17,10 @@ generate_plots <- function(file_path, name){
   dt$Source <- name
   dir.create(paste0('Graphs/', name), showWarnings = F)
   authors_database <- read.csv('authors_database.csv')
-  missing_data <- dt[!Author %in% authors_database$Author][, c('Author', 'Title', 'gender')]
-  missing_data <- missing_data[, .(Title = head(Title,1)), by=c('Author', 'gender')]
-  dt[!gender %in% c('female', 'male')]$gender <- mapvalues(
-    dt[!gender %in% c('female', 'male')]$Author, 
+  # update the authors database based on potential new data from dt
+  authors_database <- update_authors_artifact(authors_database, dt)
+  dt$gender <- mapvalues(
+    dt$Author, 
     authors_database$Author, 
     authors_database$gender_fixed, warn_missing = F)
   dt_read <- dt[Exclusive.Shelf == 'read']

@@ -72,6 +72,7 @@ preprocess_dt <- function(dt){
   dt$Exclusive.Shelf <- 'read'
 }
 
+
 month_plot <- function(df, name, date_col, page_col, title_col,
                        author_gender_col, lims=NULL, save=F){
   setDT(df)
@@ -241,9 +242,23 @@ year_comparison <- function(l, year_col, year_start, user, plot=T) {
   }
 }
 
-update_authors_artifact <- function(artifact, df_new, id_col='Author'){
-  authors_new = setdiff(df_new[,get(id_col)], artifact[,get(id_col)])
-  
+update_authors_artifact <- function(artifact, df_new, id_col='Author', gender_col='gender', title_col='Title'){
+  setDT(artifact)
+  setDT(df_new)
+  df_new_authors <- df_new[, .(Title=head(get(title_col),1)), by = c(id_col, gender_col)]
+  authors_new = df_new_authors[!get(id_col) %in% artifact[,get(id_col)]]
+  names(authors_new) <- mapvalues(names(authors_new), from='gender', to='gender_guessed')
+  authors_new$gender_fixed <- NA
+  authors_new$Country.Chosen <- ''
+  write.csv(authors_new, 'new_authors_data.csv', row.names=F)
+  system('/Users/christopherlee/anaconda3/bin/python3 google_answer.py new_authors_data.csv')
+  system('/Users/christopherlee/anaconda3/bin/python3 choose_nationality.py new_authors_data.csv')
+  system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py new_authors_data.csv')
+  new_data <- read.csv('new_authors_data.csv')
+  artifact <- rbind.fill(artifact, new_data)
+  # because of the multiple programming languages, have this awkward write python read pipeline
+  write.csv(artifact, 'authors_database.csv', row.names=F)
+  return (artifact)
 }
 
 merge_nationalities <- function(df, authors_db, country_col = 'Country.Chosen'){
@@ -340,16 +355,17 @@ summary_plot <- function(dt, date_col,
                          name, start_year=1800){
   # plot a 2x2 summary plot of
   # 1. Barplot of genders / fiction
-  # 2. Barplot of nationalities
+  # 2. Barplot of highest rated books
   # 3. Histogram of publication date
   # 4. Top genres
   source('multiplot.R')
   p1 <- gender_bar_plot(dt, gender_col, narrative_col, name)
-  p2 <- nationality_bar_plot(dt, authors_database, nationality_col)
+  # p2 <- nationality_bar_plot(dt, authors_database, nationality_col)
+  p2 <- plot_highest_rated_books(dt)
   p3 <- publication_histogram(dt, date_col)
   p3 <- p3 + ggtitle(paste0('for ', name))
   min_count <- round(nrow(dt)/40)
-  p4 <- genre_bar_plot(dt, min_count=10)
+  p4 <- genre_bar_plot(dt, min_count=min_count)
   jpeg(filename = paste0('Graphs/', name, '/Summary_plot.jpeg'), 
        res = 200, width = 3200, height=2400)
   multiplot(p1, p2, p3, p4, cols=2)

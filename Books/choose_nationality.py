@@ -42,4 +42,5 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
 if __name__ == "__main__":
     file_path = sys.argv[1]
     df = pd.read_csv(file_path)
-    choose_nationality(df).to_csv(file_path, index=False)
+    if len(df) > 0:
+        choose_nationality(df).to_csv(file_path, index=False)

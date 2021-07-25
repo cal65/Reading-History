@@ -81,7 +81,7 @@ def append_nationalities(df, author_col="Author"):
     return pd.concat([df.reset_index(drop=True), nats_df], axis=1)
 
 
-def lookup_unfound(df, nationality_col="country_chosen", author_col="Author"):
+def lookup_unfound(df, nationality_col="Country.Chosen", author_col="Author"):
     df_found = df[(pd.notnull(df[nationality_col])) & (df[nationality_col] != "")]
     df_unfound = df[(pd.isnull(df[nationality_col])) | (df[nationality_col] == "")]
     df_unfound = df_unfound[
@@ -91,8 +91,11 @@ def lookup_unfound(df, nationality_col="country_chosen", author_col="Author"):
             if ("nationality" not in c) and (nationality_col not in c)
         ]
     ]
-    df_unfound = append_nationalities(df_unfound)
-    df_return = pd.concat([df_found, df_unfound])
+    if len(df_unfound) > 0:
+	    df_unfound = append_nationalities(df_unfound)
+	    df_return = pd.concat([df_found, df_unfound])
+    else:
+	    df_return = df_found
 
     return df_return
 

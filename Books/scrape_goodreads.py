@@ -13,6 +13,7 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+
 def get_stats(url, wait=0):
     """
     Mega block to pull Goodreads website contents using BeautifulSoup
@@ -21,34 +22,51 @@ def get_stats(url, wait=0):
     """
     page = requests.get(url)
     soup = BeautifulSoup(page.content, "html.parser")
+    null_return = {
+        "Added_by": None,
+        "To_reads": None,
+        "Title": None,
+        "Author": None,
+        "Publish_info": None,
+        "Language": None,
+        "Rating": None,
+        "Shelf1": None,
+        "Shelf2": None,
+        "Shelf3": None,
+        "Shelf4": None,
+        "Shelf5": None,
+        "Original_title": None,
+    }
 
     scripts = soup.findAll("script")
     try:
         navig = scripts[18].string
     except IndexError as error:
         logger.info("Soup failed - index error - for url: " + url)
-        return None
+        return null_return
     except Exception as exception:
-        logger.info("Soup failed for url: " + url, )
-        return None
+        logger.info(
+            "Soup failed for url: " + url,
+        )
+        return null_return
     add_string = 'added by <span class=\\"value\\">'
     # crucial breaking line
     try:
         n = navig.find(add_string)
     except Exception as exception:
         print(str(exception))
-        return None
+        return null_return
     added_by_raw = navig[(n + len(add_string)) : (n + len(add_string) + 9)]
-    added_by_parsed = re.findall('\d+', added_by_raw) # extract numbers
+    added_by_parsed = re.findall("\d+", added_by_raw)  # extract numbers
     if len(added_by_parsed) > 0:
-        added_by = int(added_by_parsed[0]) # first number found
+        added_by = int(added_by_parsed[0])  # first number found
     else:
         added_by = None
 
     to_read_string = "<\\/span> to-reads"
     n2 = navig.find(to_read_string)
     to_reads_raw = navig[(n2 - 8) : n2]
-    to_reads_parsed = re.findall('\d+', to_reads_raw)
+    to_reads_parsed = re.findall("\d+", to_reads_raw)
     if len(to_reads_parsed) > 0:
         to_reads = int(to_reads_parsed[0])
     else:
@@ -121,7 +139,7 @@ def create_url(id, name):
     # formatted_name = formatted_name.replace("'", "-")
     # formatted_name = formatted_name.split(":")[0]
     # formatted_name = formatted_name.split("(")[0]
-    return "https://www.goodreads.com/book/show/" + str(id) #+ "." + formatted_name
+    return "https://www.goodreads.com/book/show/" + str(id)  # + "." + formatted_name
 
 
 def read_goodreads_export(file_path):
@@ -160,12 +178,14 @@ def apply_added_by(urls):
     # shelves
     return goodreads_data
 
+
 def get_first_name(name):
     names = name.split(" ")
     if len(names) > 0:
         return names[0]
     else:
         return ""
+
 
 def generate_random_urls(max, n, seed):
     random.seed(seed)

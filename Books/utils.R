@@ -374,6 +374,9 @@ summary_plot <- function(dt, date_col,
 
 gender_bar_plot <- function(dt, gender_col, narrative_col, name){
   name <- gsub('_', ' ', name)
+  dt[[gender_col]] <- mapvalues(dt[[gender_col]],
+                                from = c('multiple', 'unknown', 'non-binary'),
+                                to = rep('unknown or other', 3))
   ggplot(dt) + 
     geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), position=position_dodge()) +
     theme_pander() +

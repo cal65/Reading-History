@@ -248,7 +248,7 @@ update_authors_artifact <- function(artifact, df_new, id_col='Author', gender_co
   df_new_authors <- df_new[, .(Title=head(get(title_col),1)), by = c(id_col, gender_col)]
   authors_new = df_new_authors[!get(id_col) %in% artifact[,get(id_col)]]
   names(authors_new) <- mapvalues(names(authors_new), from='gender', to='gender_guessed')
-  authors_new$gender_fixed <- NA
+  authors_new$gender_fixed <- authors_new$gender_guessed
   authors_new$Country.Chosen <- ''
   write.csv(authors_new, 'new_authors_data.csv', row.names=F)
   system('/Users/christopherlee/anaconda3/bin/python3 google_answer.py new_authors_data.csv')

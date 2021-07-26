@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
+from pandas.api.types import is_string_dtype 
 import numpy as np
 import json
 import random
@@ -151,14 +152,15 @@ def read_goodreads_export(file_path):
 
 
 def return_urls(goodreads_data, id_col="Book.Id"):
-    goodreads_data["Title"] = goodreads_data["Title"].astype(str)
+    if not is_string_dtype(goodreads_data["Title"]):
+        goodreads_data["Title"] = goodreads_data["Title"].astype(str)
     urls = goodreads_data.apply(lambda x: create_url(x[id_col], x["Title"]), axis=1)
 
     return urls
 
 
-def apply_added_by(urls):
-    stats = [get_stats(url) for url in urls]
+def apply_added_by(urls, wait=1):
+    stats = [get_stats(url, wait=wait) for url in urls]
     goodreads_data = pd.DataFrame(stats)
 
     goodreads_data["date_published"] = (

@@ -296,6 +296,7 @@ create_melted_genre_df <- function(dt) {
   genre_df.m <- setDT(melt(genre_df, 
                            id.var='Source', value.name = 'Shelf'))
   genre_df.m <- genre_df.m[!Shelf %in% c('Fiction', 'Nonfiction', '')]
+  genre_df.m <- genre_df.m[!is.na(Shelf)]
   return (genre_df.m)
 }
 
@@ -313,7 +314,6 @@ genre_plot <- function(genre_df,
   #random_seed
   genre_df.m <- setDT(melt(genre_df, 
                      id.var='Source', value.name = 'Shelf'))
-  genre_df.m <- genre_df.m[!Shelf %in% c('Fiction', 'Nonfiction', '')]
 
   all_names <- unique(genre_df[,get(source_col)])
   other_names <- sample(setdiff(all_names, name), n_users)
@@ -376,7 +376,8 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
   name <- gsub('_', ' ', name)
   dt[[gender_col]] <- mapvalues(dt[[gender_col]],
                                 from = c('multiple', 'unknown', 'non-binary'),
-                                to = rep('unknown or other', 3))
+                                to = rep('unknown or other', 3),
+                                warn_missing = F)
   ggplot(dt) + 
     geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), position=position_dodge()) +
     theme_pander() +
@@ -415,6 +416,7 @@ publication_histogram <- function(dt, date_col, start_year=1800){
 genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
   genre_df.m <- create_melted_genre_df(dt)
   genre_df.m <- genre_df.m[variable %in% paste0('Shelf', 1:n_shelves)]
+  genre_df.m <- genre_df.m[!is.na(Shelf)]
   shelf_table_df <- data.frame(table(genre_df.m$Shelf))
   names(shelf_table_df) <- c('Shelf', 'Count')
   setDT(shelf_table_df)

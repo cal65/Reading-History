@@ -106,32 +106,17 @@ for (name in names(paths)){
   genre_plot(genre_df, name = name, n_genre = 12, read_col='Read',  plot=T)
 }
 
-for (name in names(paths)){
-  indiv_genre <- top_table[Source == name]
-  indiv_genre$Freq_perc <- indiv_genre$Freq / sum(indiv_genre$Freq)
-  genre_comparison_df <- merge(indiv_genre[,c('Shelf', 'Freq_perc')],
-                               overall_genre_distribution,
-                               by.x = 'Shelf', by.y = 'Var1',
-                               all.y = T)
-  genre_comparison_df$difference <- with(genre_comparison_df, Freq_perc - Freq)
-  print(name)
-  print(genre_comparison_df[which.max(genre_comparison_df$difference)])
-}
-
-# Medium post
-top_table$Source_medium <- mapvalues(top_table$Source, 
-                                     from = c('Adam', 'Liz', 'Ruby', 'Sarah', 'Andrea'),
-                                     to = c('Friend 1', 'Friend 2', 'Friend 3', 'Friend 4', 'Friend 5'))
-ggplot(top_table[Shelf %in% top_genres & Source != 'Glen']) + 
-  geom_col(aes(x=Shelf, y=Freq, fill=Source_medium), color='black') +
-  facet_grid(. ~ Source_medium, scales='free') + 
-  scale_fill_brewer(palette = 'Set3', 'Source') +
-  coord_flip() +
-  ggtitle('Genre Plot') +
-  theme_wsj()
-ggsave('Graphs/genre_plot_medium.jpeg', width=14, height=8)
-df_cal <- goodreads_list[['Cal']][Date.Read > '2011-01-01']
-
+# for (name in names(paths)){
+#   indiv_genre <- top_table[Source == name]
+#   indiv_genre$Freq_perc <- indiv_genre$Freq / sum(indiv_genre$Freq)
+#   genre_comparison_df <- merge(indiv_genre[,c('Shelf', 'Freq_perc')],
+#                                overall_genre_distribution,
+#                                by.x = 'Shelf', by.y = 'Var1',
+#                                all.y = T)
+#   genre_comparison_df$difference <- with(genre_comparison_df, Freq_perc - Freq)
+#   print(name)
+#   print(genre_comparison_df[which.max(genre_comparison_df$difference)])
+# }
 
 ## Month plot
 for (name in names(paths)){

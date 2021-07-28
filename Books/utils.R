@@ -312,8 +312,7 @@ genre_plot <- function(genre_df,
                       random_seed=337,
                       start_year=NA){
   #random_seed
-  genre_df.m <- setDT(melt(genre_df, 
-                     id.var='Source', value.name = 'Shelf'))
+  genre_df.m <- create_melted_genre_df(setDT(genre_df))
 
   all_names <- unique(genre_df[,get(source_col)])
   other_names <- sample(setdiff(all_names, name), n_users)

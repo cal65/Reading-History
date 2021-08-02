@@ -399,11 +399,10 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
                                 from = c('multiple', 'unknown', 'non-binary'),
                                 to = rep('unknown or other', 3),
                                 warn_missing = F)
-  genders_preserve <- unique(dt[[gender_col]]) # for position_dodge2 preserve parameter
-  # this parameter allows for equal bar heights
   ggplot(dt) + 
+    # preserve parameter allows for equal bar heights
     geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), 
-             position=position_dodge2(preserve = genders_preserve)) +
+             position=position_dodge2(preserve = 'single')) +
     theme_pander() +
     xlab('') + ylab('Count') +
     scale_fill_brewer('Gender', palette='Set1') +

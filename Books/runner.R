@@ -11,8 +11,9 @@ source('utils.R')
 args = commandArgs(trailingOnly=TRUE)
 file_path <- args[1]
 name <- args[2]
+write <- ifelse(length(args > 2), as.logical(args[3]), F)
 
-generate_plots <- function(file_path, name){
+generate_plots <- function(file_path, name, write=write){
   dt <- run_all(file_path)
   dt$Source <- name
   dir.create(paste0('Graphs/', name), showWarnings = F)
@@ -49,5 +50,8 @@ generate_plots <- function(file_path, name){
   summary_plot(dt_read, date_col='Original.Publication.Year', gender_col = 'gender', 
                narrative_col='Narrative', nationality_col='Country.Chosen', 
                authors_database = authors_database, name = name)
+  if (write == T){
+    write.csv(country_dt, file_path)
+  }
 }
-generate_plots(file_path, name)
+generate_plots(file_path, name, write)

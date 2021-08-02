@@ -399,8 +399,11 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
                                 from = c('multiple', 'unknown', 'non-binary'),
                                 to = rep('unknown or other', 3),
                                 warn_missing = F)
+  genders_preserve <- unique(dt[[gender_col]]) # for position_dodge2 preserve parameter
+  # this parameter allows for equal bar heights
   ggplot(dt) + 
-    geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), position=position_dodge2()) +
+    geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), 
+             position=position_dodge2(preserve = genders_preserve)) +
     theme_pander() +
     xlab('') + ylab('Count') +
     scale_fill_brewer('Gender', palette='Set1') +
@@ -410,7 +413,8 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
     ggtitle('Summary Plots')
 }
 
-nationality_bar_plot <- function(dt, authors_database, nationality_col='Country.Chosen'){
+nationality_bar_plot <- function(dt, authors_database, name,
+                                 nationality_col='Country.Chosen', save=F){
   dt <- setDT(merge(dt, authors_database, by='Author'))
   dt_sub <- dt[get(nationality_col) != '']
   nation_table_df <- data.frame(table(dt_sub[,get(nationality_col)]))
@@ -422,6 +426,9 @@ nationality_bar_plot <- function(dt, authors_database, nationality_col='Country.
   ggplot(dt_sub) + geom_bar(aes(x=Nationality), color='black', fill='blue') + 
     coord_flip() + theme_pander() +
     theme(panel.border = element_rect(colour = "black", fill=NA, size=1)) 
+  if (save == T){
+    ggsave(paste0('Graphs/', name, '/nationality_barplot_' , name, '.jpeg'), width=11, height=8)
+  }
 }
 
 

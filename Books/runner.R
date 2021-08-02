@@ -34,6 +34,7 @@ generate_plots <- function(file_path, name){
   region_dict <- fread('world_regions_dict.csv')
   region_dict <- region_dict[nationality != '']
   country_dt <- merge_nationalities(dt_read, authors_database)
+  nationality_bar_plot(dt_read, authors_database, name=name, save=T)
   plot_map_data(country_dt, region_dict=region_dict, world_sf=world_sf, user=name)
   # cannot do genre plot with just an individual's data. To figure out better path
   # month plot

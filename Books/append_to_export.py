@@ -3,6 +3,7 @@ import sys
 import pandas as pd
 import re
 import logging
+import argparse
 
 logging.basicConfig()
 ch = logging.StreamHandler()
@@ -56,6 +57,9 @@ def update_goodreads(df1, df2, index_column):
 
 
 def update_missing_data(df, wait=1):
+    """
+    This function is for incomplete appends, when rows failed due to timeouts
+    """
     df_missing = df[pd.isnull(df["Added_by"])]
     if len(df_missing) > 0:
         logger.info("Updating " + str(len(df_missing.shape)) + " missing rows of data")
@@ -78,7 +82,22 @@ def fix_date(file_path):
 
 
 if __name__ == "__main__":
-    file_path = sys.argv[1]
+    """
+    Usage: python append_to_export.py [--update] filepath.csv 
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file_path")
+    parser.add_argument("--update", dest='update', action='store_true', help="Mode - default none = apply append")
+    args = parser.parse_args()
+    print(args.file_path)
+    print(args.update)
+    file_path = args.file_path
+    update = args.update
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)
-    apply_append(file_path).to_csv(export_path, index=False)
-    fix_date(export_path)
+    if update is False:
+    	apply_append(file_path).to_csv(export_path, index=False)
+    	fix_date(export_path)
+    elif update is True:
+    	df = pd.read_csv(file_path)
+    	df = update_missing_data(df)
+    	df.to_csv(file_path, index=False)

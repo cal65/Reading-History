@@ -180,7 +180,7 @@ Judea Pearl,unknown,The Book of Why: The New Science of Cause and Effect,male,Am
 Hernan Diaz,unknown,In the Distance,male,Argentine,,,,Argentine
 Mary-Frances Winters,unknown,"We Can't Talk about That at Work!: How to Talk about Race, Religion, Politics, and Other Polarizing Topics",female,American,,,,American
 Shaka Senghor,unknown,"Writing My Wrongs: Life, Death, and Redemption in an American Prison",male,American,,,,American
-Vaclav Smil,unknown,Energy and Civilization: A History,male,Canadian,,,,Canadian
+Vaclav Smil,unknown,Energy and Civilization: A History,male,Canadian,Czech,,,Czech
 Lesley Nneka Arimah,andy,What It Means When a Man Falls from the Sky,female,Nigerian,,,,Nigerian
 Mei Fong,andy,One Child: The Story of China's Most Radical Experiment,female,American,,,,American
 Irin Carmon,unknown,Notorious RBG: The Life and Times of Ruth Bader Ginsburg,female,American,,,,American
@@ -326,7 +326,7 @@ Anuk Arudpragasam,unknown,The Story of a Brief Marriage,male,Sri Lankan,,,,Sri L
 Yun Ko-eun,unknown,The Disaster Tourist,female,South Korean,,,,South Korean
 Hiromi Kawakami,unknown,The Ten Loves of Mr. Nishino,female,Japanese,,,,Japanese
 Moïra Fowley-Doyle,unknown,Spellbook of the Lost and Found,female,Irish,French,,,Irish
-Casey McQuiston,unknown,"Red, White & Royal Blue",male,American,,,,American
+Casey McQuiston,unknown,"Red, White & Royal Blue",female,American,,,,American
 Banana Yoshimoto,unknown,Lizard,female,Japanese,,,,Japanese
 Dessa,unknown,"My Own Devices: Essays From the Road on Music, Science, and Senseless Love",male,American,,,,American
 Roshani Chokshi,unknown,"Aru Shah and the End of Time (Pandava Quartet, #1)",female,American,,,,American
@@ -464,7 +464,7 @@ Chip Heath,male,Switch: How to Change Things When Change Is Hard,male,American,,
 Eric Ries,male,The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses,male,American,,,,American
 Matt Sheehan,male,[UNTITLED MATT SHEEHAN BOOK],male,American,,,,American
 David Mitchell,male,Cloud Atlas,male,British,,,,British
-Amor Towles,female,A Gentleman in Moscow,female,American,,,,American
+Amor Towles,female,A Gentleman in Moscow,male,American,,,,American
 Kristin Hannah,female,The Nightingale,female,American,,,,American
 Julie Michelle Klinger,female,Rare Earth Frontiers: From Terrestrial Subsoils to Lunar Landscapes,female,American,,,,American
 Peter Hessler,male,River Town: Two Years on the Yangtze (P.S.),male,American,,,,American
@@ -486,7 +486,7 @@ Joseph Conrad,male,Heart of Darkness,male,British,Russian,,,Russian
 Vladimir Nabokov,male,Pnin,male,American,Russian,Swiss,,Swiss
 David Plotz,male,The Genius Factory: The Curious History of the Nobel Prize Sperm Bank,male,American,,,,American
 Zora Neale Hurston,female,Their Eyes Were Watching God,female,American,,,,American
-Toni Morrison,male,Beloved,male,American,,,,American
+Toni Morrison,male,Beloved,female,American,,,,American
 William Shakespeare,male,Hamlet,male,English,,,,English
 Suzanne Collins,female,"Mockingjay (The Hunger Games, #3)",female,American,,,,American
 John Steinbeck,male,The Grapes of Wrath,male,American,,,,American
@@ -1163,7 +1163,7 @@ Sarah Pinsker,female,A Song for a New Day,female,American,,,,American
 Rebecca Skloot,female,The Immortal Life of Henrietta Lacks,female,American,,,,American
 Cathy Park Hong,female,Minor Feelings: An Asian American Reckoning,female,American,,,,American
 Wanda Coleman,female,Mercurochrome,female,American,,,,American
-Ali Wong,male,"Dear Girls: Intimate Tales, Untold Secrets, & Advice for Living Your Best Life",male,American,,,,American
+Ali Wong,male,"Dear Girls: Intimate Tales, Untold Secrets, & Advice for Living Your Best Life",female,American,,,,American
 Julia  Phillips,female,Disappearing Earth,female,American,,,,American
 Ronald Takaki,male,Strangers from a Different Shore: A History of Asian Americans,male,American,,,,American
 Helen Zia,female,Asian American Dreams: The Emergence of an American People,female,American,,,,American
@@ -1640,7 +1640,7 @@ Richard   Preston,male,The Hot Zone: The Terrifying True Story of the Origins of
 Raymond Bonner,male,Anatomy of Injustice: A Murder Case Gone Wrong,male,American,,,,American
 Val McDermid,female,"Forensics: What Bugs, Burns, Prints, DNA and More Tell Us About Crime",female,British,Scottish,,,Scottish
 Colleen Hoover,female,It Ends with Us,female,American,,,,American
-Taylor Jenkins Reid,male,The Seven Husbands of Evelyn Hugo,male,American,,,,American
+Taylor Jenkins Reid,male,The Seven Husbands of Evelyn Hugo,female,American,,,,American
 Yrsa Daley-Ward,female,The Terrible: A Storyteller's Memoir,female,British,,,,British
 Lori Gottlieb,female,"Maybe You Should Talk to Someone: A Therapist, Her Therapist, and Our Lives Revealed",female,American,,,,American
 Ron Chernow,male,Alexander Hamilton,male,American,,,,American
@@ -2294,10 +2294,10 @@ Al Comeaux,male,Change (the) Management: Why We as Leaders Must Change for the C
 Lori Qian,female,How Sweet the Bitter Soup,female,American,Chinese,,,Chinese
 Caroline Bobick,female,Censored,female,American,,,,American
 Amy Morin,female,"13 Things Mentally Strong People Don't Do: Take Back Your Power, Embrace Change, Face Your Fears, and Train Your Brain for Happiness and Success",female,American,,,,American
-Jody Hoffer Gittell,female,"High Performance Healthcare: Using the Power of Relationships to Achieve Quality, Efficiency and Resilience",female,,,,,
+Jody Hoffer Gittell,female,"High Performance Healthcare: Using the Power of Relationships to Achieve Quality, Efficiency and Resilience",female,American,,,,American
 Seth Stephens-Davidowitz,male,"Everybody Lies: Big Data, New Data, and What the Internet Can Tell Us About Who We Really Are",male,American,,,,American
 Danielle Teller,female,All the Ever Afters: The Untold Story of Cinderella's Stepmother,female,Canadian,American,,,Canadian
-Brian Portnoy,male,The Geometry of Wealth: How to shape a life of money and meaning,male,,,,,
+Brian Portnoy,male,The Geometry of Wealth: How to shape a life of money and meaning,male,American,,,,American
 Jonathan D. Quick,male,The End of Epidemics: The Looming Threat to Humanity and How to Stop It,male,American,,,,American
 Eugenia Kim,female,The Calligrapher's Daughter,female,American,,,,American
 Rhian E. Jones,female,Under My Thumb: Songs That Hate Women and the Women That Love Them,female,Welsh,,,,Welsh
@@ -2321,12 +2321,12 @@ Monique W. Morris,female,Pushout: The Criminalization of Black Girls in Schools,
 Josephine Ensign,female,Catching Homelessness: A Nurse's Story of Falling Through the Safety Net,female,American,,,,American
 Harry Beckwith,male,Selling the Invisible: A Field Guide to Modern Marketing,male,American,,,,American
 Alexandra M. Levitt,female,"Deadly Outbreaks: How Medical Detectives Save Lives Threatened by Killer Pandemics, Exotic Viruses, and Drug-Resistant Parasites",female,American,,,,American
-Ernest Drucker,male,A Plague of Prisons: The Epidemiology of Mass Incarceration in America,male,,,,,
-Jennifer  Jordan,female,"Savage Summit: The True Stories of the First Five Women Who Climbed K2, the World's Most Feared Mountain",female,,,,,
-Michael G. Marmot,male,The Health Gap: The Challenge of an Unequal World,male,,,,,
+Ernest Drucker,male,A Plague of Prisons: The Epidemiology of Mass Incarceration in America,male,American,,,,American
+Jennifer  Jordan,female,"Savage Summit: The True Stories of the First Five Women Who Climbed K2, the World's Most Feared Mountain",female,American,,,,American
+Michael G. Marmot,male,The Health Gap: The Challenge of an Unequal World,male,English,,,,English
 Marilyn  Chase,female,The Barbary Plague: The Black Death in Victorian San Francisco,female,American,,,,American
-Erica Katz,female,The Boys' Club,female,,,,,
-Michael D. Watkins,male,The First 90 Days: Proven Strategies for Getting Up to Speed Faster and Smarter,male,,,,,
+Erica Katz,female,The Boys' Club,female,American,,,,American
+Michael D. Watkins,male,The First 90 Days: Proven Strategies for Getting Up to Speed Faster and Smarter,male,Canadian,,,,Canadian
 Asha Lemmie,female,Fifty Words for Rain,female,American,,,,American
 Lois P. Frankel,female,Nice Girls Don't Get the Corner Office: 101 Unconscious Mistakes Women Make That Sabotage Their Careers,female,American,,,,American
 Eveline Hasler,female,La strega bambina,female,Swiss,,,,Swiss
@@ -2345,7 +2345,7 @@ Erin Bartels,female,We Hope for Better Things,female,American,,,,American
 Claire Lombardo,female,The Most Fun We Ever Had,female,American,,,,American
 Derick Lugo,male,The Unlikely Thru-Hiker: An Appalachian Trail Journey,male,American,,,,American
 Stephen Puleo,male,"Voyage of Mercy: The USS Jamestown, the Irish Famine, and the Remarkable Story of America's First Humanitarian Mission",male,American,,,,American
-Jane Healey,female,The Saturday Evening Girls Club,female,,,,,
+Jane Healey,female,The Saturday Evening Girls Club,female,American,,,,American
 Kelli Estes,female,The Girl Who Wrote in Silk,female,,,,,
 Jim DeFede,male,"The Day the World Came to Town: 9/11 in Gander, Newfoundland",male,,,,,
 Hazel Gaynor,female,The Lighthouse Keeper's Daughter,female,,,,,
@@ -2355,12 +2355,12 @@ Juliette Fay,female,Shelter Me,female,,,,,
 Andrew Forsthoefel,male,"Walking to Listen: 4,000 Miles Across America, One Story at a Time",male,,,,,
 Hillary Manton Lodge,female,Jane of Austin: A Novel of Sweet Tea and Sensibility,female,,,,,
 Julia Claiborne Johnson,female,Be Frank With Me,female,,,,,
-Camron Wright,male,The Orphan Keeper,male,,,,,
+Camron Wright,male,The Orphan Keeper,male,American,,,,American
 Julie Kibler,female,Calling Me Home,female,American,,,,American
-Aili McConnon,female,"Road to Valor: A True Story of WWII Italy, the Nazis, and the Cyclist who inspired a nation",female,,,,,
+Aili McConnon,female,"Road to Valor: A True Story of WWII Italy, the Nazis, and the Cyclist who inspired a nation",female,Canadian,,,,Canadian
 Ursula DeYoung,female,Shorecliff,female,American,,,,American
-Jessamyn Hope,female,Safekeeping,female,,,,,
-Lev Golinkin,male,"A Backpack, a Bear, and Eight Crates of Vodka: A Memoir",male,,,,,
+Jessamyn Hope,female,Safekeeping,female,Canadian,,,,Canadian
+Lev Golinkin,male,"A Backpack, a Bear, and Eight Crates of Vodka: A Memoir",male,American,Ukrainian,,,Ukrainian
 Laura Schroff,female,An Invisible Thread,female,,,,,
 Molly Guptill Manning,female,When Books Went to War: The Stories that Helped Us Win World War II,female,,,,,
 Dina Vargo,female,Wild Women of Boston: Mettle and Moxie in the Hub,female,,,,,
@@ -2382,7 +2382,7 @@ Maya Abu Al-Hayat,female,The Book of Ramallah: A City in Short Fiction (Reading 
 Mark  Stay,male,The End of Magic,male,British,,,,British
 Stephen Fry,male,Mythos: The Greek Myths Retold,male,British,,,,British
 Guy Morpuss,male,Five Minds,male,British,,,,British
-Natalie Eve Garrett,female,Eat Joy: Stories & Comfort Food from 31 Celebrated Writers,female,,,,,
+Natalie Eve Garrett,female,Eat Joy: Stories & Comfort Food from 31 Celebrated Writers,female,American,,,,American
 Emily R. Austin,female,Everyone in This Room Will Someday Be Dead,female,Canadian,,,,Canadian
 Alexandria Bellefleur,female,Written in the Stars,female,American,,,,American
 Quan Barry,male,We Ride Upon Sticks,male,Vietnamese,American,,,Vietnamese
@@ -2399,7 +2399,7 @@ Maxine Mei-Fung Chung,female,The Eighth Girl,female,British,,,,British
 Una Mannion,female,A Crooked Tree,female,American,Irish,,,Irish
 Fiona Mozley,female,Hot Stew,female,English,,,,English
 Rachel  Long,female,My Darling from the Lions,female,British,,,,British
-Jesse Q. Sutanto,male,Dial A for Aunties,male,Indonesian,Singaporean,British,,Indonesian
+Jesse Q. Sutanto,male,Dial A for Aunties,female,Indonesian,Singaporean,British,,Indonesian
 Sarah Hogle,female,You Deserve Each Other,female,American,,,,American
 Toshikazu Kawaguchi,male,"Before the Coffee Gets Cold (Before the Coffee Gets Cold, #1)",male,Japanese,,,,Japanese
 Amie Kaufman,female,"Aurora Burning (The Aurora Cycle, #2)",female,Australian,,,,Australian
@@ -2420,7 +2420,7 @@ Jessica J. Lee,female,"Two Trees Make a Forest: A Story of Memory, Migration, an
 Miranda Popkey,female,Topics of Conversation,female,,,,,
 Jessie Greengrass,female,Sight,female,,,,,
 Bev Thomas,female,A Good Enough Mother,female,,,,,
-Alice Clark-Platts,female,"Bitter Fruits (DI Erica Martin, #1)",female,,,,,
+Alice Clark-Platts,female,"Bitter Fruits (DI Erica Martin, #1)",female,British,,,,British
 David  Yoon,male,Frankly in Love,male,American,,,,American
 Maria Reva,female,Good Citizens Need Not Fear: Stories,female,,,,,
 Rachel DeLoache Williams,female,My Friend Anna: The True Story of a Fake Heiress,female,,,,,
@@ -2912,14 +2912,14 @@ Natasha Diaz,female,Color Me In,female,American,,,,American
 Tahereh Mafi,female,A Very Large Expanse of Sea,female,American,,,,American
 Leslie T. Chang,female,Factory Girls: From Village to City in a Changing China,female,American,NA,NA,NA,American
 David Eimer,male,The Emperor Far Away: Travels at the Edge of China,male,British,NA,NA,NA,British
-Arthur Meursault,male,Party Members,male,,NA,NA,NA,
+Arthur Meursault,male,Party Members,male,English,NA,NA,NA,English
 Mark Elvin,male,The Retreat of the Elephants: An Environmental History of China,male,,NA,NA,NA,
 Ada Palmer,female,"Too Like the Lightning (Terra Ignota, #1)",female,American,NA,NA,NA,American
 Jerry Smath,male,But No Elephants (Once Upon a Time),male,,NA,NA,NA,
 Bobbi Jane Kates,female,"We're Different, We're the Same",female,American,NA,NA,NA,American
 Kevin Roose,male,Futureproof: 9 Rules for Humans in the Age of Automation,male,American,,,NA,American
 James P. Womack,male,The Machine That Changed the World: The Story of Lean Production-- Toyota's Secret Weapon in the Global Car Wars That Is Now Revolutionizing World Industry,male,American,,,NA,American
-Jeffrey K. Liker,male,The Toyota Way: 14 Management Principles from the World's Greatest Manufacturer,male,,,,NA,
+Jeffrey K. Liker,male,The Toyota Way: 14 Management Principles from the World's Greatest Manufacturer,male,American,,,NA,American
 Justin Zappulla,male,Critical Selling: How Top Performers Accelerate the Sales Process and Close More Deals,male,American,,,NA,American
 Barry Werth,male,The Billion-Dollar Molecule: The Quest for the Perfect Drug,male,American,,,NA,American
 Matthew Dixon,male,The Challenger Sale: Taking Control of the Customer Conversation,male,British,English,,NA,British
@@ -3022,7 +3022,7 @@ Pierre Lemaitre,unknown,The Great Swindle,male,French,,,NA,French
 Simone van der Vlugt,unknown,Midnight Blue,female,Dutch,,,NA,Dutch
 Qiu Xiaolong,unknown,A Loyal Character Dancer (Inspector Chen Cao #2),male,American,Chinese,,NA,Chinese
 Lars Mytting,unknown,The Sixteen Trees of the Somme,male,Norwegian,,,NA,Norwegian
-Taylor Downing,unknown,"Breakdown: The Crisis of Shell Shock on the Somme, 1916",male,,,,NA,
+Taylor Downing,unknown,"Breakdown: The Crisis of Shell Shock on the Somme, 1916",male,British,,,NA,British
 Sun Shuyun,unknown,The Long March: The True History of Communist China's Founding Myth,female,Chinese,,,NA,Chinese
 Dominic Smith,unknown,The Last Painting of Sara de Vos,male,American,Australian,,NA,Australian
 Svetlana Alexievich,unknown,The Unwomanly Face of War: An Oral History of Women in World War II,female,Belarusian,,,NA,Belarusian

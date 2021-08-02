@@ -4,7 +4,7 @@ require(ggrepel)
 require(forcats)
 require(plyr)
 require(stringi)
-require(rworldmap)
+library(rnaturalearth) # for map data
 require(RColorBrewer)
 require(ggthemes)
 source('utils.R')
@@ -30,11 +30,11 @@ generate_plots <- function(file_path, name){
   # finish plot
   finish_plot(dt_read, name = name, plot=T)
   # plot world maps
-  world_df <- setDT(map_data('world'))
+  world_sf <- ne_countries(returnclass = "sf", scale = "large", type='map_units')
   region_dict <- fread('world_regions_dict.csv')
   region_dict <- region_dict[nationality != '']
   country_dt <- merge_nationalities(dt_read, authors_database)
-  plot_map_data(country_dt, region_dict=region_dict, world_df=world_df, user=name)
+  plot_map_data(country_dt, region_dict=region_dict, world_sf=world_sf, user=name)
   # cannot do genre plot with just an individual's data. To figure out better path
   # month plot
   month_plot(dt_read, name=name, date_col='Date.Read', 

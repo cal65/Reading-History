@@ -4,8 +4,12 @@ import pandas as pd
 import re
 import logging
 
+logging.basicConfig()
+ch = logging.StreamHandler()
+ch.setLevel(logging.INFO)
+# add the handler to the root logger
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger.addHandler(ch)
 
 
 def append_scraping(goodreads_data):

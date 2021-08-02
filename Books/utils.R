@@ -5,7 +5,6 @@ library(ggrepel)
 library(forcats)
 library(plyr)
 library(stringi)
-library(rworldmap)
 library(RColorBrewer)
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 
@@ -266,21 +265,33 @@ merge_nationalities <- function(df, authors_db, country_col = 'Country.Chosen'){
   return (df)
 }
 
-plot_map_data <- function(df, region_dict, world_df, user, country_col = 'Country.Chosen'){
+plot_map_data <- function(df, region_dict, world_sf, user, country_col = 'Country.Chosen'){
+  # defining other df for subregions not included in the world simple features
+  # choosing to define here because it's low cost and multiple lines of code. 
+  # Including Hong Kong and the countries of the United Kingdom
+  hk_sf <- ne_states(geounit = "Hong Kong S.A.R.", returnclass = "sf")
+  uk_sf <- ne_states(country = "united kingdom", returnclass = "sf")
+  other_sf <- rbind(uk_sf, hk_sf)
+  names(other_sf) <- mapvalues(names(other_sf), from = 'geonunit', to='geounit')
+  
   country_df <- merge(df, region_dict, by.x='Country.Chosen', by.y='nationality', all.x=T)
   regions_count <- data.frame(table(country_df$region))
   names(regions_count) <- c('region', 'count')
-  world_df <- merge(world_df, regions_count, all.x=T)
+  world_sf <- merge(world_sf, 
+                    regions_count, by.x='geounit', by.y='region', all.x=T)
+  
+  other_sf <- merge(other_sf, regions_count, by.x='geounit', by.y='region', all.x=T)
   max_count = max(regions_count$count)
   my_breaks <- c(1, rep(2^(1:round(log2(max_count)))))
-  ggplot(world_df) + 
-    geom_polygon((aes(x=long, y=lat, group=group, fill=count))) +
+  ggplot(world_sf) + 
+    geom_sf(aes(fill=count, group=geounit), size=0.1) +
+    geom_sf(data=other_sf, aes(fill=count, group=geounit), color=NA) +
     scale_fill_gradientn(name = "count", trans = "log", breaks=my_breaks,
-                        colors=rev(brewer.pal(8, 'RdBu'))) +
+                        colors=brewer.pal(9, 'YlOrRd')) +
     ggtitle(paste0('Author Nationality Map - ', user)) +
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
-  ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.jpeg'), width=12, height=8)
+  ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.pdf'), width=12, height=8)
 }
 
 export_user_authors <- function(user, list='goodreads_list', authors_db){
@@ -317,15 +328,26 @@ genre_plot <- function(genre_df,
   all_names <- unique(genre_df[,get(source_col)])
   other_names <- sample(setdiff(all_names, name), n_users)
   chosen_names <- c(name, other_names)
-  top_table <- genre_df.m[,.(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-
+  top_table <- genre_df.m[Source %in% chosen_names,.(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
+  # I want to make a table with all sources and shelves
+  all_genres <- unique(genre_df.m$Shelf)
+  all_table <- data.frame(Source=rep(unique(genre_df$Source), each = length(all_genres)),
+                          Shelf = rep(all_genres, length(unique(genre_df$Source))))
+  all_table <- merge(all_table, top_table, by = c('Source', 'Shelf'), all.x=T)
+  all_table$Freq[is.na(all_table$Freq)] <- 0
+  setDT(all_table)
+  all_table <- all_table[order(Freq)]
   ### Calculate average
   genres_total <- setDT(data.frame(table(genre_df.m$Shelf)))
   names(genres_total) <- c('Shelf', 'Freq')
   genres_total$Freq <- genres_total$Freq / nrow(genre_df) * 100
   genres_total$Source <- 'Average'
-  top_genres <- unique(top_table[Source %in% chosen_names, .SD[1:n_genre], by=Source]$Shelf)
-  genre_plot_df <- top_table[Shelf %in% top_genres & Source %in% chosen_names]
+  ## To do, calculate user averages and merge with this total table, calculate difference
+  ## Use greatest and highest differences as top and bottom genres
+  user_table <- all_table[Source == name]
+  top_genres <- user_table[, .SD[1:n_genre], by=Source]$Shelf
+  bottom_genres <- user_table[, .SD[(nrow(user_table) - n_genre):nrow(user_table)], by=Source]$Shelf
+  genre_plot_df <- all_table[Shelf %in% c(top_genres, bottom_genres)]
   genre_plot_df <- rbind(genre_plot_df, genres_total[Shelf %in% top_genres])
   genre_plot_df$Source <- mapvalues(genre_plot_df$Source, 
                                     from = other_names,
@@ -378,9 +400,9 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
                                 to = rep('unknown or other', 3),
                                 warn_missing = F)
   ggplot(dt) + 
-    geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), position=position_dodge()) +
+    geom_bar(aes(x=get(narrative_col), fill=get(gender_col)), position=position_dodge2()) +
     theme_pander() +
-    xlab('') +
+    xlab('') + ylab('Count') +
     scale_fill_brewer('Gender', palette='Set1') +
     coord_flip() +
     theme(legend.position = 'bottom', plot.title=element_text(hjust=1),
@@ -405,7 +427,7 @@ nationality_bar_plot <- function(dt, authors_database, nationality_col='Country.
 
 publication_histogram <- function(dt, date_col, start_year=1800){
   dt_sub <- dt[get(date_col) > start_year]
-  n_bins <- max(nrow(dt_sub) / 10, 10)
+  n_bins <- max(sqrt(nrow(dt_sub)), 15)
   ggplot(dt_sub) + geom_histogram(aes(x=get(date_col)), fill='black', bins=n_bins) + 
     theme_pander() +
     xlab('Year of Publication') +

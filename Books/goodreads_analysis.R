@@ -5,6 +5,7 @@ library(scales)
 library(ggrepel)
 library(ggthemes)
 library(rworldmap)
+library(rnaturalearth) # for map data
 
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 source('utils.R')
@@ -83,17 +84,15 @@ for (name in names(paths)){
 }
 
 # plot world maps
-world_df <- setDT(map_data('world'))
+world_sf <- ne_countries(returnclass = "sf", scale = "large", type='map_units')
 region_dict <- fread('world_regions_dict.csv')
 region_dict <- region_dict[nationality != '']
 authors_database <- read.csv('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){
   country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_database)
-  country_dict[[name]]$Country.Chosen <- mapvalues(country_dict[[name]]$Country.Chosen,
-                                                   from = c('English', 'Scottish'),
-                                                   to = c('British', 'British'))
-  plot_map_data(country_dict[[name]], region_dict=region_dict, world_df=world_df, user=name)
+  plot_map_data(country_dict[[name]], region_dict=region_dict, world_sf=world_sf, 
+                user=name)
 }
 
 lapply(country_dict, function(x) length(which(is.na(x$Country.Chosen) | x$Country.Chosen=='')))

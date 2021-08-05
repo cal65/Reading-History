@@ -31,7 +31,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Luisa' = paste0(file_start, 'luisa_appended.csv'),
               'Ben_Goldsmith' = paste0(file_start, 'ben_goldsmith_appended.csv'),
               'Josh_Z' = paste0(file_start, 'josh_z_appended.csv'),
-              'Maryann' = paste0(file_start, 'maryann_appended.csv'))
+              'Maryann' = paste0(file_start, 'maryann_appended.csv'),
+              'Stephanie' = 'data/goodreads_library_SHopkins_appended.csv')
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -39,6 +40,10 @@ for (name in names(paths)){
 }
 authors_database <- read.csv('authors_database.csv')
 for (name in names(paths)){
+  goodreads_list[[name]][!gender %in% c('female', 'male')]$gender <- mapvalues(
+    goodreads_list[[name]][!gender %in% c('female', 'male')]$Author, 
+    authors_database$Author, 
+    authors_database$gender_fixed, warn_missing = F)
   missing_data <- goodreads_list[[name]][!Author %in% authors_database$Author][, c('Author', 'Title', 'gender')]
   missing_data <- missing_data[, .(Title = head(Title,1)), by=c('Author', 'gender')]
   if (nrow(missing_data) > 0){
@@ -96,8 +101,9 @@ unique(authors_database[which(!authors_database$Country.Chosen %in% region_dict$
 # genre plotting
 genre_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
                            c('Source', grep('^Shelf', names(books_combined), value=T)),with=F]
+create_melted_genre_df(books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read)])
 for (name in names(paths)){
-  genre_plot(genre_df, name = name, n_genre = 12, read_col='Read',  plot=T)
+  genre_plot(genre_df, name = name, n_genre = 12, n_users=3, read_col='Read',  plot=T)
 }
 
 # for (name in names(paths)){

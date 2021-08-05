@@ -311,6 +311,38 @@ create_melted_genre_df <- function(dt) {
   return (genre_df.m)
 }
 
+create_genre_difference_df <- function(genre_df){
+  melted_genre_df <- create_melted_genre_df(genre_df)
+  top_table <- melted_genre_df[,.(Freq = .N), 
+                          by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
+  # I want to make a table with all sources and shelves
+  all_genres <- unique(melted_genre_df$Shelf)
+  all_table <- data.frame(Source=rep(unique(genre_df$Source), each = length(all_genres)),
+                          Shelf = rep(all_genres, length(unique(genre_df$Source))))
+  all_table <- merge(all_table, top_table, by = c('Source', 'Shelf'), all.x=T)
+  all_table$Freq[is.na(all_table$Freq)] <- 0
+  setDT(all_table)
+  all_table <- all_table[order(Freq)]
+  ### Calculate average frequencies of genres
+  genres_total <- setDT(data.frame(table(melted_genre_df$Shelf)))
+  names(genres_total) <- c('Shelf', 'Freq')
+  genres_total$Ratio_Total <- genres_total$Freq / nrow(genre_df) * 100
+  genres_total$Source <- 'Average'
+  ## To do, calculate user averages and merge with this total table, calculate difference
+  ## Use greatest and highest differences as top and bottom genres
+  n_source <- genre_df[, .N, by=Source]
+  all_table <- merge(all_table, n_source)
+  all_table$Ratio <- with(all_table, Freq / N * 100)
+  # for each user, calculate their genre ratio and compare to average
+  genre_table_merged <- merge(all_table, genres_total[,c('Shelf', 'Ratio_Total')], by='Shelf')
+  genre_table_merged$Diff <- with(genre_table_merged, Ratio - Ratio_Total)
+  setDT(genre_table_merged)
+  # return dataframe from least read to most read genres for all users
+  genre_table_merged <- genre_table_merged[order(Diff)]
+  
+  return(list('genres_total' = genres_total, 'genre_table_merged' = genre_table_merged))
+}
+
 genre_plot <- function(genre_df, 
                       name, 
                       read_col,
@@ -328,27 +360,19 @@ genre_plot <- function(genre_df,
   all_names <- unique(genre_df[,get(source_col)])
   other_names <- sample(setdiff(all_names, name), n_users)
   chosen_names <- c(name, other_names)
-  top_table <- genre_df.m[Source %in% chosen_names,.(Freq = .N), by = c('Source', 'Shelf')][order(Freq, decreasing = T),]
-  # I want to make a table with all sources and shelves
-  all_genres <- unique(genre_df.m$Shelf)
-  all_table <- data.frame(Source=rep(unique(genre_df$Source), each = length(all_genres)),
-                          Shelf = rep(all_genres, length(unique(genre_df$Source))))
-  all_table <- merge(all_table, top_table, by = c('Source', 'Shelf'), all.x=T)
-  all_table$Freq[is.na(all_table$Freq)] <- 0
-  setDT(all_table)
-  all_table <- all_table[order(Freq)]
-  ### Calculate average
-  genres_total <- setDT(data.frame(table(genre_df.m$Shelf)))
-  names(genres_total) <- c('Shelf', 'Freq')
-  genres_total$Freq <- genres_total$Freq / nrow(genre_df) * 100
-  genres_total$Source <- 'Average'
-  ## To do, calculate user averages and merge with this total table, calculate difference
-  ## Use greatest and highest differences as top and bottom genres
-  user_table <- all_table[Source == name]
-  top_genres <- user_table[, .SD[1:n_genre], by=Source]$Shelf
-  bottom_genres <- user_table[, .SD[(nrow(user_table) - n_genre):nrow(user_table)], by=Source]$Shelf
-  genre_plot_df <- all_table[Shelf %in% c(top_genres, bottom_genres)]
-  genre_plot_df <- rbind(genre_plot_df, genres_total[Shelf %in% top_genres])
+  # get dataframe 
+  genre_list <- create_genre_difference_df(genre_df)
+  genres_total <- genre_list$genres_total
+  genre_table_merged <- genre_list$genre_table_merged
+  user_table <- genre_table_merged[Source == name]
+  top_genres <-  tail(user_table$Shelf, n_genre)
+  bottom_genres <- head(user_table$Shelf, n_genre)
+  
+  genre_plot_df <- genre_table_merged[Shelf %in% c(top_genres, bottom_genres) & Source %in% chosen_names]
+  genres_select <- genres_total[Shelf %in% c(bottom_genres, top_genres)]
+  names(genres_select) <- mapvalues(names(genres_select), from = 'Ratio_Total',
+                                    to = 'Ratio')
+  genre_plot_df <- setDT(rbind.fill(genre_plot_df, genres_select))
   genre_plot_df$Source <- mapvalues(genre_plot_df$Source, 
                                     from = other_names,
                                     to = paste0('Reader', 1:length(other_names)))
@@ -356,14 +380,17 @@ genre_plot <- function(genre_df,
   genre_plot_df$Shelf <- factor(genre_plot_df$Shelf, 
                             levels = rev(union(unique(genre_plot_df[Source == name]$Shelf),
                                                unique(genre_plot_df$Shelf))))
+  genre_plot_df$Type <- ifelse(genre_plot_df$Shelf %in% top_genres, 'Top', 'Bottom')
   ggplot(genre_plot_df) + 
-    geom_col(aes(x=Shelf, y=Freq, fill=Source), color='black') +
-    facet_grid(. ~ Source, scales='free') + 
+    geom_col(aes(x=Shelf, y=Ratio, fill=Source), color='black') +
+    facet_grid(Type ~ Source, scales='free_y', space='free_y') + 
     scale_fill_brewer(palette = 'Set1') +
     coord_flip() +
     ggtitle('Genre Plot') +
-    theme_pander() + theme(plot.title=element_text(hjust=0.5), 
-                           legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
+    theme_pander() + 
+    theme(plot.title=element_text(hjust=0.5), 
+                           legend.position = 'bottom', legend.key.width = unit(1.5, 'cm'),
+          panel.border = element_rect(color='black', fill=NA)) 
   if (plot==T){
     ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=14, height=8)
     

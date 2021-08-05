@@ -67,11 +67,6 @@ for (name in names(paths)){
   rm(missing_data)
 }
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
-# complete author genders pipeline
-author_genders <- books_combined[, .(Title=head(Title,1)), by = c('Author', 'gender')]
-author_genders <- author_genders[!Author %in% authors_database$Author]
-names(author_genders) <- mapvalues(names(author_genders), from = 'gender', to = 'gender_guessed')
-author_genders$gender_fixed <- author_genders$gender_guessed
 
 for (name in names(paths)){
   read_plot(goodreads_list[[name]][Read.Count>0], name=name, 

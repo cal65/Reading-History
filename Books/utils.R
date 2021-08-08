@@ -335,7 +335,7 @@ create_genre_difference_df <- function(genre_df){
   all_table$Ratio <- with(all_table, Freq / N * 100)
   # for each user, calculate their genre ratio and compare to average
   genre_table_merged <- merge(all_table, genres_total[,c('Shelf', 'Ratio_Total')], by='Shelf')
-  genre_table_merged$Diff <- with(genre_table_merged, Ratio - Ratio_Total)
+  genre_table_merged$Diff <- with(genre_table_merged, sqrt(Ratio) - sqrt(Ratio_Total))
   setDT(genre_table_merged)
   # return dataframe from least read to most read genres for all users
   genre_table_merged <- genre_table_merged[order(Diff)]
@@ -501,4 +501,16 @@ plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
     ylim(0, 5) +
     scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
     coord_flip() + theme_pander()
+}
+
+yearly_gender_graph <- function(dt, year_col, gender_col){
+  min_year = min(dt[get(year_col)], na.rm=T)
+  max_year = max(dt[get(year_col)], na.rm=T)
+  ggplot(dt) + 
+    geom_bar(aes(x=get(year_col), fill=get(gender_col)), 
+                              position = position_dodge2(preserve = 'single')) +
+    scale_fill_brewer(palette='Set1', 'Author Gender') +
+    scale_x_continuous(labels=min_year:max_year) +
+    coord_flip() +
+    theme_pander()
 }

@@ -759,7 +759,7 @@ Pierrette Hondagneu-Sotelo,female,Doméstica: Immigrant Workers Cleaning and Car
 Frank H. Wu,male,Yellow: Race in America Beyond Black and White,male,American,,,,American
 Ayn Rand,female,The Fountainhead,female,American,Russian,Soviet,,Russian
 George Eliot,male,Middlemarch,male,English,,,,English
-Ken Follett,male,"The Pillars of the Earth (Kingsbridge, #1)",male,British,,,,British
+Ken Follett,male,"The Pillars of the Earth (Kingsbridge, #1)",male,British,Welsh,,,Welsh
 Madeleine L'Engle,female,"A Wrinkle in Time (Time Quintet, #1)",female,American,,,,American
 Mario Puzo,male,The Godfather,male,American,,,,American
 Scott O'Dell,male,Island of the Blue Dolphins,male,American,,,,American
@@ -3154,7 +3154,7 @@ Karen Engelmann,female,The Stockholm Octavo,female,American,,,,American
 Mary Horlock,unknown,The Book of Lies,female,Australian,Guernsey,British,,Giernesi
 Peter Robb,unknown,M: The Man Who Became Caravaggio,male,Australian,,,,Australian
 Maynard Solomon,unknown,Mozart,male,American,,,,American
-Brian Ladd,unknown,The Ghosts of Berlin: Confronting German History in the Urban Landscape,male,,,,,
+Brian Ladd,unknown,The Ghosts of Berlin: Confronting German History in the Urban Landscape,male,American,,,,American
 Peter Demetz,unknown,Prague in Black and Gold: Scenes from the Life of a European City,male,American,German,,,German
 Yamamoto Tsunetomo,unknown,Hagakure: The Book of the Samurai,male,Japanese,,,,Japanese
 John Banville,unknown,Ancient Light (The Cleave Trilogy #3),male,Irish,,,,Irish
@@ -3328,7 +3328,7 @@ T. Geronimo Johnson,unknown,Welcome to Braggsville,male,American,,,,American
 James Hannaham,male,Delicious Foods,male,,,,,
 Pam Muñoz Ryan,female,Echo,female,American,Mexican,,,Mexican
 Jandy Nelson,unknown,The Sky Is Everywhere,female,American,,,,American
-Adam Silvera,male,More Happy Than Not,male,,,,,
+Adam Silvera,male,More Happy Than Not,male,American,,,,American
 Nina LaCour,female,You Know Me Well,female,,,,,
 Norman H. Finkelstein,male,Schools of Hope: How Julius Rosenwald Helped Change African American Education,male,,,,,
 Liza Klaussmann,female,Villa America,female,American,,,,American
@@ -3370,7 +3370,7 @@ Adam Braun,male,The Promise of a Pencil: How an Ordinary Person Can Create Extra
 Carola Suárez-Orozco,female,Learning a New Land: Immigrant Students in American Society,female,American,,,,American
 Dana Goldstein,female,The Teacher Wars: A History of America's Most Embattled Profession,female,American,,,,American
 Stephanie Perkins,female,Isla and the Happily Ever After,female,American,,,,American
-Leslie R.  Crutchfield,female,Forces for Good: The Six Practices of High-Impact Nonprofits,female,,,,,
+Leslie R.  Crutchfield,female,Forces for Good: The Six Practices of High-Impact Nonprofits,female,American,,,,American
 Suzanne Rindell,female,The Other Typist,female,American,,,,American
 Nikki Loftin,female,Nightingale's Nest,female,American,,,,American
 Vince Vawter,male,Paperboy,male,American,,,,American
@@ -3417,3 +3417,12 @@ Siobhan Vivian,unknown,The List,female,American,,,,American
 Rachel Cohn,unknown,"Dash & Lily's Book of Dares (Dash & Lily, #1)",female,American,,,,American
 Kiera Cass,unknown,"The Selection (The Selection, #1)",female,American,,,,American
 Cal Newport,male,Digital Minimalism: Choosing a Focused Life in a Noisy World,male,American,,,,American
+Nawaaz Ahmed,male,Radiant Fugitives,male,American,Indian,,,Indian
+Friedrich Nietzsche,male,Thus Spake Zarathustra,male,Prussian,German,,,German
+Kelly Tyler-Lewis,female,The Lost Men: The Harrowing Saga of Shackleton's Ross Sea Party,female,American,,,,American
+Albert Memmi,male,The Pillar of Salt,male,French,Tunisian,NA,NA,Tunisian
+Kaia Alderson,female,Sisters in Arms,female,American,,NA,NA,American
+Eugène Ionesco,male,Rhinocéros,male,French,Romanian,NA,NA,Romanian
+Tété-Michel Kpomassie,unknown,An African in Greenland,unknown,Togolese,,NA,NA,Togolese
+Ayad Akhtar,unknown,American Dervish,unknown,American,Pakistani,NA,NA,Pakistani
+Richard W. Pound,male,"Inside the Olympics: A Behind-The-Scenes Look at the Politics, the Scandals and the Glory of the Games",male,Canadian,,NA,NA,Canadian

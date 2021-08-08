@@ -1,6 +1,5 @@
 require(ggplot2)
 require(data.table)
-require(ggrepel)
 require(forcats)
 require(plyr)
 require(stringi)
@@ -20,6 +19,7 @@ generate_plots <- function(file_path, name, write=write){
   authors_database <- read.csv('authors_database.csv')
   # update the authors database based on potential new data from dt
   authors_database <- update_authors_artifact(authors_database, dt)
+  print('Updated authors database')
   dt$gender <- mapvalues(
     dt$Author, 
     authors_database$Author, 
@@ -28,6 +28,7 @@ generate_plots <- function(file_path, name, write=write){
   # read plot
   read_plot(dt_read, name=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T)
+  print("Read plot created")
   # finish plot
   finish_plot(dt_read, name = name, plot=T)
   # plot world maps
@@ -37,6 +38,7 @@ generate_plots <- function(file_path, name, write=write){
   country_dt <- merge_nationalities(dt_read, authors_database)
   nationality_bar_plot(dt_read, authors_database, name=name, save=T)
   plot_map_data(country_dt, region_dict=region_dict, world_sf=world_sf, user=name)
+  print("Map created")
   # cannot do genre plot with just an individual's data. To figure out better path
   # month plot
   month_plot(dt_read, name=name, date_col='Date.Read', 

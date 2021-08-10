@@ -32,7 +32,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Ben_Goldsmith' = paste0(file_start, 'ben_goldsmith_appended.csv'),
               'Josh_Z' = paste0(file_start, 'josh_z_appended.csv'),
               'Maryann' = paste0(file_start, 'maryann_appended.csv'),
-              'Stephanie' = 'data/goodreads_library_SHopkins_appended.csv')
+              'Stephanie' = 'data/goodreads_library_SHopkins_appended.csv',
+              'Tiff' = paste0(file_start, 'tiff_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -81,6 +82,8 @@ for (name in names(paths)){
                   year_col='Original.Publication.Year', 
                   year_start=1780,
                   user = name, plot=T)
+  yearly_gender_graph(goodreads_list[[name]], name=name, gender_col='gender', 
+                      date_col='Date.Read', save=T)
 }
 
 # plot world maps

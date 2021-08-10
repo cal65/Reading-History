@@ -161,19 +161,22 @@ read_plot <- function(df,
   breaks <- c(0, 10^c(min_break : max_digits))
   df[[read_col]] <- as.numeric(df[[read_col]])
   df$title_length <- nchar(df[[title_col]])
-  df$text_size <- pmax(3, 70/df$title_length)
   # order title text by popularity
   df <- df[order(get(read_col))]
   df[[title_col]] <- factor(df[[title_col]], levels = unique(df[[title_col]]))
   labels = generate_labels(prettyNum(breaks, big.mark = ',', scientific=F))
   df$strats <- cut(df[[read_col]], breaks = breaks, 
                    labels = labels)
+  # 1 text size for each strat
+  text_sizes <- df[, .(text_size = 120/max(title_length)), by = strats]
+  df <- merge(df, text_sizes, by='strats', all.x=T)
+  
   ggplot(df, aes(x=strats, y=get(title_col))) +
     geom_tile(aes(fill=Narrative), color='black') +
     geom_text(aes(label = get(title_col), size = text_size)) +
     facet_wrap(strats ~ ., scales='free', nrow=1) +
     scale_fill_manual(values = c('hotpink2', 'darkolivegreen')) +
-    scale_size_continuous(guide=F, range=c(3, 10)) +
+    scale_size_continuous(guide=F, range=c(2.5, max(df$text_size))) +
     xlab('Number of Readers') + 
     ylab('Title') +
     ggtitle(paste0('Readership Spectrum - ', name)) +
@@ -302,11 +305,11 @@ export_user_authors <- function(user, list='goodreads_list', authors_db){
   return (df)
 }
 
-create_melted_genre_df <- function(dt) {
+create_melted_genre_df <- function(dt, additional_exclude=c('Audiobook')) {
   genre_df <- dt[,c('Source', grep('^Shelf', names(dt), value=T)),with=F]
   genre_df.m <- setDT(melt(genre_df, 
                            id.var='Source', value.name = 'Shelf'))
-  genre_df.m <- genre_df.m[!Shelf %in% c('Fiction', 'Nonfiction', '')]
+  genre_df.m <- genre_df.m[!Shelf %in% c('Fiction', 'Nonfiction', '', additional_exclude)]
   genre_df.m <- genre_df.m[!is.na(Shelf)]
   return (genre_df.m)
 }
@@ -368,6 +371,7 @@ genre_plot <- function(genre_df,
   top_genres <-  tail(user_table$Shelf, n_genre)
   bottom_genres <- head(user_table$Shelf, n_genre)
   
+  # plot only shelves in top and bottom
   genre_plot_df <- genre_table_merged[Shelf %in% c(top_genres, bottom_genres) & Source %in% chosen_names]
   genres_select <- genres_total[Shelf %in% c(bottom_genres, top_genres)]
   names(genres_select) <- mapvalues(names(genres_select), from = 'Ratio_Total',
@@ -380,7 +384,7 @@ genre_plot <- function(genre_df,
   genre_plot_df$Shelf <- factor(genre_plot_df$Shelf, 
                             levels = rev(union(unique(genre_plot_df[Source == name]$Shelf),
                                                unique(genre_plot_df$Shelf))))
-  genre_plot_df$Type <- ifelse(genre_plot_df$Shelf %in% top_genres, 'Top', 'Bottom')
+  genre_plot_df$Type <- ifelse(genre_plot_df$Shelf %in% top_genres, 'Above Average', 'Below Average')
   ggplot(genre_plot_df) + 
     geom_col(aes(x=Shelf, y=Ratio, fill=Source), color='black') +
     facet_grid(Type ~ Source, scales='free_y', space='free_y') + 
@@ -407,13 +411,13 @@ summary_plot <- function(dt, date_col,
   # 3. Histogram of publication date
   # 4. Top genres
   source('multiplot.R')
-  p1 <- gender_bar_plot(dt, gender_col, narrative_col, name)
+  p1 <- gender_bar_plot(dt, gender_col, narrative_col, name) 
   # p2 <- nationality_bar_plot(dt, authors_database, nationality_col)
-  p2 <- plot_highest_rated_books(dt)
-  p3 <- publication_histogram(dt, date_col)
+  p2 <- plot_highest_rated_books(dt) + ggtitle('Highest Rated Books')
+  p3 <- publication_histogram(dt, date_col) + ggtitle('Publication Years')
   p3 <- p3 + ggtitle(paste0('for ', name))
   min_count <- round(nrow(dt)/40)
-  p4 <- genre_bar_plot(dt, min_count=min_count)
+  p4 <- genre_bar_plot(dt, min_count=min_count) + ggtitle('Most Common Genres')
   jpeg(filename = paste0('Graphs/', name, '/Summary_plot.jpeg'), 
        res = 200, width = 3200, height=2400)
   multiplot(p1, p2, p3, p4, cols=2)
@@ -435,7 +439,8 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
     scale_fill_brewer('Gender', palette='Set1') +
     coord_flip() +
     theme(legend.position = 'bottom', plot.title=element_text(hjust=1),
-          panel.border = element_rect(colour = "black", fill=NA, size=1)) + 
+          panel.border = element_rect(colour = "black", fill=NA, size=1),
+          axis.text = element_text(size=12)) + 
     ggtitle('Summary Plots')
 }
 
@@ -460,7 +465,7 @@ nationality_bar_plot <- function(dt, authors_database, name,
 
 publication_histogram <- function(dt, date_col, start_year=1800){
   dt_sub <- dt[get(date_col) > start_year]
-  n_bins <- max(sqrt(nrow(dt_sub)), 15)
+  n_bins <- max(3*sqrt(nrow(dt_sub)), 50)
   ggplot(dt_sub) + geom_histogram(aes(x=get(date_col)), fill='black', bins=n_bins) + 
     theme_pander() +
     xlab('Year of Publication') +
@@ -503,14 +508,26 @@ plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
     coord_flip() + theme_pander()
 }
 
-yearly_gender_graph <- function(dt, year_col, gender_col){
-  min_year = min(dt[get(year_col)], na.rm=T)
-  max_year = max(dt[get(year_col)], na.rm=T)
+yearly_gender_graph <- function(dt, name, date_col, gender_col, year_start=NA,
+                                plot_name="gender_breakdown_by_year_", save=F){
+  dt$Year.Read <- as.numeric(format(dt[[date_col]], '%Y'))
+  if (length(unique(dt$Year.Read) < 2)) {
+    return()
+  }
+  if (!is.na(year_start)){
+    dt <- dt[Year.Read >= year_start]
+  }
+  min_year = min(dt$Year.Read, na.rm=T)
+  max_year = max(dt$Year.Read, na.rm=T)
   ggplot(dt) + 
-    geom_bar(aes(x=get(year_col), fill=get(gender_col)), 
-                              position = position_dodge2(preserve = 'single')) +
+    geom_bar(aes(x=get(gender_col), fill=get(gender_col)), 
+                              position = position_dodge2(0.7, preserve = 'single')) +
     scale_fill_brewer(palette='Set1', 'Author Gender') +
-    scale_x_continuous(labels=min_year:max_year) +
-    coord_flip() +
-    theme_pander()
+    facet_grid(. ~ Year.Read) +
+    theme_pander() + xlab('') +
+    ggtitle('Gender Breakdown by Year') +
+    theme(axis.text.x=element_blank(), axis.title.x = element_blank())
+  if (save==T){
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=14, height=8)
+  }
 }

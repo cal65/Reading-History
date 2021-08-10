@@ -37,6 +37,7 @@ def get_stats(url, wait=0):
         "Shelf4": None,
         "Shelf5": None,
         "Original_title": None,
+        "url": url,
     }
 
     scripts = soup.findAll("script")
@@ -132,6 +133,7 @@ def get_stats(url, wait=0):
         "Shelf4": shelf4,
         "Shelf5": shelf5,
         "Original_title": original_title,
+        "url": url,
     }
 
 
@@ -159,7 +161,7 @@ def return_urls(goodreads_data, id_col="Book.Id"):
     return urls
 
 
-def apply_added_by(urls, wait=1):
+def apply_added_by(urls, wait=3):
     stats = [get_stats(url, wait=wait) for url in urls]
     goodreads_data = pd.DataFrame(stats)
 

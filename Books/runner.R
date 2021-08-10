@@ -10,7 +10,7 @@ source('utils.R')
 args = commandArgs(trailingOnly=TRUE)
 file_path <- args[1]
 name <- args[2]
-write <- ifelse(length(args > 2), as.logical(args[3]), F)
+write <- ifelse(length(args) > 2, as.logical(args[3]), F)
 
 generate_plots <- function(file_path, name, write=write){
   dt <- run_all(file_path)
@@ -44,16 +44,21 @@ generate_plots <- function(file_path, name, write=write){
   month_plot(dt_read, name=name, date_col='Date.Read', 
              page_col='Number.of.Pages', title_col='Title.Simple',
              author_gender_col='gender', lims=c(2010, 2022), save=T)
+  print("Month plot")
   # year plot
   year_plot(dt_read, name=name, fiction_col='Narrative', 
             date_col='Date.Read', page_col='Number.of.Pages', 
             title_col='Title.Simple', author_gender_col='gender', save=T)
+  print('Year Plot created')
+  # gender by year
+  yearly_gender_graph(dt_read, name=name, date_col='Date.Read', gender_col='gender', 
+                       year_start = 2011, save=T)
   # summary plot
   summary_plot(dt_read, date_col='Original.Publication.Year', gender_col = 'gender', 
                narrative_col='Narrative', nationality_col='Country.Chosen', 
                authors_database = authors_database, name = name)
   if (write == T){
-    write.csv(country_dt, file_path)
+    write.csv(country_dt, file_path, row.names=F)
   }
 }
 generate_plots(file_path, name, write)

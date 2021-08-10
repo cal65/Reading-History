@@ -13,6 +13,7 @@ URL = "https://www.google.com/search?q="
 
 
 def get_search_url(name):
+    name = str(name)
     return URL + name.replace(" ", "+") + "+nationality"
 
 
@@ -51,7 +52,7 @@ def lookup_author_nationality(author):
     answers = [a for answer in answers for a in answer]  # flatten list
     answers = pd.unique(answers)
     if len(answers) == 0:
-        print("No results found for " + author)
+        print("No results found for " + str(author))
     return answers
 
 
@@ -82,6 +83,10 @@ def append_nationalities(df, author_col="Author"):
 
 
 def lookup_unfound(df, nationality_col="Country.Chosen", author_col="Author"):
+    # for a file without the base schema
+    if nationality_col not in df.columns:
+        return append_nationalities(df)
+    # for a file with the nationality column
     df_found = df[(pd.notnull(df[nationality_col])) & (df[nationality_col] != "")]
     df_unfound = df[(pd.isnull(df[nationality_col])) | (df[nationality_col] == "")]
     df_unfound = df_unfound[

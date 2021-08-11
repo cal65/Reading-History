@@ -5,13 +5,8 @@ import re
 import logging
 import argparse
 
-logging.basicConfig()
-ch = logging.StreamHandler()
-ch.setLevel(logging.INFO)
-# add the handler to the root logger
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-logger.addHandler(ch)
-
 
 def append_scraping(goodreads_data):
     goodreads_data.columns = [c.replace(" ", ".") for c in goodreads_data.columns]
@@ -45,13 +40,14 @@ def update_goodreads(df1, df2, index_column):
     """
     df2.columns = [c.replace(" ", ".") for c in df2.columns]
     # save all new books
-    df2_unupdated = df2[~df2[index_column].isin(df1[index_column])]
+    df2_new = df2[~df2[index_column].isin(df1[index_column])]
+    logger.info("Adding " + str(len(df2_new)) + " new rows of data")
     # go over the old books that are in common with existing dataset
     df1.set_index(index_column, inplace=True)
     df2.set_index(index_column, inplace=True)
-    df1.update(df2)
+    df1.update(df2) 
     df1.reset_index(inplace=True)
-    df2_updated = append_scraping(df2_unupdated)
+    df2_updated = append_scraping(df2_new)
     df_updated = pd.concat([df1, df2_updated])
     return df_updated
 
@@ -60,9 +56,9 @@ def update_missing_data(df, wait=1):
     """
     This function is for incomplete appends, when rows failed due to timeouts
     """
-    df_missing = df[pd.isnull(df["Added_by"])]
+    df_missing = df[pd.isnull(df["Added_by"])] # this is a scraped field that is often missing
     if len(df_missing) > 0:
-        logger.info("Updating " + str(len(df_missing.shape)) + " missing rows of data")
+        logger.info("Updating " + str(len(df_missing)) + " missing rows of data")
         urls = scrape_goodreads.return_urls(df_missing)
         scraped_missing = scrape_goodreads.apply_added_by(urls, wait=wait)
         scraped_missing.index = df_missing.index
@@ -89,8 +85,6 @@ if __name__ == "__main__":
     parser.add_argument("file_path")
     parser.add_argument("--update", dest='update', action='store_true', help="Mode - default none = apply append")
     args = parser.parse_args()
-    print(args.file_path)
-    print(args.update)
     file_path = args.file_path
     update = args.update
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)

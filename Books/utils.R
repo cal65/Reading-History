@@ -513,7 +513,8 @@ plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
 yearly_gender_graph <- function(dt, name, date_col, gender_col, year_start=NA,
                                 plot_name="gender_breakdown_by_year_", save=F){
   dt$Year.Read <- as.numeric(format(dt[[date_col]], '%Y'))
-  if (length(unique(dt$Year.Read) < 2)) {
+  if (length(unique(dt$Year.Read)) < 2) {
+    print("Not enough years to graph")
     return()
   }
   if (!is.na(year_start)){
@@ -530,6 +531,7 @@ yearly_gender_graph <- function(dt, name, date_col, gender_col, year_start=NA,
     ggtitle('Gender Breakdown by Year') +
     theme(axis.text.x=element_blank(), axis.title.x = element_blank())
   if (save==T){
+    print("Saving yearly gender breakdown plot")
     ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=14, height=8)
   }
 }

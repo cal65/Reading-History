@@ -192,20 +192,22 @@ read_plot <- function(df,
 finish_plot <- function(df, 
                       name, 
                       read_col = 'Read.Percentage',
+                      exclusive_shelf = 'Exclusive.Shelf',
                       n = 10, 
                       plot=F, 
                       plot_name = 'finish_plot_'){
   df_read <- df[order(get(read_col)),]
   df_read <- df_read[!is.na(get(read_col))]
   # keep only bottom n
-  df_read <- head(df_read, n)
-  df_read$Title.Simple <- factor(df_read$Title.Simple,
-                                 levels = unique(df_read$Title.Simple))
-  ggplot(df_read, aes(x=Title.Simple)) +
+  df_read_n <- df_read[, head(.SD, n), by=get(exclusive_shelf)]
+  df_read_n$Title.Simple <- factor(df_read_n$Title.Simple,
+                                 levels = unique(df_read_n$Title.Simple))
+  ggplot(df_read_n, aes(x=Title.Simple)) +
     geom_col(aes( y=1), fill='Dark Blue') +
        geom_col(aes( y=get(read_col)), fill='red') +
     geom_text(aes(y=get(read_col)/2, label = paste0(Read, ' / ', Added_by)), 
               size=n * 3/5, color='white', hjust=0) +
+    facet_grid(get(exclusive_shelf) ~ ., scales='free', space='free') +
     ylim(0, 1) +
     xlab('Title') +
     ylab('Reading Percentage') +

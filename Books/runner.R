@@ -30,14 +30,14 @@ generate_plots <- function(file_path, name, write=write){
             read_col='Read', title_col = 'Title.Simple', plot=T)
   print("Read plot created")
   # finish plot
-  finish_plot(dt_read, name = name, plot=T)
+  finish_plot(dt, name = name, plot=T)
   # plot world maps
   world_sf <- ne_countries(returnclass = "sf", scale = "large", type='map_units')
   region_dict <- fread('world_regions_dict.csv')
   region_dict <- region_dict[nationality != '']
-  country_dt <- merge_nationalities(dt_read, authors_database)
+  country_dt <- merge_nationalities(dt, authors_database)
   nationality_bar_plot(dt_read, authors_database, name=name, save=T)
-  plot_map_data(country_dt, region_dict=region_dict, world_sf=world_sf, user=name)
+  plot_map_data(country_dt[Exclusive.Shelf == 'read'], region_dict=region_dict, world_sf=world_sf, user=name)
   print("Map created")
   # cannot do genre plot with just an individual's data. To figure out better path
   # month plot

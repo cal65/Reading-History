@@ -93,8 +93,9 @@ region_dict <- region_dict[nationality != '']
 authors_database <- read.csv('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){
-  country_dict[[name]] <- merge_nationalities(goodreads_list[[name]][Exclusive.Shelf =='read'], authors_database)
-  plot_map_data(country_dict[[name]], region_dict=region_dict, world_sf=world_sf, 
+  country_dict[[name]] <- merge_nationalities(goodreads_list[[name]], authors_database)
+  plot_map_data(country_dict[[name]][Exclusive.Shelf =='read'], 
+                region_dict=region_dict, world_sf=world_sf, 
                 user=name)
 }
 
@@ -102,9 +103,9 @@ lapply(country_dict, function(x) length(which(is.na(x$Country.Chosen) | x$Countr
 unique(authors_database[which(!authors_database$Country.Chosen %in% region_dict$nationality),]$Country.Chosen)
 
 # genre plotting
-genre_df <- books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read),
+genre_df <- books_combined[Exclusive.Shelf == 'read']
+genre_df <- books_combined[Date.Read > '2010-01-01' | is.na(Date.Read),
                            c('Source', grep('^Shelf', names(books_combined), value=T)),with=F]
-create_melted_genre_df(books_combined[Exclusive.Shelf == 'read' & Date.Read > '2010-01-01' | is.na(Date.Read)])
 for (name in names(paths)){
   genre_plot(genre_df, name = name, n_genre = 12, n_users=3, read_col='Read',  plot=T)
 }

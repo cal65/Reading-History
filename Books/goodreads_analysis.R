@@ -107,7 +107,7 @@ genre_df <- books_combined[Exclusive.Shelf == 'read']
 genre_df <- books_combined[Date.Read > '2010-01-01' | is.na(Date.Read),
                            c('Source', grep('^Shelf', names(books_combined), value=T)),with=F]
 for (name in names(paths)){
-  genre_plot(genre_df, name = name, n_genre = 12, n_users=3, read_col='Read',  plot=T)
+  genre_plot(genre_df, name = name, n_genre = 24, read_col='Read',  plot=T)
 }
 
 # for (name in names(paths)){

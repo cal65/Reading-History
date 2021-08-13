@@ -307,6 +307,12 @@ export_user_authors <- function(user, list='goodreads_list', authors_db){
   return (df)
 }
 
+create_genre_df <- function(dt) {
+  ## grab all the columns starting with Shelf, as well as Source
+  genre_df <- dt[,c('Source', grep('^Shelf', names(dt), value=T)),with=F]
+  return (genre_df)
+}
+
 create_melted_genre_df <- function(dt, additional_exclude=c('Audiobook')) {
   genre_df <- dt[,c('Source', grep('^Shelf', names(dt), value=T)),with=F]
   genre_df.m <- setDT(melt(genre_df, 
@@ -351,8 +357,7 @@ create_genre_difference_df <- function(genre_df){
 genre_plot <- function(genre_df, 
                       name, 
                       read_col,
-                      n_genre = 10, 
-                      n_users = 5,
+                      n_genre = 20, 
                       plot=F, 
                       plot_name = 'genre_comparison_',
                       source_col= 'Source',
@@ -361,10 +366,6 @@ genre_plot <- function(genre_df,
                       start_year=NA){
   #random_seed
   genre_df.m <- create_melted_genre_df(setDT(genre_df))
-
-  all_names <- unique(genre_df[,get(source_col)])
-  other_names <- sample(setdiff(all_names, name), n_users)
-  chosen_names <- c(name, other_names)
   # get dataframe 
   genre_list <- create_genre_difference_df(genre_df)
   genres_total <- genre_list$genres_total
@@ -374,22 +375,20 @@ genre_plot <- function(genre_df,
   bottom_genres <- head(user_table$Shelf, n_genre)
   
   # plot only shelves in top and bottom
-  genre_plot_df <- genre_table_merged[Shelf %in% c(top_genres, bottom_genres) & Source %in% chosen_names]
+  genre_plot_df <- user_table[Shelf %in% c(top_genres, bottom_genres)]
   genres_select <- genres_total[Shelf %in% c(bottom_genres, top_genres)]
   names(genres_select) <- mapvalues(names(genres_select), from = 'Ratio_Total',
                                     to = 'Ratio')
   genre_plot_df <- setDT(rbind.fill(genre_plot_df, genres_select))
-  genre_plot_df$Source <- mapvalues(genre_plot_df$Source, 
-                                    from = other_names,
-                                    to = paste0('Reader', 1:length(other_names)))
+
   # order the shelves based on the order of the user
   genre_plot_df$Shelf <- factor(genre_plot_df$Shelf, 
                             levels = rev(union(unique(genre_plot_df[Source == name]$Shelf),
                                                unique(genre_plot_df$Shelf))))
   genre_plot_df$Type <- ifelse(genre_plot_df$Shelf %in% top_genres, 'Above Average', 'Below Average')
   ggplot(genre_plot_df) + 
-    geom_col(aes(x=Shelf, y=Ratio, fill=Source), color='black') +
-    facet_grid(Type ~ Source, scales='free_y', space='free_y') + 
+    geom_col(aes(x=Shelf, y=Ratio, fill=Source), color='black', position=position_dodge()) +
+    facet_wrap(. ~ Type, scales='free') + 
     scale_fill_brewer(palette = 'Set1') +
     coord_flip() +
     ggtitle('Genre Plot') +

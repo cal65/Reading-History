@@ -6,6 +6,7 @@ require(stringi)
 library(rnaturalearth) # for map data
 require(RColorBrewer)
 require(ggthemes)
+setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 source('utils.R')
 args = commandArgs(trailingOnly=TRUE)
 file_path <- args[1]

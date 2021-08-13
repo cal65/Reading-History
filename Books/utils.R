@@ -415,7 +415,7 @@ summary_plot <- function(dt, date_col,
   source('multiplot.R')
   p1 <- gender_bar_plot(dt, gender_col, narrative_col, name) 
   # p2 <- nationality_bar_plot(dt, authors_database, nationality_col)
-  p2 <- plot_highest_rated_books(dt) + ggtitle('Highest Rated Books')
+  p2 <- plot_longest_books(dt) + ggtitle('Longest Books')
   p3 <- publication_histogram(dt, date_col) + ggtitle('Publication Years')
   p3 <- p3 + ggtitle(paste0('for ', name))
   min_count <- round(nrow(dt)/40)
@@ -506,6 +506,22 @@ plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
       geom_text(aes(y=get(rating_col)/2, label=get(rating_col))) +
     xlab('Title') + ylab('Average Rating') +
     ylim(0, 5) +
+    scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
+    coord_flip() + theme_pander()
+}
+
+plot_longest_books <- function(dt, n=10, pages_col='Number.of.Pages', 
+                               title_col='Title.Simple',
+                               my_rating_col='My.Rating'){
+  
+  highest <- tail(dt[!is.na(get(pages_col))][order(get(pages_col))], n)
+  highest[[title_col]] <- factor(highest[[(title_col)]],
+                                 levels = unique(highest[[(title_col)]]))
+  highest[[my_rating_col]] <- as.factor(highest[[my_rating_col]])
+  ggplot(highest, aes(x=Title.Simple)) + 
+    geom_col(aes(y=get(pages_col), fill=get(my_rating_col))) +
+    geom_text(aes(y=get(pages_col)/2, label=get(pages_col))) +
+    xlab('Title') + ylab('Number of Pages') +
     scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
     coord_flip() + theme_pander()
 }

@@ -391,7 +391,7 @@ genre_plot <- function(genre_df,
     facet_wrap(. ~ Type, scales='free') + 
     scale_fill_brewer(palette = 'Set1') +
     coord_flip() +
-    ggtitle('Genre Plot') +
+    ggtitle(paste0('Genre Comparison Plot - ', name)) +
     theme_pander() + 
     theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom', legend.key.width = unit(1.5, 'cm'),

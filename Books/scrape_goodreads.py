@@ -139,11 +139,8 @@ def get_stats(url, wait=0):
 
 
 def create_url(id, name):
-    # formatted_name = name.replace(" ", "_")
-    # formatted_name = formatted_name.replace("'", "-")
-    # formatted_name = formatted_name.split(":")[0]
-    # formatted_name = formatted_name.split("(")[0]
-    return "https://www.goodreads.com/book/show/" + str(id)  # + "." + formatted_name
+
+    return "https://www.goodreads.com/book/show/" + str(id) 
 
 
 def read_goodreads_export(file_path):

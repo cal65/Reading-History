@@ -9,6 +9,10 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def append_scraping(goodreads_data):
+    """
+    Take data meant to be in the Goodreads export format
+    Scrape additional fields and add them as columns
+    """
     goodreads_data.columns = [c.replace(" ", ".") for c in goodreads_data.columns]
     urls = scrape_goodreads.return_urls(goodreads_data)
     scraped_df = scrape_goodreads.apply_added_by(urls)
@@ -52,7 +56,7 @@ def update_goodreads(df1, df2, index_column):
     return df_updated
 
 
-def update_missing_data(df, wait=1):
+def update_missing_data(df, wait=3):
     """
     This function is for incomplete appends, when rows failed due to timeouts
     """

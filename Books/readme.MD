@@ -8,6 +8,9 @@ Data is neutral. The graphs simply present truth about what a person has read, p
 
 ![Author Map](Graphs/Cal/nationality_map_Cal.jpeg)
 
+A graph like this can show what genres you read a lot of, and what genres you might not have ever thought about reading.
+
+![Genre Comparison Plot](Graphs/Cal/genre_comparison_Cal.jpeg)
 If you would like your data analyzed, please contact me (information in profile).
 
 # Technical Steps

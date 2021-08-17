@@ -36,6 +36,8 @@ def get_stats(url, wait=0):
         "Shelf3": None,
         "Shelf4": None,
         "Shelf5": None,
+        "Shelf6": None,
+        "Shelf7": None,
         "Original_title": None,
         "url": url,
     }
@@ -110,8 +112,10 @@ def get_stats(url, wait=0):
         shelf3 = shelves[2] if len(shelves) > 2 else ""
         shelf4 = shelves[3] if len(shelves) > 3 else ""
         shelf5 = shelves[4] if len(shelves) > 4 else ""
+        shelf6 = shelves[5] if len(shelves) > 5 else ""
+        shelf7 = shelves[6] if len(shelves) > 6 else ""
     except:
-        shelf1 = shelf2 = shelf3 = shelf4 = shelf5 = None
+        shelf1 = shelf2 = shelf3 = shelf4 = shelf5 = shelf6 = shelf7 = None
 
     try:
         original_title = soup.find("div", {"class": "infoBoxRowItem"}).text
@@ -133,6 +137,8 @@ def get_stats(url, wait=0):
         "Shelf3": shelf3,
         "Shelf4": shelf4,
         "Shelf5": shelf5,
+        "Shelf6": shelf6,
+        "Shelf7": shelf7,
         "Original_title": original_title,
         "url": url,
     }

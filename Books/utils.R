@@ -176,7 +176,7 @@ read_plot <- function(df,
     geom_text(aes(label = get(title_col), size = text_size)) +
     facet_wrap(strats ~ ., scales='free', nrow=1) +
     scale_fill_manual(values = c('hotpink2', 'darkolivegreen')) +
-    scale_size_continuous(guide=F, range=c(2.5, max(df$text_size))) +
+    scale_size_continuous(guide=F, range=c(2, 5)) +
     xlab('Number of Readers') + 
     ylab('Title') +
     ggtitle(paste0('Readership Spectrum - ', name)) +
@@ -184,7 +184,7 @@ read_plot <- function(df,
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   if (plot){
-    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9)
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9, dpi=100)
   }
 }
 
@@ -280,8 +280,7 @@ plot_map_data <- function(df, region_dict, world_sf, user, country_col = 'Countr
   names(other_sf) <- mapvalues(names(other_sf), from = 'geonunit', to='geounit')
   
   country_df <- merge(df, region_dict, by.x='Country.Chosen', by.y='nationality', all.x=T)
-  regions_count <- data.frame(table(country_df$region))
-  names(regions_count) <- c('region', 'count')
+  regions_count <- country_df[, .(count = .N, titles = paste(head(Title.Simple, 3), collapse='\n')), by=region]
   world_sf <- merge(world_sf, 
                     regions_count, by.x='geounit', by.y='region', all.x=T)
   
@@ -289,7 +288,7 @@ plot_map_data <- function(df, region_dict, world_sf, user, country_col = 'Countr
   max_count = max(regions_count$count)
   my_breaks <- c(1, rep(2^(1:round(log2(max_count)))))
   ggplot(world_sf) + 
-    geom_sf(aes(fill=count, group=geounit), size=0.1) +
+    geom_sf(aes(fill=count, group=geounit, text=titles), size=0.1) +
     geom_sf(data=other_sf, aes(fill=count, group=geounit), color=NA) +
     scale_fill_gradientn(name = "count", trans = "log", breaks=my_breaks,
                         colors=brewer.pal(9, 'YlOrRd')) +
@@ -297,6 +296,8 @@ plot_map_data <- function(df, region_dict, world_sf, user, country_col = 'Countr
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
   ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.pdf'), width=12, height=8)
+  #world_plotly <- ggplotly(tool_tip=c('geounit', 'count', 'titles'), original_data=F)
+  #htmlwidgets::saveWidget(world_plotly, paste0('Graphs/', user, '/nationality_map_', user, '.html'))
 }
 
 export_user_authors <- function(user, list='goodreads_list', authors_db){
@@ -440,8 +441,8 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
     scale_fill_brewer('Gender', palette='Set1') +
     coord_flip() +
     theme(legend.position = 'bottom', plot.title=element_text(hjust=1),
-          panel.border = element_rect(colour = "black", fill=NA, size=1),
-          axis.text = element_text(size=12)) + 
+          axis.text = element_text(size=12),
+          plot.background = element_rect(colour = "black", fill=NA, size=0.5)) + 
     ggtitle('Summary Plots')
 }
 
@@ -457,7 +458,7 @@ nationality_bar_plot <- function(dt, authors_database, name,
     factor(dt_sub[,get(nationality_col)], levels = nation_table_df$Nationality)
   ggplot(dt_sub) + geom_bar(aes(x=Nationality), color='black', fill='blue') + 
     coord_flip() + theme_pander() +
-    theme(panel.border = element_rect(colour = "black", fill=NA, size=1)) 
+    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5)) 
   if (save == T){
     ggsave(paste0('Graphs/', name, '/nationality_barplot_' , name, '.jpeg'), width=11, height=8)
   }
@@ -469,8 +470,9 @@ publication_histogram <- function(dt, date_col, start_year=1800){
   n_bins <- max(3*sqrt(nrow(dt_sub)), 50)
   ggplot(dt_sub) + geom_histogram(aes(x=get(date_col)), fill='black', bins=n_bins) + 
     theme_pander() +
-    xlab('Year of Publication') +
-    theme(panel.border = element_rect(colour = "black", fill=NA, size=1)) 
+    xlab('Year of Publication') + ylab('Count') +
+    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5),
+          axis.title.y = element_text(vjust=-2)) 
 }
 
 genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
@@ -484,7 +486,8 @@ genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
   shelf_table_df$Shelf <- factor(shelf_table_df$Shelf, levels = shelf_table_df$Shelf)
   ggplot(shelf_table_df[Count > min_count]) + 
     geom_col(aes(x=Shelf, y=Count), color='black', fill='red') +
-    coord_flip() + theme_pander()
+    coord_flip() + theme_pander() + ylab('') +
+    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5))
 }
 
 get_highest_rated_book <- function(dt, rating_col='Average.Rating', 
@@ -520,9 +523,10 @@ plot_longest_books <- function(dt, n=10, pages_col='Number.of.Pages',
   ggplot(highest, aes(x=Title.Simple)) + 
     geom_col(aes(y=get(pages_col), fill=get(my_rating_col))) +
     geom_text(aes(y=get(pages_col)/2, label=get(pages_col))) +
-    xlab('Title') + ylab('Number of Pages') +
+    xlab('') + ylab('Number of Pages') +
     scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
-    coord_flip() + theme_pander()
+    coord_flip() + theme_pander() +
+    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5))
 }
 
 yearly_gender_graph <- function(dt, name, date_col, gender_col, year_start=NA,
@@ -544,9 +548,44 @@ yearly_gender_graph <- function(dt, name, date_col, gender_col, year_start=NA,
     facet_grid(. ~ Year.Read) +
     theme_pander() + xlab('') +
     ggtitle('Gender Breakdown by Year') +
-    theme(axis.text.x=element_blank(), axis.title.x = element_blank())
+    theme(axis.text.x=element_blank(), axis.title.x = element_blank(), 
+          panel.border=element_rect(colour="black",size=1),
+          plot.title = element_text(hjust=0.5))
   if (save==T){
     print("Saving yearly gender breakdown plot")
     ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width=14, height=8)
+  }
+}
+
+graph_list <- function(dt, list_name, plot_name, save=F){
+  top_list_df <- fread(list_name)
+  # merging just by Book.Id may miss near matches with similar titles
+  # for now, check if titles are the same and change the book.id
+  top_list_df$Title.Upper <- toupper(top_list_df$Title)
+  
+  dt$Title.Upper <- toupper(dt$Title.Simple)
+  dt$Match <- dt$Book.Id %in% top_list_df$Book.Id
+  unmatched_titles <- dt[Match==F & Title.Upper %in% top_list_df$Title.Upper]$Title.Upper
+  for (title in unmatched_titles){
+    dt[Title.Upper==title]$Book.Id <- top_list_df[Title.Upper == title]$Book.Id
+  }
+  top_books <- merge(top_list_df, dt[,c('Book.Id', 'Source', 'gender', 'Date.Read')], 
+                     by='Book.Id', all.x=T)
+  setDT(top_books)
+  top_books$Read <- ifelse(is.na(top_books$Source), F, T)
+  top_books$Year.Read <- format(top_books$Date.Read, '%Y')
+  palette <- c('grey40', 'Purple')
+  plot_title <- gsub('_', ' ', plot_name)
+  ggplot(top_books, aes(x=1, y=Title)) +
+    geom_tile(aes(fill=Read), color='black') +
+    geom_text(aes(label=Year.Read)) +
+    facet_wrap(Facet ~ ., scales='free') +
+    scale_fill_manual(values = palette) +
+    ggtitle(paste0(plot_title, ' - ', name)) +
+    theme_pander() +
+    theme(axis.text.x = element_blank(), plot.title=element_text(hjust=0.5),
+          axis.title.x = element_blank())
+  if (save == T){
+    ggsave(paste0('Graphs/', name, '/', plot_name, '_', name, '.jpeg'), width=9.5, height=7)
   }
 }

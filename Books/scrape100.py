@@ -20,7 +20,7 @@ def scrape100(url_ending, save_path):
 	title_strings = [title.replace('-', ' ') for title in title_strings]
 	title_strings = [title.title() for title in title_strings]
 	title_strings = [title.replace(' S ', "'s ") for title in title_strings]
-	df = pd.DataFrame({'titles_raw': titles, 'book_ids': book_ids, 'titles': title_strings}) 
+	df = pd.DataFrame({'Title.Raw': titles, 'Book.Id': book_ids, 'Title': title_strings}) 
 	df['Index'] = range(1, 101)
 	df['Facet'] = ['A']*25 + ['B']*25 + ['C']*25  + ['D'] * 25 # for graphing purposes
 	df.to_csv(save_path, index=False)

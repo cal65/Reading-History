@@ -111,17 +111,7 @@ for (name in names(paths)){
   genre_plot(genre_df, name = name, n_genre = 24, read_col='Read',  plot=T)
 }
 
-# for (name in names(paths)){
-#   indiv_genre <- top_table[Source == name]
-#   indiv_genre$Freq_perc <- indiv_genre$Freq / sum(indiv_genre$Freq)
-#   genre_comparison_df <- merge(indiv_genre[,c('Shelf', 'Freq_perc')],
-#                                overall_genre_distribution,
-#                                by.x = 'Shelf', by.y = 'Var1',
-#                                all.y = T)
-#   genre_comparison_df$difference <- with(genre_comparison_df, Freq_perc - Freq)
-#   print(name)
-#   print(genre_comparison_df[which.max(genre_comparison_df$difference)])
-# }
+
 
 ## Month plot
 for (name in names(paths)){
@@ -174,35 +164,7 @@ for (name in names(goodreads_list)){
 }
 
 ## top 100
-top_100 <- read.csv('100_books_to_read.csv')
-top_100$Book.Id <- as.integer(top_100$Book.Id)
-
-books_100 <- vector('list')
 for (name in names(goodreads_list)){
-  books_100[[name]] <- merge(top_100, goodreads_list[[name]][,c('Book.Id', 'Source', 
-                                                                'gender', 'Date.Read')], 
-                             by='Book.Id', all.x=T)
-  setDT(books_100[[name]])
-  books_100[[name]]$Read <- ifelse(is.na(books_100[[name]]$Source), F, T)
-  ## check using fuzzy case matching logic on uncaptured names
-  unread_100 <-  toupper(books_100[[name]][Read==F,Title])
-  user_books <- toupper(goodreads_list[[name]]$Title.Simple)
-  additional_100 <- user_books[which(user_books %in% unread_100)]
-  date_dict <- goodreads_list[[name]][toupper(Title.Simple) %in% additional_100, 
-                                      c('Title.Simple', 'Date.Read'), with=F]
-  books_100[[name]][toupper(Title) %in% additional_100]$Read <- T
-  books_100[[name]][toupper(Title) %in% additional_100]$Date.Read <- mapvalues(toupper(books_100[[name]][toupper(Title) %in% additional_100]$Title),
-    from = toupper(date_dict$Title.Simple), to = date_dict$Date.Read)
-  books_100[[name]]$Year.Read <- format(books_100[[name]]$Date.Read, '%Y')
-  palette <- c('grey40', 'Purple')
-  ggplot(books_100[[name]], aes(x=1, y=Title)) +
-    geom_tile(aes(fill=Read), color='black') +
-    geom_text(aes(label=Year.Read)) +
-    facet_wrap(Facet ~ ., scales='free') +
-    scale_fill_manual(values = palette) +
-    ggtitle(paste0('100 Books to Read in your Lifetime - ', name)) +
-    theme_pander() +
-    theme(axis.text.x = element_blank(), plot.title=element_text(hjust=0.5),
-          axis.title.x = element_blank())
-  ggsave(paste0('Graphs/', name, '/100_to_read_', name, '.jpeg'), width=9.5, height=7)
+  graph_list(goodreads_list[[name]], 'artifacts/100_books_to_read.csv', '100_Books_to_Read_in_Your_Lifetime', save=T)
+  graph_list(goodreads_list[[name]], 'artifacts/100_best_memoirs.csv', '100_Best_Memoirs', save=T)
 }

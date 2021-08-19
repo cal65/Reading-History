@@ -56,7 +56,7 @@ def update_goodreads(df1, df2, index_column):
     return df_updated
 
 
-def update_missing_data(df, wait=3):
+def update_missing_data(df, wait=4):
     """
     This function is for incomplete appends, when rows failed due to timeouts
     """
@@ -83,19 +83,21 @@ def fix_date(file_path):
 
 if __name__ == "__main__":
     """
-    Usage: python append_to_export.py [--update] filepath.csv 
+    Usage: python append_to_export.py filepath.csv [--update] [wait]
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("file_path")
     parser.add_argument("--update", dest='update', action='store_true', help="Mode - default none = apply append")
+    parser.add_argument("wait")
     args = parser.parse_args()
     file_path = args.file_path
     update = args.update
+    wait = int(args.wait)
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)
     if update is False:
     	apply_append(file_path).to_csv(export_path, index=False)
     	fix_date(export_path)
     elif update is True:
     	df = pd.read_csv(file_path)
-    	df = update_missing_data(df)
+    	df = update_missing_data(df, wait)
     	df.to_csv(file_path, index=False)

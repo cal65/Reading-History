@@ -74,6 +74,7 @@ generate_plots <- function(file_path, name, write=write, start_year.=start_year)
   # some top 100 charts
   graph_list(dt_read, 'artifacts/100_books_to_read.csv', '100_Books_to_Read_in_Your_Lifetime', save=T)
   graph_list(dt_read, 'artifacts/100_best_memoirs.csv', '100_Best_Memoirs', save=T)
+  graph_list(dt_read, 'artifacts/100_Best_Books_of_the_Decade_2010s.csv', '100_Best_Books_of_the_2010s', save=T)
   if (write == T){
     write.csv(country_dt, file_path, row.names=F)
   }

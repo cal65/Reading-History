@@ -108,23 +108,26 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
                       save=F){
   divergent_df <- df
   divergent_df$Pages <- with(divergent_df, ifelse(get(fiction_col) == 'Fiction', -1*get(page_col), get(page_col)))
-  str_len <- str_len
   divergent_df$Year.Read <- format(divergent_df[[date_col]], '%Y')
   # exit function if there is no date data
   if (length(unique(divergent_df$Year.Read)) < 1) {
     return()
   }
+  title_name <- gsub('_', ' ', name) # format for the plot title
+  # calculate a text size bsaed on number of books in a year
+  max_books_year <- max(table(divergent_df[Year.Read >= start_year]$Year.Read), na.rm=T)
+  text_size <- max(2, 0.04*max_books_year^2 -1.1*max_books_year + 10) # quadratic fit
   divergent_df[[title_col]] <- sapply(divergent_df[[title_col]],
                                function(x) paste(stri_wrap(x, width=str_len), collapse='\n'))
   ggplot(divergent_df[Year.Read >= start_year], aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(get(title_col))))) +
     geom_col(aes(color=get(fiction_col), fill=get(author_gender_col)), 
              size=0.7, width = .7, alpha=0.7) +
     geom_hline(yintercept=0, linetype='solid', size=1, color='white') +
-    geom_text(aes(label=get(title_col)), position = position_stack(0.5), size=1.5) +
+    geom_text(aes(label=get(title_col)), position = position_stack(0.5), size=text_size) +
     scale_color_manual(values=c('chartreuse', 'Grey'), 'Narrative') + 
     scale_fill_brewer(palette='Dark2', 'Author Gender') +
     xlab('Year Read') +
-    ggtitle(paste0(name, ' - Reading History')) +
+    ggtitle(paste0(title_name, ' - Reading History')) +
     theme_pander() + theme(plot.title=element_text(hjust=0.5), 
                            legend.position = 'bottom') 
   if (save == T){
@@ -316,7 +319,7 @@ create_genre_df <- function(dt) {
 
 create_melted_genre_df <- function(dt, additional_exclude=c('Audiobook')) {
   genre_df <- dt[,c('Source', grep('^Shelf', names(dt), value=T)),with=F]
-  genre_df.m <- setDT(melt(genre_df, 
+  genre_df.m <- setDT(data.table::melt(genre_df, 
                            id.var='Source', value.name = 'Shelf'))
   genre_df.m <- genre_df.m[!Shelf %in% c('Fiction', 'Nonfiction', '', additional_exclude)]
   genre_df.m <- genre_df.m[!is.na(Shelf)]

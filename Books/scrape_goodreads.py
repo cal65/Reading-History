@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-from pandas.api.types import is_string_dtype 
+from pandas.api.types import is_string_dtype
 import numpy as np
 import json
 import random
@@ -106,7 +106,9 @@ def get_stats(url, wait=0):
     try:
         shelves = soup.findAll("a", {"class": "actionLinkLite bookPageGenreLink"})
         shelves = [shelf.text for shelf in shelves]
-        shelves = pd.unique(shelves) # because of the way Goodreads organizes this, there are some repeat shelves
+        shelves = pd.unique(
+            shelves
+        )  # because of the way Goodreads organizes this, there are some repeat shelves
         shelf1 = shelves[0] if len(shelves) > 0 else ""
         shelf2 = shelves[1] if len(shelves) > 1 else ""
         shelf3 = shelves[2] if len(shelves) > 2 else ""
@@ -146,7 +148,7 @@ def get_stats(url, wait=0):
 
 def create_url(id, name):
 
-    return "https://www.goodreads.com/book/show/" + str(id) 
+    return "https://www.goodreads.com/book/show/" + str(id)
 
 
 def read_goodreads_export(file_path):

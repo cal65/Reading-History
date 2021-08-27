@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import sys
 import logging
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
@@ -97,7 +98,9 @@ def lookup_unfound(df, nationality_col="Country.Chosen", author_col="Author"):
         ]
     ]
     if len(df_unfound) > 0:
-        logger.info("Looking up author nationalities for " + str(len(df_unfound)) + " authors")
+        logger.info(
+            "Looking up author nationalities for " + str(len(df_unfound)) + " authors"
+        )
         df_unfound = append_nationalities(df_unfound)
         df_return = pd.concat([df_found, df_unfound])
     else:

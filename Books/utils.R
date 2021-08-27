@@ -515,7 +515,7 @@ plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
     coord_flip() + theme_pander()
 }
 
-plot_longest_books <- function(dt, n=10, pages_col='Number.of.Pages', 
+plot_longest_books <- function(dt, n=15, pages_col='Number.of.Pages', 
                                title_col='Title.Simple',
                                my_rating_col='My.Rating'){
   

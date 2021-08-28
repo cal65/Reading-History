@@ -94,7 +94,7 @@ def merge_with_existing(df, db, id_col_df="Book.Id", id_col_db="Book.Id"):
     db is a dataframe of an existing library of goodreads books with only Book.Id and scraped columns (and unique)
     Merge the db fields into df, so as to save scraping time
     """
-    df = merge(df, db, left_on=id_col_df, right_on=id_col_db, how="outer")
+    df = merge(df, db, left_on=id_col_df, right_on=id_col_db, how="left")
     return df
 
 

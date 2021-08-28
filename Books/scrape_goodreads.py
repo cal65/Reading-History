@@ -40,6 +40,7 @@ def get_stats(url, wait=0):
         "Shelf7": None,
         "Original_title": None,
         "url": url,
+        "numberOfPages": None,
     }
 
     scripts = soup.findAll("script")
@@ -123,6 +124,10 @@ def get_stats(url, wait=0):
         original_title = soup.find("div", {"class": "infoBoxRowItem"}).text
     except:
         original_title = None
+    try:
+        numberOfPages = soup.find("span", {"itemprop": "numberOfPages"}).text.replace("\n", "")
+    except:
+        numberOfPages = None
 
     time.sleep(wait)
 
@@ -143,6 +148,7 @@ def get_stats(url, wait=0):
         "Shelf7": shelf7,
         "Original_title": original_title,
         "url": url,
+        "numberOfPages": numberOfPages,
     }
 
 
@@ -167,7 +173,7 @@ def return_urls(goodreads_data, id_col="Book.Id"):
     return urls
 
 
-def apply_added_by(urls, wait=3):
+def apply_added_by(urls, wait=4):
     stats = [get_stats(url, wait=wait) for url in urls]
     goodreads_data = pd.DataFrame(stats)
 
@@ -211,7 +217,11 @@ if __name__ == "__main__":
     python scrape_goodreads.py 67500000 25 999 export_goodreads.csv
     """
     urls = generate_random_urls(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
-    goodreads_data = apply_added_by(urls)
+    if len(sys.argv) >= 5:
+        wait = sys.argv[4]
+    else:
+        wait = 3
+    goodreads_data = apply_added_by(urls, wait=wait)
     try:
         existing = pd.read_csv(sys.argv[-1])
         goodreads_data = pd.concat([existing, goodreads_data], axis=0)

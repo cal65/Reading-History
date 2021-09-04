@@ -217,14 +217,14 @@ if __name__ == "__main__":
     python scrape_goodreads.py 67500000 25 999 export_goodreads.csv
     """
     urls = generate_random_urls(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
-    if len(sys.argv) >= 5:
-        wait = sys.argv[4]
+    if len(sys.argv) >= 6:
+        wait = int(sys.argv[5])
     else:
         wait = 3
     goodreads_data = apply_added_by(urls, wait=wait)
     try:
-        existing = pd.read_csv(sys.argv[-1])
+        existing = pd.read_csv(sys.argv[4])
         goodreads_data = pd.concat([existing, goodreads_data], axis=0)
     except:
         pass
-    goodreads_data.to_csv(sys.argv[-1], index=False)
+    goodreads_data.to_csv(sys.argv[4], index=False)

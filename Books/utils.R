@@ -116,7 +116,7 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
   title_name <- gsub('_', ' ', name) # format for the plot title
   # calculate a text size bsaed on number of books in a year
   max_books_year <- max(table(divergent_df[Year.Read >= start_year]$Year.Read), na.rm=T)
-  text_size <- max(2, 0.04*max_books_year^2 -1.1*max_books_year + 10) # quadratic fit
+  text_size <- max(2, 0.02*max_books_year^2 -1.1*max_books_year + 10) # quadratic fit
   divergent_df[[title_col]] <- sapply(divergent_df[[title_col]],
                                function(x) paste(stri_wrap(x, width=str_len), collapse='\n'))
   ggplot(divergent_df[Year.Read >= start_year], aes(x=Year.Read, y=Pages, group=fct_rev(fct_inorder(get(title_col))))) +
@@ -187,7 +187,7 @@ read_plot <- function(df,
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   if (plot){
-    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9, dpi=100)
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9, dpi=150)
   }
 }
 

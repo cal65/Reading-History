@@ -47,3 +47,6 @@ if __name__ == "__main__":
     authors_file_path = "authors_database.csv"
     books_db = remove_nulls(books_file_path)
     authors_db = pd.read_csv(authors_file_path)
+    books_addon = lookup_nationalities(books_db, authors_db)
+    authors_db = sync(books_addon, authors_db)
+    authors_db.to_csv(authors_file_path, index=False)

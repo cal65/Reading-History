@@ -83,7 +83,7 @@ def append_nationalities(df, author_col="Author"):
     return pd.concat([df.reset_index(drop=True), nats_df], axis=1)
 
 
-def lookup_unfound(df, nationality_col="Country.Chosen", author_col="Author"):
+def lookup_unfound(df, nationality_col="nationality_1", author_col="Author"):
     # for a file without the base schema
     if nationality_col not in df.columns:
         return append_nationalities(df)

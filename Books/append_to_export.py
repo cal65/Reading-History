@@ -94,7 +94,8 @@ def merge_with_existing(df, db, id_col_df="Book.Id", id_col_db="Book.Id"):
     db is a dataframe of an existing library of goodreads books with only Book.Id and scraped columns (and unique)
     Merge the db fields into df, so as to save scraping time
     """
-    df = merge(df, db, left_on=id_col_df, right_on=id_col_db, how="left")
+    db.drop(columns=['Title', 'Author', 'Original.Publication.Year', 'Number.of.Pages', 'Average.Rating'], inplace=True)
+    df = pd.merge(df, db, left_on=id_col_df, right_on=id_col_db, how="left")
     return df
 
 
@@ -112,12 +113,18 @@ if __name__ == "__main__":
     )
     parser.add_argument("wait")
     args = parser.parse_args()
+    db = pd.read_csv('artifacts/books_database.csv')
     file_path = args.file_path
     update = args.update
     wait = int(args.wait)
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)
     if update is False:
-        apply_append(file_path).to_csv(export_path, index=False)
+        df = pd.read_csv(file_path)
+        df.columns = [c.replace(" ", ".") for c in df.columns]
+        df = merge_with_existing(df, db)
+        df = update_missing_data(df, wait)
+        df = guess_gender(df)
+        df.to_csv(export_path, index=False) 
         fix_date(export_path)
     elif update is True:
         df = pd.read_csv(file_path)

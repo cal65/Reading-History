@@ -35,7 +35,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Stephanie' = 'data/goodreads_library_SHopkins_appended.csv',
               'Tiff' = paste0(file_start, 'tiff_appended.csv'),
               'Alison_Shin' = paste0(file_start, 'alison_shin_appended.csv'),
-              'Eva' = 'data/goodreads_library_Eva_appended.csv')
+              'Eva' = 'data/goodreads_library_Eva_appended.csv',
+              'Michele' = 'data/mwtm_goodreads_library_export_appended.csv')
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name

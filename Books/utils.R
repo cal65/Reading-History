@@ -77,7 +77,8 @@ month_plot <- function(df, name, date_col, page_col, title_col,
   setDT(df)
   df$Year.Read <- as.numeric(format(df[[date_col]], '%Y'))
   df$Month.Read  <- as.numeric(format(df[[date_col]], '%m'))
-  if (length(unique(df$Year.Read)) < 1) {
+  if (all(is.na(df$Year.Read))) {
+    print('No date read data available')
     return()
   }
   df <- df[!is.na(Year.Read)]
@@ -110,7 +111,7 @@ year_plot <- function(df, name, fiction_col, date_col, page_col,
   divergent_df$Pages <- with(divergent_df, ifelse(get(fiction_col) == 'Fiction', -1*get(page_col), get(page_col)))
   divergent_df$Year.Read <- format(divergent_df[[date_col]], '%Y')
   # exit function if there is no date data
-  if (length(unique(divergent_df$Year.Read)) < 1) {
+  if (all(is.na(divergent_df$Year.Read))) {
     return()
   }
   title_name <- gsub('_', ' ', name) # format for the plot title
@@ -179,7 +180,7 @@ read_plot <- function(df,
     geom_text(aes(label = get(title_col), size = text_size)) +
     facet_wrap(strats ~ ., scales='free', nrow=1) +
     scale_fill_manual(values = c('hotpink2', 'darkolivegreen')) +
-    scale_size_continuous(guide=F, range=c(2, 5)) +
+    scale_size_continuous(guide=F, range=c(2, 4)) +
     xlab('Number of Readers') + 
     ylab('Title') +
     ggtitle(paste0('Readership Spectrum - ', name)) +
@@ -187,7 +188,7 @@ read_plot <- function(df,
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   if (plot){
-    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9, dpi=150)
+    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9, dpi=250)
   }
 }
 
@@ -202,7 +203,7 @@ finish_plot <- function(df,
   df_read <- df[order(get(read_col)),]
   df_read <- df_read[!is.na(get(read_col))]
   # keep only bottom n
-  df_read_n <- df_read[, head(.SD, n), by=get(exclusive_shelf)]
+  df_read_n <- df_read[, head(.SD, n), by=exclusive_shelf]
   df_read_n$Title.Simple <- factor(df_read_n$Title.Simple,
                                  levels = unique(df_read_n$Title.Simple))
   ggplot(df_read_n, aes(x=Title.Simple)) +
@@ -254,10 +255,14 @@ update_authors_artifact <- function(artifact, df_new, id_col='Author', gender_co
   setDT(df_new)
   df_new_authors <- df_new[, .(Title=head(get(title_col),1)), by = c(id_col, gender_col)]
   authors_new = df_new_authors[!get(id_col) %in% artifact[,get(id_col)]]
+  if (nrow(authors_new) < 1){
+    return(artifact)
+  }
   names(authors_new) <- mapvalues(names(authors_new), from='gender', to='gender_guessed')
   authors_new$gender_fixed <- authors_new$gender_guessed
   authors_new$Country.Chosen <- ''
   write.csv(authors_new, 'new_authors_data.csv', row.names=F)
+  print(paste0('Adding new authors: ', nrow(authors_new)))
   system('/Users/christopherlee/anaconda3/bin/python3 google_answer.py new_authors_data.csv')
   system('/Users/christopherlee/anaconda3/bin/python3 choose_nationality.py new_authors_data.csv')
   system('/Users/christopherlee/anaconda3/bin/python3 wikipedia.py new_authors_data.csv')
@@ -269,7 +274,7 @@ update_authors_artifact <- function(artifact, df_new, id_col='Author', gender_co
 }
 
 merge_nationalities <- function(df, authors_db, country_col = 'Country.Chosen'){
-  df <- merge(df, authors_db[,c('Author', country_col)], by='Author', all.x=T)
+  df <- merge(df, authors_db[,c('Author', country_col), with=F], by='Author', all.x=T)
   return (df)
 }
 

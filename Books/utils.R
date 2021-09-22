@@ -250,10 +250,11 @@ year_comparison <- function(l, year_col, year_start, user, plot=T) {
   }
 }
 
-update_authors_artifact <- function(artifact, df_new, id_col='Author', gender_col='gender', title_col='Title'){
+update_authors_artifact <- function(artifact, df_new, user, id_col='Author', gender_col='gender', title_col='Title'){
   setDT(artifact)
   setDT(df_new)
   df_new_authors <- df_new[, .(Title=head(get(title_col),1)), by = c(id_col, gender_col)]
+  df_new_authors$Source <- user
   authors_new = df_new_authors[!get(id_col) %in% artifact[,get(id_col)]]
   if (nrow(authors_new) < 1){
     return(artifact)
@@ -434,6 +435,11 @@ summary_plot <- function(dt, date_col,
   dev.off()
 }
 
+# define a summary theme for all summary plots
+theme_summary <- theme_pander() + 
+  theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5),
+        plot.margin = unit(c(.2,.2,.2,.2), "cm")) 
+
 gender_bar_plot <- function(dt, gender_col, narrative_col, name){
   name <- gsub('_', ' ', name)
   dt[[gender_col]] <- mapvalues(dt[[gender_col]],
@@ -448,10 +454,10 @@ gender_bar_plot <- function(dt, gender_col, narrative_col, name){
     xlab('') + ylab('Count') +
     scale_fill_brewer('Gender', palette='Set1') +
     coord_flip() +
+    theme_summary +
     theme(legend.position = 'bottom', plot.title=element_text(hjust=1),
-          axis.text = element_text(size=12),
-          plot.background = element_rect(colour = "black", fill=NA, size=0.5)) + 
-    ggtitle('Summary Plots')
+          axis.text = element_text(size=12)) + 
+    ggtitle('Summary Plots  ')
 }
 
 nationality_bar_plot <- function(dt, authors_database, name,
@@ -465,8 +471,7 @@ nationality_bar_plot <- function(dt, authors_database, name,
   dt_sub$Nationality <-
     factor(dt_sub[,get(nationality_col)], levels = nation_table_df$Nationality)
   ggplot(dt_sub) + geom_bar(aes(x=Nationality), color='black', fill='blue') + 
-    coord_flip() + theme_pander() +
-    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5)) 
+    coord_flip() + theme_summary
   if (save == T){
     ggsave(paste0('Graphs/', name, '/nationality_barplot_' , name, '.jpeg'), width=11, height=8)
   }
@@ -479,8 +484,7 @@ publication_histogram <- function(dt, date_col, start_year=1800){
   ggplot(dt_sub) + geom_histogram(aes(x=get(date_col)), fill='black', bins=n_bins) + 
     theme_pander() +
     xlab('Year of Publication') + ylab('Count') +
-    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5),
-          axis.title.y = element_text(vjust=-2)) 
+    theme_summary 
 }
 
 genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
@@ -494,8 +498,9 @@ genre_bar_plot <- function(dt, n_shelves=4, min_count=2){
   shelf_table_df$Shelf <- factor(shelf_table_df$Shelf, levels = shelf_table_df$Shelf)
   ggplot(shelf_table_df[Count > min_count]) + 
     geom_col(aes(x=Shelf, y=Count), color='black', fill='red') +
-    coord_flip() + theme_pander() + ylab('') +
-    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5))
+    coord_flip() + theme_pander() + ylab('Number of Books') +
+    theme_summary +
+    theme(plot.title = element_text(hjust=0.5))
 }
 
 get_highest_rated_book <- function(dt, rating_col='Average.Rating', 
@@ -517,7 +522,7 @@ plot_highest_rated_books <- function(dt, n=10, rating_col='Average.Rating',
     xlab('Title') + ylab('Average Rating') +
     ylim(0, 5) +
     scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
-    coord_flip() + theme_pander()
+    coord_flip() + theme_summary
 }
 
 plot_longest_books <- function(dt, n=15, pages_col='Number.of.Pages', 
@@ -533,8 +538,8 @@ plot_longest_books <- function(dt, n=15, pages_col='Number.of.Pages',
     geom_text(aes(y=get(pages_col)/2, label=get(pages_col))) +
     xlab('') + ylab('Number of Pages') +
     scale_fill_brewer(palette='Blues', 'Your Rating', type='seq') +
-    coord_flip() + theme_pander() +
-    theme(plot.background = element_rect(colour = "black", fill=NA, size=0.5))
+    coord_flip() + theme_summary +
+    theme(plot.title = element_text(hjust=0.5))
 }
 
 yearly_gender_graph <- function(dt, name, date_col, gender_col, year_start=NA,

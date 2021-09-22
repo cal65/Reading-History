@@ -21,7 +21,8 @@ generate_plots <- function(file_path, name, write=write, start_year.=start_year)
   dir.create(paste0('Graphs/', name), showWarnings = F)
   authors_database <- read.csv('authors_database.csv')
   # update the authors database based on potential new data from dt
-  authors_database <- update_authors_artifact(authors_database, dt)
+  authors_database <- update_authors_artifact(authors_database, dt, user=name)
+  setDT(authors_database)
   print(paste0('Updated authors database - ', Sys.time() - t1))
   dt$gender <- mapvalues(
     dt$Author, 

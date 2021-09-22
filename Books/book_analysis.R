@@ -17,8 +17,9 @@ books_df$Title <- as.character(unlist(books_df$Title))
 names(books_df) <- gsub(' ', '.', names(books_df))
 books_df$Biography[is.na(books_df$Biography)] <- 'Not Biography'
 #initial eda graphs
-ggplot(books_df) + geom_histogram(aes(Date.Read)) +
-  scale_x_date(date_labels = "%Y", date_breaks = '2 years')
+ggplot(books_df) + geom_histogram(aes(Date.Read), bins=60) +
+  scale_x_date(date_labels = "%Y", date_breaks = '2 years') +
+  theme_pander()
 
 books_df$Year.Read <- as.numeric(format(books_df$Date.Read, '%Y'))
 books_df$Month.Read  <- as.numeric(format(books_df$Date.Read, '%m'))

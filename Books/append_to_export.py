@@ -123,7 +123,7 @@ if __name__ == "__main__":
         df.columns = [c.replace(" ", ".") for c in df.columns]
         df = merge_with_existing(df, db)
         df = update_missing_data(df, wait)
-        df = guess_gender(df)
+        df = scrape_goodreads.guess_gender(df)
         df.to_csv(export_path, index=False) 
         fix_date(export_path)
     elif update is True:

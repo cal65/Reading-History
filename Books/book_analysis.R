@@ -174,17 +174,6 @@ lm6 <-
 interpolated_merged_df$y_lm6 <-
   predict(lm6, newdata = interpolated_df)
 
-lm8 <-
-  lm(
-    data = interpolated_merged_df,
-    y_interpolated ~ Date.Numeric + I(Date.Numeric ^ 2) +
-      I(Date.Numeric ^ 3) + I(Date.Numeric ^ 4) + I(Date.Numeric ^
-                                                      5) + I(Date.Numeric ^ 6) +
-      I(Date.Numeric ^ 7) + I(Date.Numeric & 8)
-  )
-interpolated_merged_df$y_lm8 <-
-  predict(lm8, newdata = interpolated_merged_df)
-
 ss <- smooth.spline(books_df$Date.Numeric,
                     books_df$Rolling.Read)
 interpolated_merged_df$smooth_spline <-

@@ -38,7 +38,7 @@ def sync(
     books_addon, authors_db, book_author_col="Author", authors_author_col="Author"
 ):
     books_addon = books_addon[pd.notnull(books_addon["nationality1"])]
-    books_addon = guess_gender(books_addon, gender_col="gender_fixed")
+    books_addon = guess_gender(books_addon, gender_col="gender_guessed")
     common_cols = list(set(books_addon.columns).intersection(set(authors_db.columns)))
     authors_db = pd.concat([authors_db, books_addon[common_cols]])
     return authors_db
@@ -62,9 +62,9 @@ if __name__ == "__main__":
     books_file_path = args.books_file_path
     authors_file_path = "authors_database.csv"
     books_db = remove_nulls(books_file_path)
-    limit = int(args.limit)
+    limit = args.limit
     if limit:
-        books_db = books_db.tail(limit)
+        books_db = books_db.tail(int(limit))
     authors_db = pd.read_csv(authors_file_path)
     books_addon = lookup_nationalities(books_db, authors_db)
     authors_db = sync(books_addon, authors_db)

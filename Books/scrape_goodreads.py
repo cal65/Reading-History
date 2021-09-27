@@ -159,7 +159,7 @@ def get_stats(url, wait=0):
     }
 
 
-def create_url(id, name):
+def create_url(id):
 
     return "https://www.goodreads.com/book/show/" + str(id)
 
@@ -175,7 +175,7 @@ def read_goodreads_export(file_path):
 def return_urls(goodreads_data, id_col="Book.Id"):
     if not is_string_dtype(goodreads_data["Title"]):
         goodreads_data["Title"] = goodreads_data["Title"].astype(str)
-    urls = goodreads_data.apply(lambda x: create_url(x[id_col], x["Title"]), axis=1)
+    urls = goodreads_data.apply(lambda x: create_url(x[id_col]), axis=1)
 
     return urls
 

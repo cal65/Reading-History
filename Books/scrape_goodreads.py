@@ -201,7 +201,7 @@ def guess_gender(goodreads_data, gender_col="gender"):
         name[0] if name != "" else ""
         for name in goodreads_data["Author"].str.split(" ").fillna("")
     ]
-    goodreads_data[gender_col] = [
+    goodreads_data.loc[:,gender_col] = [
         d.get_gender(name) for name in goodreads_data["First.Name"]
     ]
     return goodreads_data

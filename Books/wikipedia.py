@@ -73,8 +73,7 @@ def search_person_for_gender(person):
     return gender
 
 
-def evaluate_file(csv, fix_col="gender_fixed", name_col="Author"):
-    df = pd.read_csv(csv)
+def evaluate_df(df, fix_col="gender_fixed", name_col="Author"):
     authors = df.loc[~(df[fix_col].isin(["male", "female", "non-binary"])), name_col]
     genders = [search_person_for_gender(author) for author in authors]
     df.loc[~(df[fix_col].isin(["male", "female", "non-binary"])), fix_col] = genders
@@ -84,4 +83,5 @@ def evaluate_file(csv, fix_col="gender_fixed", name_col="Author"):
 
 if __name__ == "__main__":
     file_path = sys.argv[1]
-    evaluate_file(file_path).to_csv(file_path, index=False)
+    df = pd.read_csv(file_path)
+    evaluate_file(df).to_csv(file_path, index=False)

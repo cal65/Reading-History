@@ -108,7 +108,7 @@ def merge_with_existing(df, db, id_col_df="Book.Id", id_col_db="Book.Id", standa
 
 if __name__ == "__main__":
     """
-    Usage: python append_to_export.py filepath.csv [--update] [wait] [--standard]
+    Usage: python append_to_export.py filepath.csv [--update] [wait] [--nonstandard]
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("file_path")
@@ -120,22 +120,22 @@ if __name__ == "__main__":
         help="Mode - default none = apply append",
     )
     parser.add_argument(
-        "--standard",
-        dest="standard",
+        "--nonstandard",
+        dest="nonstandard",
         action="store_false",
-        help="Specify false if not appending to a standard Goodreads library export",
+        help="Include if not appending to a standard Goodreads library export",
     )
     args = parser.parse_args()
     db = pd.read_csv('artifacts/books_database.csv')
     file_path = args.file_path
     update = args.update 
     wait = int(args.wait)
-    standard = args.standard 
+    nonstandard = args.nonstandard 
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)
     if update is False:
         df = pd.read_csv(file_path)
         df.columns = [c.replace(" ", ".") for c in df.columns]
-        df = merge_with_existing(df, db, standard_export=standard)
+        df = merge_with_existing(df, db, standard_export=nonstandard)
         df = update_missing_data(df, wait)
         df = scrape_goodreads.guess_gender(df)
         df.to_csv(export_path, index=False) 

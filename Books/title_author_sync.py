@@ -11,11 +11,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def remove_nulls(file_path, drop_col="Title", secondary_col="Author"):
+def remove_nulls(file_path, secondary_col="Author"):
     books_db = pd.read_csv(file_path)
     start_rows = len(books_db)
-    books_db = books_db[pd.notnull(books_db[drop_col])]
-    books_db.drop_duplicates(subset=[drop_col, secondary_col], inplace=True)
+    #books_db = books_db[pd.notnull(books_db[drop_col])]
+    books_db.drop_duplicates(subset=[secondary_col], inplace=True)
     logger.info(
         "Reduced books db size from "
         + str(start_rows)
@@ -48,7 +48,7 @@ def sync(
     books_addon["gender_fixed"] = [
         search_person_for_gender(author)
         if gender not in ["male", "female", "non-binary"]
-        else author
+        else gender
         for author, gender in zip(books_addon[book_author_col], books_addon["gender_guessed"])
     ]
     books_addon = choose_nationality(books_addon)

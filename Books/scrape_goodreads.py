@@ -226,7 +226,7 @@ def generate_random_urls(max, n, seed):
 
 if __name__ == "__main__":
     """
-    python scrape_goodreads.py 67500000 25 999 export_goodreads.csv
+    python scrape_goodreads.py 67500000 25 999 export_goodreads.csv 3
     """
     urls = generate_random_urls(int(sys.argv[1]), int(sys.argv[2]), int(sys.argv[3]))
     if len(sys.argv) >= 6:

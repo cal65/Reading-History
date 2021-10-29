@@ -577,6 +577,8 @@ graph_list <- function(dt, list_name, plot_name, save=F){
   top_list_df$Title.Upper <- toupper(top_list_df$Title)
   
   dt$Title.Upper <- toupper(dt$Title.Simple)
+  dt$Title.Upper <- gsub('-', ' ', df$Title.Upper)
+  top_list_df$Title.Upper <- gsub('-', ' ', top_list_df$Title.Upper)
   dt$Match <- dt$Book.Id %in% top_list_df$Book.Id
   unmatched_titles <- dt[Match==F & Title.Upper %in% top_list_df$Title.Upper]$Title.Upper
   for (title in unmatched_titles){

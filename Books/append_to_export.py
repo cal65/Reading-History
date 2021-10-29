@@ -135,7 +135,7 @@ if __name__ == "__main__":
     if update is False:
         df = pd.read_csv(file_path)
         df.columns = [c.replace(" ", ".") for c in df.columns]
-        df = merge_with_existing(df, db, standard_export=nonstandard)
+        df = merge_with_existing(df, db, standard_export=True)
         df = update_missing_data(df, wait)
         df = scrape_goodreads.guess_gender(df)
         df.to_csv(export_path, index=False) 

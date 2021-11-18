@@ -70,7 +70,13 @@ def update_missing_data(df, wait=4, standard_export=True):
         logger.info("Updating " + str(len(df_missing)) + " missing rows of data")
         urls = scrape_goodreads.return_urls(df_missing)
         scraped_missing = scrape_goodreads.apply_added_by(urls, wait=wait)
+        if standard_export == False:
+            scraped_missing['Number.of.Pages'] = pd.to_numeric(scraped_missing['Number.of.Pages'].str.replace(' Pages', ''))
+            scraped_missing['Title'] = scraped_missing['Title'].str.strip()
         scraped_missing.index = df_missing.index
+        diff_columns = set(scraped_missing.columns).difference(set(df.columns))
+        for col in diff_columns:
+            df[col] = None
         df.update(scraped_missing)
     else:
         logger.info("No data needs updating")
@@ -102,6 +108,8 @@ def merge_with_existing(df, db, id_col_df="Book.Id", id_col_db="Book.Id", standa
         db.drop(columns=['Title', 'Author', 'Original.Publication.Year', 'Number.of.Pages', 'Average.Rating'], inplace=True)
     else:
         db.drop(columns=['Title'], inplace=True)
+        if 'Author' not in db.columns:
+            db['Author'] = ""
     df = pd.merge(df, db, left_on=id_col_df, right_on=id_col_db, how="left")
     return df
 
@@ -131,12 +139,14 @@ if __name__ == "__main__":
     update = args.update 
     wait = int(args.wait)
     nonstandard = args.nonstandard 
+
     export_path = re.sub(".csv|.xlsx", "_appended.csv", file_path)
     if update is False:
         df = pd.read_csv(file_path)
         df.columns = [c.replace(" ", ".") for c in df.columns]
-        df = merge_with_existing(df, db, standard_export=True)
-        df = update_missing_data(df, wait)
+        df = merge_with_existing(df, db, standard_export=nonstandard)
+        df = update_missing_data(df, wait, standard_export=nonstandard)
+        df.to_csv(export_path, index=False) 
         df = scrape_goodreads.guess_gender(df)
         df.to_csv(export_path, index=False) 
         fix_date(export_path)

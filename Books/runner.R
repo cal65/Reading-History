@@ -14,7 +14,7 @@ name <- args[2]
 write <- ifelse(length(args) > 2, as.logical(args[3]), F)
 start_year <- ifelse(length(args) > 3, as.integer(args[4]), NA)
 
-generate_plots <- function(file_path, name, write=write, start_year.=start_year){
+generate_plots <- function(file_path, name, write=write, start_year=start_year){
   t1 <- Sys.time()
   dt <- run_all(file_path)
   dt$Source <- name

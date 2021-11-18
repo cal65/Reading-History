@@ -155,7 +155,7 @@ def get_stats(url, wait=0):
         "Shelf7": shelf7,
         "Original_title": original_title,
         "url": url,
-        "numberOfPages": numberOfPages,
+        "Number.of.Pages": numberOfPages,
     }
 
 

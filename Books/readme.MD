@@ -13,6 +13,9 @@ A graph like this can show what genres you read a lot of, and what genres you mi
 ![Genre Comparison Plot](Graphs/Cal/genre_comparison_Cal.jpeg)
 If you would like your data analyzed, please contact me (information in profile).
 
+![Month Plot](Monthly_pages_read.jpeg)
+
+
 # Technical Steps
-1. **python append_to_export file.csv** ## This will scrape additional fields from goodreads and append them as new columns to the file, and save a new file called file_appended.csv
-2. **Rscript runner.R file.csv name** ## This will run a pipeline that processes the data, updates a databas of authors' genders and nationalities, and generate numerous graphs
+1. **python append_to_export file.csv** # (This will scrape additional fields from goodreads and append them as new columns to the file, and save a new file called file_appended.csv)
+2. **Rscript runner.R file.csv name** # (This will run a pipeline that processes the data, updates a databas of authors' genders and nationalities, and generate numerous graphs)

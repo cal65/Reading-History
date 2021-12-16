@@ -180,7 +180,7 @@ read_plot <- function(df,
     geom_text(aes(label = get(title_col), size = text_size)) +
     facet_wrap(strats ~ ., scales='free', nrow=1) +
     scale_fill_manual(values = c('hotpink2', 'darkolivegreen')) +
-    scale_size_continuous(guide=F, range=c(2, 4)) +
+    scale_size_continuous(guide='none', range=c(2, 4)) +
     xlab('Number of Readers') + 
     ylab('Title') +
     ggtitle(paste0('Readership Spectrum - ', name)) +

@@ -38,7 +38,7 @@ def get_stats(url, wait=0):
         "Shelf7": None,
         "Original_title": None,
         "url": url,
-        "numberOfPages": None,
+        "Number.of.Pages": None,
     }
 
     try: 

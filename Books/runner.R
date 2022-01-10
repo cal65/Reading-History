@@ -11,10 +11,10 @@ source('utils.R')
 args = commandArgs(trailingOnly=TRUE)
 file_path <- args[1]
 name <- args[2]
-write <- ifelse(length(args) > 2, as.logical(args[3]), F)
-start_year <- ifelse(length(args) > 3, as.integer(args[4]), NA)
+w <- ifelse(length(args) > 2, as.logical(args[3]), F)
+year <- ifelse(length(args) > 3, as.integer(args[4]), NA)
 
-generate_plots <- function(file_path, name, write=write, start_year=start_year){
+generate_plots <- function(file_path, name, write=w, start_year=year){
   t1 <- Sys.time()
   dt <- run_all(file_path)
   dt$Source <- name
@@ -30,7 +30,7 @@ generate_plots <- function(file_path, name, write=write, start_year=start_year){
     authors_database$gender_fixed, warn_missing = F)
   dt_read <- dt[Exclusive.Shelf == 'read']
   # read plot
-  read_plot(dt_read, name=name, 
+  read_plot(dt_read, user=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T, start_year=start_year
   )
   print(paste0("Read plot created - ", Sys.time() - t1))

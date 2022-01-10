@@ -133,6 +133,7 @@ def get_stats(url, wait=0):
         numberOfPages = soup.find("span", {"itemprop": "numberOfPages"}).text.replace(
             "\n", ""
         )
+        numberOfPages = int(re.findall(r'\d+', numberOfPages)[0])
     except:
         numberOfPages = None
 

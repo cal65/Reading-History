@@ -84,4 +84,4 @@ def evaluate_df(df, fix_col="gender_fixed", name_col="Author"):
 if __name__ == "__main__":
     file_path = sys.argv[1]
     df = pd.read_csv(file_path)
-    evaluate_file(df).to_csv(file_path, index=False)
+    evaluate_df(df).to_csv(file_path, index=False)

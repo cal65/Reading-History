@@ -65,7 +65,7 @@ ggplot(books_df) + geom_line(aes(x = Date.Read, y = 1:nrow(books_df)), color =
 # )
 
 # month plotter
-ggplot(books_df[Year.Read > 2010],
+ggplot(books_df[Year.Read > 2011],
        aes(
          x = Month.Read,
          y = Pages,
@@ -81,7 +81,7 @@ ggplot(books_df[Year.Read > 2010],
     alpha = 0.65
   ) +
   facet_grid(Year.Read ~ .) +
-  scale_fill_manual(values = c('pink1', 'royalblue1'),
+  scale_fill_manual(values = c('grey40', 'pink1', 'royalblue1'),
                     'Author Gender',
                     guide = F) +
   scale_color_brewer('Type', palette = 'Dark2') +
@@ -179,7 +179,7 @@ ss <- smooth.spline(books_df$Date.Numeric,
 interpolated_merged_df$smooth_spline <-
   predict(ss, interpolated_merged_df$Date.Numeric)$y
 
-ggplot(interpolated_merged_df) +
+ggplot(interpolated_merged_df[which(interpolated_merged_df$Date > '2014-01-01'),]) +
   geom_line(aes(x = Date, y = y_spl), size = 3, alpha = 0.1) +
   geom_point(aes(x = Date.Read, y = y_spl, color = Pages)) +
   geom_text_repel(aes(

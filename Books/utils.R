@@ -146,7 +146,7 @@ generate_labels <- function(breaks){
 }
 
 read_plot <- function(df, 
-                      name, 
+                      user, 
                       read_col, 
                       title_col, 
                       min_break = 3, 
@@ -183,12 +183,12 @@ read_plot <- function(df,
     scale_size_continuous(guide='none', range=c(2, 4)) +
     xlab('Number of Readers') + 
     ylab('Title') +
-    ggtitle(paste0('Readership Spectrum - ', name)) +
+    ggtitle(paste0('Readership Spectrum - ', user)) +
     theme(axis.text.y = element_blank(),
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   if (plot){
-    ggsave(paste0('Graphs/', name, '/', plot_name, name, '.jpeg'), width = 16, height=9, dpi=250)
+    ggsave(paste0('Graphs/', user, '/', plot_name, user, '.jpeg'), width = 16, height=9, dpi=250)
   }
 }
 

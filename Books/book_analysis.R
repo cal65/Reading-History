@@ -102,7 +102,8 @@ ggplot(books_df[Year.Read > 2011],
   )
 ggsave('Monthly_pages_read.jpeg',
        width = 16,
-       height = 9)
+       height = 9, 
+       dpi=350)
 
 ## rolling average
 rolling_books_read <- function(df, date_col, interval = 180) {
@@ -403,9 +404,11 @@ ggplot(divergent_df[Year.Read > 2011], aes(
     size = 3,
     color = 'white'
   ) +
-  geom_text(aes(label = Title), position = position_stack(0.5), size = 3) +
+  geom_text(aes(label = Title), position = position_stack(0.5), size = 2) +
   scale_color_manual(values = c('chartreuse', 'Grey')) +
-  scale_fill_manual(values = c('pink1', 'royalblue1'), 'Author Gender') +
+  scale_fill_manual(values = c('grey10', 'pink1', 'royalblue1'), 'Author Gender') +
+  scale_x_continuous(breaks = c(min(divergent_df$Year.Read) : max(divergent_df$Year.Read)),
+    labels = c(min(divergent_df$Year.Read) : max(divergent_df$Year.Read))) +
   xlab('Year Read') +
   ggtitle('Reading History') +
   theme_pander() + theme(plot.title = element_text(hjust = 0.5),

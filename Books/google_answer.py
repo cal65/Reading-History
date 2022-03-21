@@ -63,6 +63,9 @@ def listlen(data):
 
 def convert_nats_list_to_df(nats_list):
     max_nat = max([listlen(n) for n in nats_list])
+    # if no nationalities are found, max_nat could be 0
+    if max_nat == 0:
+        return pd.DataFrame({'nationality1': np.repeat(np.NaN, len(nats_list))}) 
     columns = ["author"] + ["nationality_" + str(i) for i in np.arange(1, max_nat + 1)]
     output_dicts = []
     for nationality in nats_list:
@@ -78,6 +81,7 @@ def convert_nats_list_to_df(nats_list):
 
 
 def append_nationalities(df, author_col="Author"):
+    # adds nationality column(s) to df
     nats_list = df[author_col].apply(lookup_author_nationality)
     nats_df = convert_nats_list_to_df(nats_list)
     return pd.concat([df.reset_index(drop=True), nats_df], axis=1)

@@ -6,6 +6,7 @@ library(forcats)
 library(plyr)
 library(stringi)
 library(RColorBrewer)
+library(lubridate)
 setwd('~/Documents/CAL/Real_Life/Repository/Books/')
 
 preprocess <- function(dt){
@@ -13,7 +14,8 @@ preprocess <- function(dt){
                                        from = c('mostly_male', 'mostly_female'),
                                        to = c('male', 'female'), warn_missing = FALSE)
   names(dt) <- gsub(' ', '.', names(dt))
-  dt$Date.Read <- as.Date(dt$Date.Read, format = '%Y-%m-%d')
+  dt$Date.Read <- as.Date(parse_date_time(dt$Date.Read, orders = c('ymd')))
+  
   dt$Title.Simple <- gsub(':.*', '', dt$Title)
   dt$Title.Simple <- gsub('\\(.*\\)', '', dt$Title.Simple)
   dt$Exclusive.Shelf <- mapvalues(dt$Exclusive.Shelf,

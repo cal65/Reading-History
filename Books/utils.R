@@ -163,7 +163,7 @@ read_plot <- function(df,
     df <- df[get(date_col) > start_date]
   }
   # control text sizes
-  max_digits <- nchar(as.character(max_read)) + 1
+  max_digits <- nchar(as.character(max_read))
   breaks <- c(0, 10^c(min_break : max_digits))
   df[[read_col]] <- as.numeric(df[[read_col]])
   df$title_length <- nchar(df[[title_col]])
@@ -171,6 +171,8 @@ read_plot <- function(df,
   df <- df[order(get(read_col))]
   df[[title_col]] <- factor(df[[title_col]], levels = unique(df[[title_col]]))
   labels = generate_labels(prettyNum(breaks, big.mark = ',', scientific=F))
+  labels[1] <- paste(labels[1], 'Obscure', sep='\n')
+  labels[length(labels)] <- paste(labels[length(labels)], 'Bestsellers', sep='\n')
   df$strats <- cut(df[[read_col]], breaks = breaks, 
                    labels = labels)
   # 1 text size for each strat
@@ -190,7 +192,7 @@ read_plot <- function(df,
           plot.title = element_text(hjust=0.5),
           panel.background = element_blank())
   if (plot){
-    ggsave(paste0('Graphs/', user, '/', plot_name, user, '.jpeg'), width = 16, height=9, dpi=250)
+    ggsave(paste0('Graphs/', user, '/', plot_name, user, '.jpeg'), width = 20, height=11, dpi=350)
   }
 }
 
@@ -427,6 +429,7 @@ summary_plot <- function(dt, date_col,
   p1 <- gender_bar_plot(dt, gender_col, narrative_col, name) 
   # p2 <- nationality_bar_plot(dt, authors_database, nationality_col)
   p2 <- plot_longest_books(dt) + ggtitle('Longest Books')
+  print('Longest books generated')
   p3 <- publication_histogram(dt, date_col) + ggtitle('Publication Years')
   p3 <- p3 + ggtitle(paste0('for ', name))
   min_count <- round(nrow(dt)/40)
@@ -579,7 +582,7 @@ graph_list <- function(dt, list_name, plot_name, save=F){
   top_list_df$Title.Upper <- toupper(top_list_df$Title)
   
   dt$Title.Upper <- toupper(dt$Title.Simple)
-  dt$Title.Upper <- gsub('-', ' ', df$Title.Upper)
+  dt$Title.Upper <- gsub('-', ' ', dt$Title.Upper)
   top_list_df$Title.Upper <- gsub('-', ' ', top_list_df$Title.Upper)
   dt$Match <- dt$Book.Id %in% top_list_df$Book.Id
   unmatched_titles <- dt[Match==F & Title.Upper %in% top_list_df$Title.Upper]$Title.Upper

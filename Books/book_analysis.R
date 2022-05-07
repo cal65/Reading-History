@@ -163,17 +163,6 @@ interpolated_merged_df$y_interpolated <-
 interpolated_merged_df$Date <-
   as.Date(interpolated_merged_df$Date.Numeric, origin = '1970-01-01')
 
-# using a sextic regression on interpolated values instead of spline
-
-lm6 <-
-  lm(
-    data = interpolated_merged_df,
-    y_interpolated ~ Date.Numeric + I(Date.Numeric ^ 2) +
-      I(Date.Numeric ^ 3) + I(Date.Numeric ^ 4) + I(Date.Numeric ^
-                                                      5) + I(Date.Numeric ^ 6)
-  )
-interpolated_merged_df$y_lm6 <-
-  predict(lm6, newdata = interpolated_df)
 
 ss <- smooth.spline(books_df$Date.Numeric,
                     books_df$Rolling.Read)
@@ -202,32 +191,8 @@ ggsave('Books_rolling_average_spline.jpeg',
        width = 16,
        height = 8)
 
-ggplot(interpolated_merged_df) +
-  geom_line(aes(x = Date, y = y_interpolated),
-            linetype = 'dashed',
-            alpha = 0.3) +
-  geom_line(aes(x = Date, y = y_lm6), size = 3, alpha = 0.1) +
-  geom_point(aes(x = Date.Read, y = Rolling.Read, color = Pages)) +
-  geom_text_repel(aes(
-    x = Date,
-    y = Rolling.Read,
-    label = Title,
-    color = Pages
-  ), size = 3) +
-  scale_x_date(date_breaks = "2 year", date_labels = '%Y') +
-  scale_y_continuous('Number of Books Read') +
-  scale_color_viridis() +
-  theme(
-    plot.title = element_text(hjust = 0.5),
-    panel.background = element_rect(fill = 'grey85'),
-    panel.grid = element_blank()
-  ) +
-  ggtitle('180 Day Rolling Average of Books Read')
-ggsave('Books_rolling_average_poly.jpeg',
-       width = 16,
-       height = 8)
 
-ggplot(interpolated_merged_df) +
+ggplot(interpolated_merged_df[which(interpolated_merged_df$Date > '2013-01-01'),]) +
   geom_line(aes(x = Date, y = smooth_spline),
             size = 3,
             alpha = 0.1) +
@@ -291,7 +256,8 @@ size = 5) +
   ) +
   ggtitle('Date Read vs. Date Published') +
   xlab('Date Read') + ylab('Date Published') + ylim(1840, 2040) +
-  scale_shape_manual('Author Gender', values = c("M" = "\u2642", "F" = "\u2640"))
+  scale_shape_manual('Author Gender', 
+                     values = c("M" = "\u2642", "F" = "\u2640", "B" = "\u2660"))
 ggsave('BooksPlot.jpeg',
        width = 10,
        height = 9.5,
@@ -310,7 +276,8 @@ ggplot(books_df) +
     alpha = 0.6
   ) +
   scale_color_brewer(palette = 'Set1') +
-  scale_shape_manual('Author Gender', values = c("M" = "\u2642", "F" = "\u2640")) +
+  scale_shape_manual('Author Gender', 
+                     values = c("M" = "\u2642", "F" = "\u2640", "B" = "\u2660")) +
   geom_text_repel(
     aes(
       x = Date.Read,

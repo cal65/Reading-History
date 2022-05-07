@@ -7,7 +7,10 @@ import functools
 def nationality_counts(df):
     nationality_cols = [n for n in df.columns if "nationality" in n]
     nationality_series = [df[c] for c in nationality_cols]
-    nationalities_all = functools.reduce(lambda a, b: a.append(b), nationality_series)
+    if len(nationality_series) >0: # function fails with empty list
+        nationalities_all = functools.reduce(lambda a, b: a.append(b), nationality_series)
+    else:
+        return {}
     counts_df = pd.DataFrame(nationalities_all.value_counts())
     counts_df.columns = ["Count"]
     count_dict = counts_df.to_dict()["Count"]

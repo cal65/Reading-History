@@ -10,7 +10,7 @@ library(stringi)
 library(ggthemes)
 #read in from Google
 books <- read_sheet('1x3c7xMfgKCdCg3D1wEqhCxchETzqNuv_arW2QMT4P0M')
-books_df <- data.frame(books)
+books_df <- setDT(data.frame(books))
 names(books_df) <- gsub(' ', '.', names(books_df))
 books_df$Date.Read <-
   as.Date(books_df$Date.Read, format = '%m/%d/%Y')
@@ -18,7 +18,6 @@ books_df$Title <- as.character(unlist(books_df$Title))
 books_df$Biography[is.na(books_df$Biography)] <- 'Not Biography'
 books_df$Year.Read <- as.numeric(format(books_df$Date.Read, '%Y'))
 books_df$Month.Read  <- as.numeric(format(books_df$Date.Read, '%m'))
-setDT(books_df)
 
 #initial eda graphs
 ggplot(books_df) + geom_histogram(aes(Date.Read), bins=60) +
@@ -65,7 +64,7 @@ ggplot(books_df) + geom_line(aes(x = Date.Read, y = 1:nrow(books_df)), color =
 # )
 
 # month plotter
-ggplot(books_df[Year.Read > 2011],
+ggplot(books_df[Year.Read > 2010],
        aes(
          x = Month.Read,
          y = Pages,
@@ -307,7 +306,7 @@ books_df$Decade <- round(books_df$Year,-1)
 books_df$Era <-
   cut(
     books_df$Year,
-    breaks = c(0, 1900, 1950, 1970, 1990, 2000, 2010, 2015, 2020),
+    breaks = c(0, 1900, 1950, 1970, 1990, 2000, 2010, 2015, 2020, 2025),
     c(
       '1800s',
       'early 1900s',
@@ -316,7 +315,8 @@ books_df$Era <-
       '1990-2000',
       '2000-2010',
       '2010-2015',
-      '2015-2020'
+      '2015-2020',
+      '2020-2025'
     )
   )
 years_tile <-
@@ -389,3 +389,4 @@ ggsave(
 
 table(books_df[, c('Author.Gender', 'Fiction')])
 sort(table(books_df$Author.Nationality))
+

@@ -38,7 +38,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Eva' = 'data/goodreads_library_Eva_appended.csv',
               'Michele' = 'data/mwtm_goodreads_library_export_appended.csv',
               'Sam_Woodman' = paste0(file_start, 'sam_appended.csv'),
-              'Daniel' = paste0(file_start, 'daniel_appended.csv'))
+              'Daniel' = paste0(file_start, 'daniel_appended.csv'),
+              'Marco' = paste0(file_start, 'marco_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -52,10 +53,11 @@ for (name in names(paths)){
     authors_database$gender_fixed, warn_missing = F)
   missing_data <- goodreads_list[[name]][!Author %in% authors_database$Author][, c('Author', 'Title', 'gender')]
   missing_data <- missing_data[, .(Title = head(Title,1)), by=c('Author', 'gender')]
+  missing_data$Source <- name
   if (nrow(missing_data) > 0){
     names(missing_data) <- mapvalues(names(missing_data),
                                        from = 'gender', to = 'gender_guessed')
-    print(nrow(missing_data))
+    print(paste("No Authors data for ", nrow(missing_data), " authors for", name))
     missing_data$country_chosen <- NA
     missing_data$gender_fixed <- ifelse(missing_data$gender_guessed %in% c('male', 'female'), missing_data$gender_guessed, NA)
     write.csv(missing_data, 'new_authors_data.csv', row.names=F)
@@ -80,7 +82,7 @@ for (name in names(paths)){
 books_combined <- setDT(do.call('rbind.fill', goodreads_list))
 
 for (name in names(paths)){
-  read_plot(goodreads_list[[name]][Read.Count>0], name=name, 
+  read_plot(goodreads_list[[name]][Read.Count>0], user=name, 
             read_col='Read', title_col = 'Title.Simple', plot=T)
   finish_plot(goodreads_list[[name]], name = name, plot=T)
   year_comparison(goodreads_list, 

@@ -35,7 +35,7 @@ def scrape100(url_ending, save_path):
 
 if __name__ == "__main__":
     """
-    Usage: python scrape100.py url_ending
+    Usage: python scrape100.py url_ending save_path
     """
     url_ending = sys.argv[1]
     save_path = sys.argv[2]

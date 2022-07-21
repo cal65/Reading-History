@@ -6,7 +6,7 @@ source('utils.R')
 transform_to_db <- function(dt){
   return (dt[, .(n_readers=.N, Title=head(Title.Simple,1),
               Author=head(Author, 1),
-              Original.Publication.Year=getmode(Original.Publication.Year, na.rm=T),
+              Original.Publication.Year=getmode(Original.Publication.Year),
               Shelf1=head(Shelf1, 1),
               Shelf2=head(Shelf2, 1),
               Shelf3=head(Shelf3, 1),
@@ -17,7 +17,7 @@ transform_to_db <- function(dt){
               Added_by=max(Added_by,na.rm=T),
               To_reads=max(To_reads,na.rm=T),
               Narrative=getmode(Narrative),
-              Number.of.Pages=as.integer(getmode(Number.of.Pages, na.rm=T)),
+              Number.of.Pages=as.integer(getmode(Number.of.Pages)),
               Average.Rating = mean(Average.Rating, na.rm=T),
               shelf_count = length(unique(Shelf1)),
               Source=head(Source, 1)), by=Book.Id])

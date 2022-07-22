@@ -5054,7 +5054,7 @@ Paul Hoffman,male,The Man Who Loved Only Numbers: The Story of  Paul Erdős and 
 Zhang Ling,Zhang Ling,A Single Swallow,female,Chinese,,,,Chinese,,Cal
 Jessica   Winter,female,Break in Case of Emergency,female,American,,,,American,2,Andrea
 Rocky Callen,male,A Breath Too Late,male,,,,,,1,Luisa
-Ronald  Holt,unknown,"A Scandal in Bohemia (The Adventures of Sherlock Holmes, #1)",male,,,,,,1,Maryann
+Ronald  Holt,unknown,"A Scandal in Bohemia (The Adventures of Sherlock Holmes, #1)",male,American,,,,American,1,Maryann
 Ruby K. Payne,female,A Framework for Understanding Poverty,female,,,,,,1,Stephanie
 Stacie  Murphy,female,A Deadly Fortune,female,,,,,,1,Stephanie
 Vicky Spring,female,"Bicycling the Pacific Coast: a complete route guide, Canada to Mexico",female,American,,,,American,1,Maggie
@@ -5066,7 +5066,7 @@ Lee Matthew Goldberg,,The Ancestor,,,,,,,,List
 Andrea Luhman,,"Missing Wings (Aranysargas, #1)",,,,,,,,List
 Lynessa Layne,,Don't Close Your Eyes,,,,,,,,List
 Vincent Panettiere,,The Scopas Factor,,,,,,,,List
-Marilyn Dalla Valle,,,,,,,,,,List
+Marilyn Dalla Valle,female,,female,American,,,,American,,List
 Samuel R. George,male,,male,,,,,,,List
 Michael G. Kramer,male,,male,,,,,,,List
 Paul Cude,,,,,,,,,,List
@@ -5078,7 +5078,7 @@ Joan Gelfand,,,female,American,,,,American,,List
 Fred Misurella,,,,,,,,,,List
 Rebecca Nolen,female,,female,,,,,,,List
 Lindsay Anne Kendal,female,,female,,,,,,,List
-Hieronymus Hawkes,,,,,,,,,,List
+Hieronymus Hawkes,male,,male,American,,,,American,,List
 Christian Warren Freed,male,,male,American,,,,American,,List
 Vera Jane Cook,,,,,,,,,,List
 M.S. Matassa,,,,,,,,,,List
@@ -5121,8 +5121,8 @@ Frances Hwang,female,Transparency: Stories,female,American,,,,American,,Daniel
 Gigi Kaeser,male,Of Many Colors: Portraits of Multiracial Families,female,American,,,,American,,Daniel
 Jeff Mallinson,male,Sexy: The Quest for Erotic Virtue in Perplexing Times,male,American,,,,American,,Marco
 Peter Greer,male,"      Mission Drift: The Unspoken Crisis Facing Leaders, Charities, and Churches",male,American,,,,American,,Marco
-Eswar S. Prasad,male,The Future of Money: How the Digital Revolution Is Transforming Currencies and Finance,male,,,,,,,Marco
-Ken Sande,male,The Peacemaker: A Biblical Guide to Resolving Personal Conflict,male,,,,,,,Marco
+Eswar S. Prasad,male,The Future of Money: How the Digital Revolution Is Transforming Currencies and Finance,male,Indian,American,,,Indian,,Marco
+Ken Sande,male,The Peacemaker: A Biblical Guide to Resolving Personal Conflict,male,American,,,,American,,Marco
 Bryant L. Myers,male,Walking with the Poor: Principles and Practice of Transformational Development,male,American,,,,American,,Marco
 Dorothy Van Soest,female,Just Mercy,female,American,,,,American,,Marco
 Jackie Pullinger,female,Chasing the Dragon: One Woman's Struggle Against the Darkness of Hong Kong's Drug Den,female,British,,,,British,,Marco
@@ -5131,11 +5131,11 @@ Costantino Bresciani-Turroni,male,The Economics of Inflation - A Study of Curren
 Immanuel C.Y. Hsu,male,The Rise of Modern China,male,Chinese,American,,,Chinese,,Marco
 Ariel Dorfman,male,Death and the Maiden,male,Argentine,American,Chilean,,Argentine,,Marco
 Jeremiah Moss,male,Vanishing New York: How a Great City Lost Its Soul,male,American,,,,American,,Daniel
-Lori A. May,female,The Low-Residency MFA Handbook: A Guide for Prospective Creative Writing Students,female,,,,,,,Daniel
+Lori A. May,female,The Low-Residency MFA Handbook: A Guide for Prospective Creative Writing Students,female,Canadian,,,,Canadian,,Daniel
 Lynn Powell,female,"      Framing Innocence: A Mother's Photographs, a Prosecutor's Zeal, and a Small Town's Response",female,,,,,,,Daniel
 Wildbow,male,Worm,male,Canadian,,,,Canadian,,Marco
 Mohamed El-Erian,male,"      The Only Game in Town: Central Banks, Instability, and Avoiding the Next Collapse",male,Egyptian,American,,,Egyptian,,Marco
-John Mauldin,male,Endgame: The End of the Debt Supercycle and How It Changes Everything,male,,,,,,,Marco
+John Mauldin,male,Endgame: The End of the Debt Supercycle and How It Changes Everything,male,American,,,,American,,Marco
 Brian Staveley,male,The Providence of Fire,male,,,,,,,Marco
 Lee Min-jin,female,Pachinko,female,Korean,American,,,Korean,,Cal
 "Wes """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""Scoop"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" Nisker",male,Crazy Wisdom,male,,,,,,,Adam
@@ -5161,3 +5161,110 @@ Sylvain Neuvel,male,A History Of What Comes Next,male,Canadian,,,,Canadian,,List
 Maiya Ibrahim,female,Spice Road,female,Australian,,,,Australian,,List
 Dustin Thao,male,You've Reached Sam,male,Vietnamese,American,,,Vietnamese,,List
 Najim Wali,male,Journey To Tell Al-Lahm,male,Iraqi,German,,,Iraqi,,List
+Louis-Ferdinand Céline,unknown,      Journey to the End of the Night,male,French,,,,French,,List
+Watty Piper,unknown,      The Little Engine That Could,female,Hungarian,,,,Hungarian,,List
+Antonin Artaud,male,      The Theater and Its Double,male,French,,,,French,,List
+Jean de Brunhoff,male,      The Story of Babar,male,French,,,,French,,List
+Marjorie Kinnan Rawlings,female,      The Yearling,female,American,,,,American,,List
+Carol Ryrie Brink,mostly_female,      Caddie Woodlawn,female,American,,,,American,,List
+John O'Hara,male,      Appointment in Samarra,male,American,,,,American,,List
+Joseph Roth,male,      The Radetzky March,male,Austrian,,,,Austrian,,List
+Joseph Kesselring,male,      Arsenic and Old Lace,male,American,,,,American,,List
+Hermann Broch,male,      The Sleepwalkers,male,Austrian,,,,Austrian,,List
+James Thurber,male,      My Life and Hard Times,male,American,,,,American,,List
+Winifred Watson,female,      Miss Pettigrew Lives for a Day,female,British,,,,British,,List
+Jean-Jacques Rousseau,unknown,Confessions,male,Swiss,,,,Swiss,,List
+Rüdiger Safranski,male,Martin Heidegger: Between Good and Evil,male,German,,,,German,,List
+Heinrich Wiegand Petzet,male,"Encounters and Dialogues with Martin Heidegger, 1929-1976",male,German,,,,German,,List
+Frank B. Gilbreth Jr.,male,Cheaper by the Dozen,male,American,,,,American,,List
+Mary Karr,mostly_female,The Liars' Club,female,American,,,,American,,List
+Carolyn Jessop,female,Escape,female,American,,,,American,,List
+Johnny Cash,male,Cash,male,American,,,,American,,List
+Władysław Szpilman,male,"The Pianist: The Extraordinary Story of One Man's Survival in Warsaw, 1939–45",male,Polish,,,,Polish,,List
+Piers Paul Read,male,Alive: The Story of the Andes Survivors,male,British,,,,British,,List
+Richard Munson,male,Tesla: Inventor of the Modern,male,American,,,,American,,List
+Marya Hornbacher,female,Wasted: A Memoir of Anorexia and Bulimia,female,American,,,,American,,List
+Andrew Morton,male,      Diana: Her True Story in Her Own Words,male,British,,,,British,,List
+Matthew Kneale,male,      English Passengers,male,British,,,,British,,List
+Francine Rivers,female,      An Echo in the Darkness,female,American,,,,American,,List
+Rosemary Sutcliff,female,      The Eagle of the Ninth,female,British,,,,British,,List
+Robert Alexander,male,      The Kitchen Boy: A Novel of the Last Tsar,male,American,,,,American,,List
+Amy Harmon,female,      Where the Lost Wander,female,American,,,,American,,List
+Stephen R. Lawhead,male,      Byzantium,male,American,,,,American,,List
+Jack Finney,male,      Time and Again,male,American,,,,American,,List
+Lucia St. Clair Robson,female,      Ride the Wind,female,American,,,,American,,List
+Rosalind Miles,female,"      I, Elizabeth",female,American,,,,American,,List
+Lew Wallace,male,      Ben-Hur: A Tale of the Christ,male,American,,,,American,,List
+Sandra Gulland,female,      The Many Lives & Secret Sorrows of Josephine B.,female,Canadian,,,,Canadian,,List
+Robert Goolrick,male,      A Reliable Wife,male,American,,,,American,,List
+Dinah Lee Küng,female,      A Visit from Voltaire,female,American,,,,American,,List
+Frank Delaney,male,      Ireland,male,Irish,,,,Irish,,List
+Ruta Sepetys,female,      Salt to the Sea,female,American,,,,American,,List
+Indu Sundaresan,female,      The Twentieth Wife,female,American,,,,American,,List
+Tom Rob Smith,male,      Child 44,male,British,,,,British,,List
+Zoe Saadia,female,,female,American,,,,American,,List
+Rafael Sabatini,male,,male,Italian,English,,,Italian,,List
+Dorothy Love,female,A Respectable Actress,female,American,,,,American,,List
+Michael Blake,male,Dances with Wolves,male,American,,,,American,,List
+Helen Hooven Santmyer,female,...And Ladies of the Club,female,American,,,,American,,List
+Lloyd C. Douglas,male,The Robe,male,American,,,,American,,List
+Lalita Tademy,female,Cane River,female,American,,,,American,,List
+Nancy Horan,female,Loving Frank,female,American,,,,American,,List
+Thomas Berger,male,Little Big Man,male,American,,,,American,,List
+Jane Yolen,female,The Devil's Arithmetic,female,American,,,,American,,List
+Irene Hunt,female,Across Five Aprils,female,American,,,,American,,List
+Margaret George,female,Helen of Troy,female,American,,,,American,,List
+Winston Graham,male,Ross Poldark,male,English,,,,English,,List
+Robert Hicks,male,The Widow of the South,male,American,,,,American,,List
+Karen Hesse,female,Out of the Dust,female,American,,,,American,,List
+Robin Maxwell,mostly_male,The Secret Diary of Anne Boleyn,unknown,American,,,,American,,List
+Michelle Moran,female,Madame Tussaud: A Novel of the French Revolution,female,American,,,,American,,List
+Hannah Kent,female,Burial Rites,female,Australian,,,,Australian,,List
+David Gemmell,male,Lord of the Silver Bow,male,British,,,,British,,List
+Ildefonso Falcones,male,La catedral del mar,male,Spanish,,,,Spanish,,List
+Tim Vicary,male,,male,British,,,,British,,List
+Tea Cooper,female,Tree Change,female,American,,,,American,,List
+Lesley  Young,andy,The Australian,unknown,Canadian,,,,Canadian,,List
+Craig Silvey,male,Jasper Jones,male,Australian,,,,Australian,,List
+Joan Lindsay,female,Picnic at Hanging Rock,female,Australian,,,,Australian,,List
+Tim Winton,male,Breath,male,Australian,,,,Australian,,List
+Ethel Turner,female,Seven Little Australians,female,Australian,,,,Australian,,List
+Stacey Nash,mostly_female,Shh!,female,American,,,,American,,List
+Peter Carey,male,Oscar and Lucinda,male,Australian,,,,Australian,,List
+Kenneth Cook,male,Wake in Fright,male,Australian,,,,Australian,,List
+Kimberley Freeman,female,Lighthouse Bay,female,Australian,,,,Australian,,List
+Kate Grenville,female,The Secret River,female,Australian,,,,Australian,,List
+Phillip Gwynne,male,"Deadly, Unna?",male,Australian,,,,Australian,,List
+Debra Oswald,female,Useful,female,Australian,,,,Australian,,List
+D'Arcy Niland,unknown,The Shiralee,male,Australian,,,,Australian,,List
+Christopher J. Koch,male,Highways to a War,male,Australian,,,,Australian,,List
+Laura Jean McKay,female,Holiday in Cambodia,female,New Zealand,,,,New Zealand,,List
+Andy McNab,male,Aggressor,male,British,,,,British,,List
+Paul  Christensen,male,The Hungry Wolves of Van Diemen's Land,male,American,,,,American,,List
+Randolph Stow,male,"Kapitein Mitnagt, struikrover",male,Australian,,,,Australian,,List
+Matt J. Pike,male,Apocalypse: Diary of a Survivor,male,American,,,,American,,List
+Garry Kilworth,male,The Iron Wire,male,British,,,,British,,List
+Tracy Ryan,mostly_female,Claustrophobia,unknown,Canadian,,,,Canadian,,List
+Lance Morcan,male,White Spirit,male,New Zealand,,,,New Zealand,,List
+Anna Jacobs,female,Farewell to Lancashire,female,English,,,,English,,List
+Murray Bail,male,Eucalyptus,male,Australian,,,,Australian,,List
+Erika Kochanski,female,,female,Australian,,,,Australian,,List
+Alannah Foley,female,,female,Australian,British,,,Australian,,List
+Kate Elizabeth Russell,female,      My Dark Vanessa,female,American,,,,American,,List
+Lucy Foley,female,      The Guest List,female,British,,,,British,,List
+Alka Joshi,female,      The Henna Artist,female,American,,,,American,,List
+Ali Hazelwood,male,      The Love Hypothesis,male,Italian,,,,Italian,,List
+Riley Sager,mostly_male,      Home Before Dark,male,American,,,,American,,List
+Kenneth   Thomas,male,      The Past,male,American,,,,American,,List
+Talia Hibbert,female,"      Take a Hint, Dani Brown",female,British,,,,British,,List
+Julie   Clark,female,      The Last Flight,female,American,,,,American,,List
+Charlotte McConaghy,female,      Migrations,female,Australian,,,,Australian,,List
+P. Djèlí Clark,unknown,      Ring Shout,male,American,,,,American,,List
+Alex North,male,      The Shadows,male,American,,,,American,,List
+Aiden Thomas,male,      Cemetery Boys,male,American,,,,American,,List
+Mary L. Trump,mostly_female,      Too Much and Never Enough: How My Family Created the World's Most Dangerous Man,female,American,,,,American,,List
+T. Kingfisher,unknown,      The Hollow Places,female,American,,,,American,,List
+Ashley Audrain,mostly_female,      The Push,female,Canadian,,,,Canadian,,List
+Monica Hesse,female,      They Went Left,female,American,,,,American,,List
+Lara  Parker,female,"      Vagina Problems: Endometriosis, Painful Sex, and Other Taboo Topics",female,American,,,,American,,List
+Phuc Tran,male,,male,American,Vietnamese,,,Vietnamese,,List

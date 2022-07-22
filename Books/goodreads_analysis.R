@@ -94,7 +94,7 @@ for (name in names(paths)){
 }
 
 # plot world maps
-world_sf <- ne_countries(returnclass = "sf", scale = "large", type='map_units')
+world_sf <- ne_countries(returnclass = "sf", scale = "medium", type='map_units')
 region_dict <- fread('world_regions_dict.csv')
 region_dict <- region_dict[nationality != '']
 authors_database <- fread('authors_database.csv')

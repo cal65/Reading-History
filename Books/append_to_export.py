@@ -94,7 +94,8 @@ def fix_date(file_path):
     df = pd.read_csv(file_path)
     date_columns = [c for c in df.columns if "date" in c.lower()]
     for c in date_columns:
-        df[c] = pd.to_datetime(df[c])
+        if c != 'date_published':
+            df[c] = pd.to_datetime(df[c])
     df.to_csv(file_path, index=False)
     # return just for proof
     return df[["Title"] + date_columns]

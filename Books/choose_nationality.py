@@ -21,7 +21,6 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
     count_dict = nationality_counts(df)
     nationality_cols = [n for n in df.columns if "nationality" in n]
     regions = pd.read_csv(regions_file, encoding="latin-1")
-
     def _choose_row(row):
         if pd.isnull(
             row.get("nationality2")
@@ -38,7 +37,11 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
             else:
                 return None
 
-    df["Country.Chosen"] = df.apply(_choose_row, axis=1)
+    countries_chosen = df.apply(_choose_row, axis=1)
+    if len(countries_chosen) > 0:
+        df["Country.Chosen"] = countries_chosen
+    else:
+        df["Country.Chosen"] = [None] * len(df)
     return df
 
 

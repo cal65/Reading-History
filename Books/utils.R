@@ -306,8 +306,10 @@ plot_map_data <- function(df, region_dict, world_sf, user, country_col = 'Countr
     scale_fill_gradientn(name = "count", trans = "log", breaks=my_breaks,
                         colors=brewer.pal(9, 'YlOrRd')) +
     ggtitle(paste0('Author Nationality Map - ', user)) +
-    theme_pander() + theme(plot.title=element_text(hjust=0.5), 
-                           legend.position = 'bottom', legend.key.width = unit(1.5, 'cm')) 
+    theme_pander() + 
+    theme(plot.title=element_text(hjust=0.5), 
+                           legend.position = 'bottom', 
+          legend.key.width = unit(length(my_breaks)*.2,'cm')) 
   ggsave(paste0('Graphs/', user, '/nationality_map_', user, '.pdf'), width=12, height=8)
   #world_plotly <- ggplotly(tool_tip=c('geounit', 'count', 'titles'), original_data=F)
   #htmlwidgets::saveWidget(world_plotly, paste0('Graphs/', user, '/nationality_map_', user, '.html'))

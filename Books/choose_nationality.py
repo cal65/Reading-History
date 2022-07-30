@@ -39,9 +39,9 @@ def choose_nationality(df, regions_file="world_regions_dict.csv"):
 
     countries_chosen = df.apply(_choose_row, axis=1)
     if len(countries_chosen) > 0:
-        df["Country.Chosen"] = countries_chosen
+        df.loc[:,"Country.Chosen"] = countries_chosen
     else:
-        df["Country.Chosen"] = [None] * len(df)
+        df.loc[:,"Country.Chosen"] = [None] * len(df)
     return df
 
 

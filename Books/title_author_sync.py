@@ -35,6 +35,7 @@ def lookup_nationalities(
     books_addon = books_db[
         ~books_db[book_author_col].isin(authors_db[authors_author_col])
     ]
+    logger.info(f"Looking up nationalities for {len(books_addon)} authors")
     books_addon = ga.append_nationalities(books_addon)
     books_addon["Source"] = source
     return books_addon

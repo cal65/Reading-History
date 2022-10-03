@@ -337,13 +337,6 @@ ggplot(years_tile) +
   ggtitle('Year Tile Plot')
 
 
-books_df$Genre <- strsplit(books_df$Genre, ',')
-
-genre_filter <- function(df, genre) {
-  df[sapply(df$Genre, function(x)
-    genre %in% x), ]
-}
-
 
 # divergent chart
 divergent_df <- books_df

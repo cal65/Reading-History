@@ -30,7 +30,7 @@ for (file in art_files) {
 }
 artifacts_df <- setDT(do.call(rbind.fill, artifacts))
 artifacts_df[Source =='']$Source <- 'List'
-lapply(artifacts, function(x) length(which(is.na(x$Number.of.Pages))))
+lapply(artifacts, function(x) length(which(is.na(x$Added_by))))
 books_all <- setDT(rbind.fill(books_combined, artifacts_df))
 books_all$Number.of.Pages <- as.numeric(books_all$Number.of.Pages)
 books_db <- transform_to_db(books_all)

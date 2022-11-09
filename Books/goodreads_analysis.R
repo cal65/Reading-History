@@ -40,7 +40,8 @@ paths <- list('Cal' = paste0(file_start, 'cal_appended.csv'),
               'Sam_Woodman' = paste0(file_start, 'sam_appended.csv'),
               'Daniel' = paste0(file_start, 'daniel_appended.csv'),
               'Marco' = paste0(file_start, 'marco_appended.csv'),
-              'Joe_Nasser' = paste0(file_start, 'joen_appended.csv'))
+              'Joe_Nasser' = paste0(file_start, 'joen_appended.csv'),
+              'Jolene' = paste0(file_start, 'jolene_appended.csv'))
 goodreads_list <- lapply(paths, run_all)
 for (name in names(paths)){
   goodreads_list[[name]]$Source <- name
@@ -102,7 +103,7 @@ authors_database <- fread('authors_database.csv')
 country_dict = vector('list')
 for (name in names(paths)){
   country_dict[[name]] <- merge_nationalities(goodreads_list[[name]], authors_database)
-  plot_map_data(country_dict[[name]][c], 
+  plot_map_data(country_dict[[name]], 
                 region_dict=region_dict, world_sf=world_sf, 
                 user=name)
 }

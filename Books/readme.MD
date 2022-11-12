@@ -17,5 +17,5 @@ If you would like your data analyzed, please contact me (information in profile)
 
 
 # Technical Steps
-1. **python append_to_export file.csv 5 ** # (This will scrape additional fields from goodreads and append them as new columns to the file, and save a new file called file_appended.csv. The 5 is a required int designating wait time between scrapes)
+1. **python append_to_export file.csv 5** # (This will scrape additional fields from goodreads and append them as new columns to the file, and save a new file called file_appended.csv. The 5 is a required int designating wait time between scrapes)
 2. **Rscript runner.R file.csv name** # (This will run a pipeline that processes the data, updates a database of authors' genders and nationalities, and generate numerous graphs in folder _name_)

@@ -88,7 +88,7 @@ ggplot(books_df[Year.Read > 2010],
   geom_text(
     aes(label = Author),
     position = position_stack(0.5),
-    size = 2.5,
+    size = 2.4,
     fontface = 'bold'
   ) +
   scale_x_continuous(breaks = 1:12, labels = 1:12) +
@@ -101,7 +101,7 @@ ggplot(books_df[Year.Read > 2010],
   )
 ggsave('Monthly_pages_read.jpeg',
        width = 16,
-       height = 9, 
+       height = 10, 
        dpi=350)
 
 ## rolling average

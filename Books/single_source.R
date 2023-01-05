@@ -19,7 +19,6 @@ transform_to_db <- function(dt){
               Narrative=getmode(Narrative),
               Number.of.Pages=as.integer(getmode(Number.of.Pages)),
               Average.Rating = mean(Average.Rating, na.rm=T),
-              shelf_count = length(unique(Shelf1)),
               Source=head(Source, 1)), by=Book.Id])
 }
 artifacts <- vector('list')

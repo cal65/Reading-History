@@ -15,10 +15,10 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 cookies = {
-
-    "u": "kRwGi6R5Hb2uGLuh_E_NpfSMHmCVU_pjLh-87uRXc-H4cmC6",
-    "__qca": "P0-58208308-1679029998916; csm-sid=646-6587796-7097540",
-    "__gpi": "UID=000004048f7baabd:T=1648685718:RT=1680296901:S=ALNI_MYxDQ7dAo3KLoXnssoo0UOLpKL7ow",
+    "u": "Zeyv_a7lAHi2XqYc8XBUAZEE6R5rNAyN29LV3fPcshXGUy4M",
+    "__qca": "P0-58208308-1679029998916",
+    "__gpi": "UID=0000097ff616a3c7:T=1682402001:RT=1685649965:S=ALNI_MY4xLYySL-kyW09g_nl8AuOjCRIbQ",
+    "jwt_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6ImZSNXpfWTVjYXZQMllsaXU3eks0YUNJVEJPcVBWdGtxTE9XVURfV3dGOTQifQ",
 }
 
 headers = {
